@@ -1,0 +1,22 @@
+[
+  {
+    "words":["Raiden Mei", "Kanbaru Suruga", "Kurapika", "Mosquito Girl"],
+    "connection":"Hiroyuki Sawano",
+    "tier":"YELLOW",
+  },
+  {
+    "words":["Shingeki no Kyojin", "Ore Dake Level Up na Ken", "Guilty Crown", "Kill la Kill"],
+    "connection":"Sawashiro Miyuki",
+    "tier":"GREEN",
+  },
+  {
+    "words":["Kobuchizawa Shirase", "Tsunemori Akane", "Sengoku Nadeko", "Satou-chan"],
+    "connection":"Hanazawa Kana",
+    "tier":"BLUE",
+  },
+  {
+    "words":["Gon Freecs", "Arima Kana", "Ramlethal Valentine", "Nokotan"],
+    "connection":"Han Megumi",
+    "tier":"PURPLE"
+  }
+]

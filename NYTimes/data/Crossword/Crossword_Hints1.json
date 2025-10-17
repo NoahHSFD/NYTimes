@@ -1,0 +1,100 @@
+[
+  {
+    "word":"satou",
+    "length":5,
+    "id":0,
+    "vertical":false,
+    "hint":"Sweet as sugar"
+  },
+  {
+    "word":"ram",
+    "length":3,
+    "id":9,
+    "vertical":false,
+    "hint":"The better twin"
+  },
+  {
+    "word":"isekaid",
+    "length":7,
+    "id":14,
+    "vertical":false,
+    "hint":"Out of this world, past tense"
+  },
+  {
+    "word":"one",
+    "length":3,
+    "id":21,
+    "vertical":false,
+    "hint":"Author of the strongest man"
+  },
+  {
+    "word":"ore",
+    "length":3,
+    "id":32,
+    "vertical":false,
+    "hint":"\"My favorite Monogatari\""
+  },
+  {
+    "word":"fear",
+    "length":4,
+    "id":36,
+    "vertical":false,
+    "hint":"Something to do in Vegas"
+  },
+  {
+    "word":"run",
+    "length":3,
+    "id":42,
+    "vertical":false,
+    "hint":"What do you say?"
+  },
+  {
+    "word":"shio",
+    "length":4,
+    "id":0,
+    "vertical":true,
+    "hint":"Sweet as salt"
+  },
+  {
+    "word":"snafu",
+    "length":5,
+    "id":15,
+    "vertical":true,
+    "hint":"S Nights At Freddy U"
+  },
+  {
+    "word":"tree",
+    "length":4,
+    "id":2,
+    "vertical":true,
+    "hint":"Under The"
+  },
+  {
+    "word":"en",
+    "length":2,
+    "id":37,
+    "vertical":true,
+    "hint":"Short for \"bad\""
+  },
+  {
+    "word":"oak",
+    "length":3,
+    "id":3,
+    "vertical":true,
+    "hint":"First Professor"
+  },
+  {
+    "word":"umatora",
+    "length":7,
+    "id":4,
+    "vertical":true,
+    "hint":"GRRRR"
+  },
+  {
+    "word":"deep",
+    "length":4,
+    "id":20,
+    "vertical":true,
+    "hint":"The names in Frieren, actually"
+  }
+]

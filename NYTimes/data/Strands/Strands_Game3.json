@@ -1,0 +1,44 @@
+[
+  {
+    "word":"yorimoi",
+    "length":7,
+    "ids":[19, 12, 6, 0, 1, 2, 7],
+    "spangram":false
+  },
+  {
+    "word":"heroaca",
+    "length":7,
+    "ids":[26, 31, 24, 30, 37, 36, 42],
+    "spangram":false
+  },
+  {
+    "word":"abbrevs",
+    "length":7,
+    "ids":[18, 25, 20, 27, 28, 22, 29],
+    "spangram":true
+  },
+  {
+    "word":"rezero",
+    "length":6,
+    "ids":[3, 8, 13, 14, 9, 4],
+    "spangram":false
+  },
+  {
+    "word":"yagakimi",
+    "length":8,
+    "ids":[21, 15, 10, 5, 11, 17, 16, 23],
+    "spangram":false
+  },
+  {
+    "word":"oregairu",
+    "length":8,
+    "ids":[35, 34, 33, 39, 40, 41, 47, 46],
+    "spangram":false
+  },
+  {
+    "word":"kaiji",
+    "length":5,
+    "ids":[45, 44, 43, 38, 32],
+    "spangram":false
+  }
+]

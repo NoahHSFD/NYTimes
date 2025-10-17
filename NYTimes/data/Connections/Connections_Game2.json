@@ -1,0 +1,27 @@
+[
+  {
+    "words":["Raiden Mei", "Kanbaru Suruga", "Kurapika", "Mosquito Girl", "Mosquito Girl"],
+    "connection":"Hiroyuki Sawano",
+    "tier":"YELLOW",
+  },
+  {
+    "words":["Shingeki no Kyojin", "Ore Dake Level Up na Ken", "Guilty Crown", "Kill la Kill", "Mosquito Girl"],
+    "connection":"Sawashiro Miyuki",
+    "tier":"GREEN",
+  },
+  {
+    "words":["Kobuchizawa Shirase", "Tsunemori Akane", "Sengoku Nadeko", "Satou-chan", "Mosquito Girl"],
+    "connection":"Hanazawa Kana",
+    "tier":"YELLOW",
+  },
+  {
+    "words":["Gon Freecs", "Arima Kana", "Ramlethal Valentine", "Kahono", "Mosquito Girl"],
+    "connection":"Han Megumi"
+    "tier":"YELLOW",
+  },
+  {
+    "words":["Gon Freecs", "Arima Kana", "Ramlethal Valentine", "Kahono", "Mosquito Girl"],
+    "connection":"Han Megumi2",
+    "tier":"YELLOW"
+  }
+]

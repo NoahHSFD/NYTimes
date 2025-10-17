@@ -1,0 +1,42 @@
+[
+  {
+    "word":"aaaaaa",
+    "length":6,
+    "ids":[0, 1, 2, 3, 4, 5]
+  },
+  {
+    "word":"bbbbbb",
+    "length":6,
+    "ids":[6, 7, 8, 9, 10, 11]
+  },
+  {
+    "word":"cccccc",
+    "length":6,
+    "ids":[12, 13, 14, 15, 16, 17]
+  },
+  {
+    "word":"dddddd",
+    "length":6,
+    "ids":[18, 19, 20, 21, 22, 23]
+  },
+  {
+    "word":"eeeeee",
+    "length":6,
+    "ids":[24, 25, 26, 27, 28, 29]
+  },
+  {
+    "word":"ffffff",
+    "length":6,
+    "ids":[30, 31, 32, 33, 34, 35]
+  },
+  {
+    "word":"gggggg",
+    "length":6,
+    "ids":[36, 37, 38, 39, 40, 41]
+  },
+  {
+    "word":"hhhhhh",
+    "length":6,
+    "ids":[42, 43, 44, 45, 46, 47]
+  }
+]

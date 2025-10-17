@@ -1,0 +1,365 @@
+public class IsaacMap {
+  
+  IsaacRoom[][] rooms;
+  int currentRoomX, currentRoomY;
+  float mapWidth, mapHeight;                                                    //highest X value of the map for minimap display purposes
+  IsaacMinimap minimap;
+  color clr = #00FFFF;
+  JSONObject[] roomData;
+  
+  public IsaacMap(JSONObject[] rooms) {
+    roomData = rooms;
+    mapWidth = 0;
+    mapHeight = 0;
+    for(int i = 0; i < rooms.length; i++) {
+      if(rooms[i].getIntList("coordinates").get(0) > mapWidth) mapWidth = rooms[i].getIntList("coordinates").get(0);
+      if(rooms[i].getIntList("coordinates").get(1) > mapHeight) mapHeight = rooms[i].getIntList("coordinates").get(1);
+    }
+    mapWidth++;
+    mapHeight++;
+    this.rooms = new IsaacRoom[int(mapWidth)][int(mapHeight++)];
+    for(int i = 0; i < this.rooms.length; i++) {
+      for(int j = 0; j < this.rooms[i].length; j++) {
+        this.rooms[i][j] = new IsaacRoom(i, j);
+      }
+    }
+    for(int i = 0; i < rooms.length; i++) {
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDoors(rooms[i].getIntList("doors").toArray());
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDestructibleDoors(rooms[i].getIntList("destructibledoors").toArray());
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
+    }
+    minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
+    currentRoomX = rooms[0].getIntList("coordinates").get(0);
+    currentRoomY = rooms[0].getIntList("coordinates").get(1);
+    minimap.setCurrentRoom(currentRoomX, currentRoomY);
+    minimap.unlockMinimapRoom(currentRoomX, currentRoomY);
+  }
+  
+  void init() {
+    currentRoomX = roomData[0].getIntList("coordinates").get(0);
+    currentRoomY = roomData[0].getIntList("coordinates").get(1);
+    minimap.setCurrentRoom(currentRoomX, currentRoomY);
+  }
+  
+  void display() {
+    rooms[currentRoomX][currentRoomY].display();
+  }
+  
+  void update() {
+    rooms[currentRoomX][currentRoomY].update();
+    minimap.update();
+  }
+  
+  IsaacRoom getCurrentRoom() {
+    return rooms[currentRoomX][currentRoomY];
+  }
+  
+  class IsaacRoom {
+  
+    int x, y;
+    color clr = #554646;
+    IsaacDoor[] doors;
+    ArrayList<IsaacEnemy> enemyList = new ArrayList<IsaacEnemy>();
+    ArrayList<IsaacBomb> bombList = new ArrayList<IsaacBomb>();
+    boolean enemyRemoved;
+    ArrayList<IsaacCollectible> collectibleList = new ArrayList<IsaacCollectible>();
+    ArrayList<IsaacObstacle> obstacleList = new ArrayList<IsaacObstacle>();
+    PImage backgroundSprite;
+    
+    public IsaacRoom(int x, int y) {
+      this.x = x;
+      this.y = y;
+      //obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 0));
+      obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 0));
+      //obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
+      obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
+      backgroundSprite = backgrounds.get(0);
+    }
+    
+    void setDoors(int[] d) {
+      this.doors = new IsaacDoor[d.length];
+      int ind = 0;
+      for(int i : d) {
+        doors[ind++] = new IsaacDoor(i);
+      }
+    }
+    
+    void setDestructibleDoors(int[] des) {
+      for(int i : des) {
+        for(IsaacDoor door : doors) {
+          if(door.position == i) door.setDestructible();
+        }
+      }
+    }
+    
+    void setEnemies(int[] e) {
+      for(int i : e) {
+        enemyList.add(new IsaacEnemy(i, random(height*.11, width-height*.1), random(height*.11, height*.9)));
+      }
+    }
+    
+    void setCollectibles(int[] c) {
+      for(int i : c) {
+        collectibleList.add(new IsaacCollectible(i));
+      }
+    }
+    
+    void display() {
+      pushStyle();
+      image(backgroundSprite, 0, 0, width, height);
+      //line(is.borderWidth, is.borderWidth, width-is.borderWidth, is.borderWidth);
+      //line(is.borderWidth, height-is.borderWidth, width-is.borderWidth, height-is.borderWidth);
+      //line(is.borderWidth, is.borderWidth, is.borderWidth, height-is.borderWidth);
+      //line(width-is.borderWidth, is.borderWidth, width-is.borderWidth, height-is.borderWidth);
+      for(IsaacEnemy e : enemyList) {
+        for(IsaacPuddle pu : e.enemyPuddles) {
+          pu.display();
+        }
+      }
+      for(IsaacObstacle o : obstacleList) {
+        o.display();
+      }
+      for(IsaacDoor d : doors) {
+        d.display();
+      }
+      for(IsaacBomb bo : bombList) {
+        bo.display();
+      }
+      for(IsaacEnemy e : enemyList) {
+        e.display();
+      }
+      for(IsaacCollectible c : collectibleList) {
+        c.display();
+      }
+      popStyle();
+    }
+    
+    void update() {
+      for(IsaacDoor d : doors) {
+        d.update();
+        if(d.getPosition() == 4 && enemyList.isEmpty()) d.open();
+      }
+      for(int i = 0; i < bombList.size(); i++) {
+        if(bombList.get(i).update()) {
+          bombList.remove(i);
+          i--;
+        }
+      }
+      for(IsaacObstacle o : obstacleList) {
+        o.update();
+        for(int i = 0; i >= 0 && i < is.player.playerProjectiles.size(); i++) {
+          if(o.intersects(is.player.playerProjectiles.get(i))) {
+            is.player.playerProjectiles.remove(i);
+            i--;
+          }
+        }
+        for(IsaacEnemy e : enemyList) {
+          for(int i = 0; i >= 0 &&  i < e.enemyProjectiles.size(); i++) {
+            if(o.intersects(e.enemyProjectiles.get(i))) {
+              e.enemyProjectiles.remove(i);
+              i--;
+            }
+          }
+        }
+      }
+      for(int i = 0; i < enemyList.size(); i++) {
+        for(IsaacObstacle o : obstacleList) {
+          if(!(enemyList.get(i).flying && o.traversible)) {
+            if(enemyList.get(i).intersects(o)) {
+              enemyList.get(i).collision(o);
+            }
+          }
+        }
+        for(int j = 0; i >= 0 && j < is.player.playerProjectiles.size(); j++) {
+          if(enemyList.get(i).intersects(is.player.playerProjectiles.get(j))) {
+            enemyList.get(i).hit(is.player.playerProjectiles.get(j));
+            is.player.playerProjectiles.remove(j);
+            j--;
+          }
+        }
+        for(int j = 0; i >= 0 && j < is.player.playerBeams.size(); j++) {
+          if(enemyList.get(i).intersects(is.player.playerBeams.get(j))) {
+            enemyList.get(i).hit(is.player.playerBeams.get(j));
+          }
+        }
+        for(int k = 0; i >= 0 && k < bombList.size(); k++) {
+          if(enemyList.get(i).intersects(bombList.get(k))) {
+            enemyList.get(i).hit(bombList.get(k));
+          }
+        }
+        if(i >= 0 && enemyList.get(i).update() && !enemyList.get(i).leavesCorpse) {
+          enemyList.remove(i);
+          i--;
+        }
+      }
+      for(IsaacCollectible c : collectibleList) {
+        if(c.update()) {
+          collectibleList.remove(c);
+          break;
+        }
+      }
+    }
+    
+    class IsaacDoor {
+    
+      float x, y;
+      float w = height*.21;
+      float h = height*.21;
+      color clr = #FFFF00;
+      int position;                                                             //0 = top, 1 = right, 2 = bottom, 3 = left,4 = middle
+      boolean open;
+      boolean destructible;                                                     //whether it can be opened with a bomb
+      
+      public IsaacDoor(float x, float y) {
+        this.x = x;
+        this.y = y;
+      }
+      
+      public IsaacDoor(int position) {
+        this.position = position;
+        switch(position) {
+          case 0:                                                              //top
+            this.x = width*.5;
+            this.y = 0;
+            this.w = height*.1;
+            this.h = height*.21;
+            this.open = true;
+            break;
+          case 1:                                                              //right
+            this.x = width;
+            this.y = height*.5;
+            this.w = height*.21;
+            this.h = height*.1;
+            this.open = true;
+            break; 
+          case 2:                                                              //bottom
+            this.x = width*.5;
+            this.y = height;
+            this.w = height*.1;
+            this.h = height*.21;
+            this.open = true;
+            break;
+          case 3:                                                              //left
+            this.x = 0;
+            this.y = height*.5;
+            this.w = height*.21;
+            this.h = height*.1;
+            this.open = true;
+            break;
+          case 4:                                                              //middle
+            this.x = width*.5;
+            this.y = height*.5;
+            this.w = height*.1;
+            this.h = height*.1;
+            break;
+          default:
+        }
+      }
+      
+      void display() {
+        pushStyle();
+        if(open) {
+          fill(clr);
+        } else {
+          fill(#FF0000);
+        }
+        rectMode(CENTER);
+        rect(x, y, w, h);
+        popStyle();
+      }
+      
+      void update() {
+        for(IsaacBomb bo : bombList) {
+          if(intersects(bo) && destructible) destroy();
+        }
+        if(intersects(is.player) && open) {
+          switchRoom();
+          is.player.invulnerable(FPS*.75);
+          minimap.setCurrentRoom(currentRoomX, currentRoomY);
+          minimap.unlockMinimapRoom(currentRoomX, currentRoomY);
+          is.player.playerProjectiles.clear();
+        }
+      }
+      
+      boolean intersects(IsaacPlayer player) {                                //different calculation because of rectMode(CENTER) in display()
+        return x - w*.5 < player.x + player.r && x + w*.5 > player.x - player.r && y - h*.5 < player.y + player.r && y + h*.5 > player.y - player.r;
+      }
+      
+      boolean intersects(IsaacBomb bomb) {
+        return bomb.exploding && (bomb.explosionTime == 1) &&  (x-w*.5 < bomb.x + bomb.explosionR && x + w*.5 > bomb.x - bomb.explosionR &&
+               y - h*.5 < bomb.y + bomb.explosionR && y + h*.5 > bomb.y - bomb.explosionR);
+      }
+      
+      void destroy() {
+        open();
+        switch(position) {
+          case 0:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
+              if(d.position == 2) d.open();
+            }
+            break;
+          case 1:
+            for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
+              if(d.position == 3) d.open();
+            }
+            break;
+          case 2:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
+              if(d.position == 0) d.open();
+            }
+            break;
+          case 3:
+            for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
+              if(d.position == 1) d.open();
+            }
+            break;
+          default:
+        }
+      }
+      
+      void setDestructible() {
+        destructible = true;
+        open = false;
+      }
+      
+      int getPosition() {
+        return position;
+      }
+      
+      void open() {
+        open = true;
+      }
+      
+      void close() {
+        open = false;
+      }
+      
+      void switchRoom() {
+        switch(position) {
+          case 0:
+            currentRoomY--;
+            is.player.setY(height - (this.h + is.player.getR()));
+            break;
+          case 1:
+            currentRoomX++;
+            is.player.setX(this.w + is.player.getR());
+            break;
+          case 2:
+            currentRoomY++;
+            is.player.setY(this.h + is.player.getR());
+            break;
+          case 3:
+            currentRoomX--;
+            is.player.setX(width - (this.w + is.player.getR()));
+            break;
+          case 4:
+            is.setCurrentMap((is.getCurrentMap()+1)%is.maps.size());
+            is.maps.get(is.getCurrentMap()).init();
+            break;
+          default:
+        }
+      }
+    }
+  }
+}

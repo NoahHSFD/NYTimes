@@ -1,0 +1,79 @@
+[
+  {
+    "word":"the",
+    "length":3,
+    "id":6,
+    "vertical":false,
+    "hint":"Which Rock is Bocchi?"
+  },
+  {
+    "word":"hunter",
+    "length":6,
+    "id":12,
+    "vertical":false,
+    "hint":"What is Gon?"
+  },
+  {
+    "word":"ing",
+    "length":3,
+    "id":18,
+    "vertical":false,
+    "hint":"Let's Fight___!"
+  },
+  {
+    "word":"stone",
+    "length":5,
+    "id":24,
+    "vertical":false,
+    "hint":"Senku's last name"
+  },
+  {
+    "word":"eki",
+    "length":3,
+    "id":31,
+    "vertical":false,
+    "hint":"\"(train) station\" in Japanese"
+  },
+  {
+    "word":"ruga",
+    "length":4,
+    "id":37,
+    "vertical":false,
+    "hint":"Higasa's nickname for \nKanbaru (Hanamonogatari)"
+  },
+  {
+    "word":"this",
+    "length":4,
+    "id":6,
+    "vertical":true,
+    "hint":"The way to be more strong"
+  },
+  {
+    "word":"hunter",
+    "length":6,
+    "id":7,
+    "vertical":true,
+    "hint":"What kind of [Horizontal 2]\n is Gon?"
+  },
+  {
+    "word":"tengoku",
+    "length":7,
+    "id":2,
+    "vertical":true,
+    "hint":"What are Kiruko and Maru\n looking for?"
+  },
+  {
+    "word":"nigg",
+    "length":4,
+    "id":27,
+    "vertical":true,
+    "hint":"Ging's username in Greed \nIsland"
+  },
+  {
+    "word":"rere",
+    "length":4,
+    "id":10,
+    "vertical":true,
+    "hint":"::"
+  }
+]
