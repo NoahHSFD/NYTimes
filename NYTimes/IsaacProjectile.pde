@@ -11,6 +11,7 @@ public class IsaacProjectile {
   float knockback;
   float delayTime, delayTimer;                                                         //delay until the projectile spawns
   boolean followingEnemy, followingPlayer;                                             //whether the projectile follows an enemy/player
+  boolean bouncing = true;                                                                    //whether projectile can bouce off of walls and obstacles
   IsaacEnemy targetEnemy;                                                              //enemy to be followed
   
   public IsaacProjectile(float x, float y, float dx, float dy, float speed, float time, float w, float damage, float knockback) {
@@ -88,21 +89,49 @@ public class IsaacProjectile {
       }
       x += dx*speed;
       y += dy*speed;
-      if (x <= is.borderWidth) {
-        return true;
-      } else if (x >= width-is.borderWidth) {
-        return true;
+      if(x <= is.borderWidth) {
+        setX(is.borderWidth);
+        if(bouncing) {
+          dx *= -1;
+        } else {
+          return true;
+        }
+      } else if(x >= width-is.borderWidth) {
+        setX(width-is.borderWidth);
+        if(bouncing) {
+          dx *= -1;
+        } else {
+          return true;
+        }
       }
-      if (y <= is.borderWidth) {
-        return true;
-      } else if (y >= height-is.borderWidth) {
-        return true;
+      if(y <= is.borderWidth) {
+        setY(is.borderWidth);
+        if(bouncing) {
+          dy *= -1;
+        } else {
+          return true;
+        }
+      } else if(y >= height-is.borderWidth) {
+        setY(height-is.borderWidth);
+        if(bouncing) {
+          dy *= -1;
+        } else {
+          return true;
+        }
       }
       if(time-- <= 0) {
         return true;
       }
     }
     return false;
+  }
+  
+  void setX(float x) {
+    this.x = x;
+  }
+  
+  void setY(float y) {
+    this.y = y;
   }
   
   void setSpeed(int speed) {
@@ -138,10 +167,10 @@ public class IsaacProjectile {
   }
   
   boolean intersects(IsaacPlayer player) {
-    return player.r + r >= sqrt(pow((player.x - this.x), 2) + pow((player.y - this.y), 2));
+    return player.r + r >= sqrt(pow((player.x - x), 2) + pow((player.y - y), 2));
   }
   
   boolean intersects(IsaacObstacle o) {
-    return this.x - this.r < o.x + o.w && this.x + this.r > o.x && this.y - this.r < o.y + o.h && this.y + this.r > o.y;
+    return x - r < o.x + o.w && x + r > o.x && y - r < o.y + o.h && y + r > o.y;
   }
 }
