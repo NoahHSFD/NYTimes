@@ -21,6 +21,7 @@ public class IsaacObstacle {
       case 1:
         this.clr = #FFFFFF;
         this.traversible = false;
+        this.destructible = true;
         break;
       default:
     }
@@ -84,5 +85,10 @@ public class IsaacObstacle {
   
   boolean intersects(IsaacProjectile p) {
     return !traversible && x < p.x + p.r && x + w > p.x - p.r && y < p.y + p.r && y + h > p.y - p.r;
+  }
+  
+  boolean intersects(IsaacBomb bomb) {
+    return bomb.exploding && (bomb.explosionTime == 1) &&  (x < bomb.x + bomb.explosionR && x + w > bomb.x - bomb.explosionR &&
+           y < bomb.y + bomb.explosionR && y + h > bomb.y - bomb.explosionR);
   }
 }
