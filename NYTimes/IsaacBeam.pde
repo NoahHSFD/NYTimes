@@ -6,8 +6,9 @@ public class IsaacBeam {
   float time;                                                                        //how long the beam exists
   color clr = #00FFFF;
   float damage = 1;
+  float knockback;
   
-  public IsaacBeam(float x, float y, float w, float h, float dx, float dy, float time, float charge) {
+  public IsaacBeam(float x, float y, float w, float h, float dx, float dy, float time, float charge, float knockback) {
     this.dx = dx;
     this.dy = dy;
     if(dx == 1) {
@@ -33,6 +34,7 @@ public class IsaacBeam {
     }
     this.time = time;
     this.damage *= charge*.25;
+    this.knockback = knockback;
   }
   
   void display() {
@@ -132,5 +134,17 @@ public class IsaacBeam {
   
   float getDamage() {
     return damage;
+  }
+  
+  float getKnockback() {
+    return knockback;
+  }
+  
+  float getDx() {
+    return dx;
+  }
+  
+  float getDy() {
+    return dy;
   }
 }

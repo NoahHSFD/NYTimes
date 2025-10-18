@@ -15,7 +15,7 @@ public class IsaacPlayer {
   float projectileSpeed;                                                     //how fast projectiles fly
   float projectileTime;                                                      //how long projectiles stay
   float projectileDamage;
-  float projectileKnockback;
+  float projectileKnockback, beamKnockback;
   boolean projectileFollowing;                                               //whether projectiles follow enemies
   IsaacEnemy target;                                                         //enemy to be targeted by projectiles
   int maxLives;
@@ -84,6 +84,7 @@ public class IsaacPlayer {
     this.projectileTime = 70;
     this.projectileDamage = 50;
     this.projectileKnockback = 10;
+    this.beamKnockback = .2;
     this.maxLives = 10;
     this.lives = maxLives;
     this.bombs = 10;
@@ -417,7 +418,7 @@ public class IsaacPlayer {
   }
   
   void shootBeam() {
-    playerBeams.add(new IsaacBeam(x, y, beamWidth, height*.4, facingX, facingY, beamTime, charge));
+    playerBeams.add(new IsaacBeam(x, y, beamWidth, height*.4, facingX, facingY, beamTime, charge, beamKnockback));
     charge = 0;
   }
   

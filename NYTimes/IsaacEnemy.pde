@@ -93,6 +93,7 @@ public class IsaacEnemy {
       this.fireRate = 1;
       this.knockbackEfficiency = 1;
       this.projectileAmount = 7;
+      this.projectileBounce = true;
       break;
     case 1:
       this.clr = #E7F00C;
@@ -699,6 +700,8 @@ public class IsaacEnemy {
 
   void hit(IsaacBeam b) {
     hp -= b.getDamage();
+    x += b.getKnockback()*b.getDx()*knockbackEfficiency;
+    y += b.getKnockback()*b.getDy()*knockbackEfficiency;
     if(hp <= 0) {
       if(revives && !reviving) {
         hp = maxHp;
