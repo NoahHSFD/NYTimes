@@ -623,6 +623,7 @@ public class IsaacPlayer {
     float projectileDamage;
     float projectileKnockback;
     boolean projectileFollowing;                                                 //whether the projectiles follow enemies
+    boolean autoShooting;                                                        //whether familiar automatically shoots or only when player is shooting/charging
     IsaacEnemy target;                                                           //enemy to be targeted by projectiles
     PImage familiarIcon, familiarIconLeft, familiarIconRight, familiarIconBack;
     
@@ -673,6 +674,7 @@ public class IsaacPlayer {
         case 0:
           this.x = p.x - facingX*(p.r + w*.25);
           this.y = p.y + facingY*(p.r + w*.25);
+          this.autoShooting = true;
           break;
         case 1:
           this.x = p.x + facingX*(p.r + w*.25);
@@ -681,6 +683,7 @@ public class IsaacPlayer {
         case 2:
           this.x = p.x - facingX*(p.r + w*.25);
           this.y = p.y - facingY*(p.r + w*.25);
+          this.autoShooting = true;
           break;
         default:
       }
@@ -727,7 +730,7 @@ public class IsaacPlayer {
           break;
         default:
       }
-      if(p.shooting || p.charging) {
+      if(p.shooting || p.charging || autoShooting) {
         shootTimer += fireRate;
         if(shootTimer >= 100) {
           target = null;
