@@ -38,6 +38,7 @@ public class IsaacEnemy {
   boolean revives, reviving;                                                   //whether an enemy can/is being revived
   boolean corpse;                                                              //whether enemy is a corpse left behind after dying
   boolean flyable;                                                             //whether an enemy can be flown over without taking contact damage
+  boolean projectileBounce;
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
@@ -189,6 +190,7 @@ public class IsaacEnemy {
       this.h = height*.1;
       this.x = width/2. - r;
       this.y = 0;
+      this.projectileTime = 250;
       this.untargetable = true;
       this.noContactDamage = true;
       this.noShadow = true;
@@ -546,35 +548,40 @@ public class IsaacEnemy {
   }
 
   void shoot() {
-    enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, facingX, facingY, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+    enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, facingX, facingY, projectileSpeed, projectileTime,
+                                             projectileSize, projectileDamage, projectileKnockback, projectileBounce));
   }
   
   void shootRandom() {
-    enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(random(0, 360)), projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+    enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(random(0, 360)), projectileSpeed, projectileTime, projectileSize,
+                                             projectileDamage, projectileKnockback, projectileBounce));
   }
 
   void shoot(IsaacPlayer p) {
     enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, (p.x-x)/(Math.abs(p.x-x) + Math.abs(p.y-y)), (p.y-y)/(Math.abs(p.x-x) + Math.abs(p.y-y)),
-      projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+      projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
   }
   
   void shoot(float amount) {
     if(amount == 1) {
-      enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, dx, dy, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+      enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, dx, dy, projectileSpeed, projectileTime, projectileSize,
+                                               projectileDamage, projectileKnockback, projectileBounce));
     } else {
       for(float i = 0; i < amount; i++) {
-        enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+        enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize,
+                                                 projectileDamage, projectileKnockback, projectileBounce));
       }
     }
   }
   
   void shoot(float amount, float x, float y, float delay) {
     if(amount == 1) {
-      enemyProjectiles.add(new IsaacProjectile(x, y, dx, dy, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+      enemyProjectiles.add(new IsaacProjectile(x, y, dx, dy, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
       enemyProjectiles.get(enemyProjectiles.size()-1).setDelayTime(delay);
     } else {
       for(float i = 0; i < amount; i++) {
-        enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+        enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize,
+                                                 projectileDamage, projectileKnockback, projectileBounce));
         enemyProjectiles.get(enemyProjectiles.size()-1).setDelayTime(delay);
       }
     }
@@ -603,10 +610,12 @@ public class IsaacEnemy {
     gravity(is.player, 2);
     switch(int(bossAttackDurationTimer%50)) {
       case 0:
-        enemyProjectiles.add(new IsaacProjectile(random(height*.11, width-height*.11), height*.89, x+r, y, projectileSpeed, projectileSize, projectileDamage, projectileKnockback));
+        enemyProjectiles.add(new IsaacProjectile(random(height*.11, width-height*.11), height*.89, x+r, y, projectileSpeed, projectileSize,
+                                                 projectileDamage, projectileKnockback, projectileBounce));
         break;
       case 25:
-        enemyProjectiles.add(new IsaacProjectile(height*.11 + ((width-2.0*height*.11)*int(random(0,2))), random(height*.2, height*.89), x+r, y, projectileSpeed, projectileSize, projectileDamage, projectileKnockback));
+        enemyProjectiles.add(new IsaacProjectile(height*.11 + ((width-2.0*height*.11)*int(random(0,2))), random(height*.2, height*.89), x+r, y,
+                                                 projectileSpeed, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
         break;
       default:
     }
@@ -616,7 +625,8 @@ public class IsaacEnemy {
     switch(int(bossAttackDurationTimer%150)) {
       case 0:
         for(int i = 0; i <= int(random(minAmount, maxAmount)); i++) {
-          enemyProjectiles.add(new IsaacProjectile(x + r, height*.11, Math.toRadians(int(random(30, 151))), random(.5, 1.5)*projectileSpeed, 1000, projectileSize, projectileDamage, projectileKnockback));
+          enemyProjectiles.add(new IsaacProjectile(x + r, height*.11, Math.toRadians(int(random(30, 151))), random(.5, 1.5)*projectileSpeed,
+                                                   projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
         }
         break;
       default:
@@ -626,7 +636,8 @@ public class IsaacEnemy {
   void gumsScream(int amount, int gap) {
     if(bossAttackDurationTimer%75 == 0) {
       for(int i = 0; i <= amount; i++) {
-        if(!(i==gap)) enemyProjectiles.add(new IsaacProjectile(x + r, height*.11, Math.toRadians(i*180/amount), projectileSpeed*.8, 1000, projectileSize, projectileDamage, projectileKnockback));
+        if(!(i==gap)) enemyProjectiles.add(new IsaacProjectile(x + r, height*.11, Math.toRadians(i*180/amount), projectileSpeed*.8, projectileTime,
+                                                               projectileSize, projectileDamage, projectileKnockback, projectileBounce));
       }
     }
   }

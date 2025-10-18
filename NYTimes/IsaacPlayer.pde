@@ -22,6 +22,7 @@ public class IsaacPlayer {
   int lives;
   int bombs;
   boolean invulnerable;
+  boolean projectileBounce;
   boolean flying;                                                            //for certain obstacles
   float invulnerableTimer;                                                   //timer to check invulnerability
   float defaultInvulnerabilityTime;                                          //time how long player stays invulberable after being hit
@@ -224,12 +225,6 @@ public class IsaacPlayer {
         j--;
       }
     }
-    //for(int k = 0; k < playerBombs.size(); k++) {
-    //  if(playerBombs.get(k).update()) {
-    //    playerBombs.remove(k);
-    //    k--;
-    //  }
-    //}
     x += (moveKeys[2] + moveKeys[3])*speed;
     y += (moveKeys[0] + moveKeys[1])*speed;
     if (x <= r + is.borderWidth) {
@@ -303,19 +298,21 @@ public class IsaacPlayer {
   }
   
   void shootProjectile() {
-    playerProjectiles.add(new IsaacProjectile(x, y, facingX, facingY, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+    playerProjectiles.add(new IsaacProjectile(x, y, facingX, facingY, projectileSpeed, projectileTime, projectileSize,
+                                              projectileDamage, projectileKnockback, projectileBounce));
   }
   
   void shootProjectile(float amount) {
     for(float i = 0; i < amount; i++) {
-      playerProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+      playerProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(360.*(i/amount)), projectileSpeed, projectileTime, projectileSize,
+                                                projectileDamage, projectileKnockback, projectileBounce));
     }
   }
     
   void shootProjectile(IsaacEnemy e) {
     if(e != null) {
       playerProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, (e.x-x)/(Math.abs(e.x-x) + Math.abs(e.y-y)), (e.y-y)/(Math.abs(e.x-x) + Math.abs(e.y-y)),
-        projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileFollowing, e));
+        projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileFollowing, e, projectileBounce));
     } else {
       shootProjectile();
     }
@@ -754,13 +751,14 @@ public class IsaacPlayer {
     }
     
     void shoot(IsaacPlayer p) {
-      p.playerProjectiles.add(new IsaacProjectile(x, y, facingX, facingY, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback));
+      p.playerProjectiles.add(new IsaacProjectile(x, y, facingX, facingY, projectileSpeed, projectileTime, projectileSize, projectileDamage,
+                                                  projectileKnockback, projectileBounce));
     }
     
     void shoot(IsaacPlayer p, IsaacEnemy e) {
       if(e != null) {
         p.playerProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, (e.x-x)/(Math.abs(e.x-x) + Math.abs(e.y-y)), (e.y-y)/(Math.abs(e.x-x) + Math.abs(e.y-y)),
-          projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileFollowing, e));
+          projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileFollowing, e, projectileBounce));
       } else {
         shoot(p);
       }

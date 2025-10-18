@@ -11,10 +11,10 @@ public class IsaacProjectile {
   float knockback;
   float delayTime, delayTimer;                                                         //delay until the projectile spawns
   boolean followingEnemy, followingPlayer;                                             //whether the projectile follows an enemy/player
-  boolean bouncing = true;                                                                    //whether projectile can bouce off of walls and obstacles
+  boolean bouncing;                                                                    //whether projectile can bouce off of walls and obstacles
   IsaacEnemy targetEnemy;                                                              //enemy to be followed
   
-  public IsaacProjectile(float x, float y, float dx, float dy, float speed, float time, float w, float damage, float knockback) {
+  public IsaacProjectile(float x, float y, float dx, float dy, float speed, float time, float w, float damage, float knockback, boolean bouncing) {
     this.w = w;
     this.r = w*.5;
     this.x = x + dx*r;
@@ -25,9 +25,10 @@ public class IsaacProjectile {
     this.time = time;
     this.damage = damage;
     this.knockback = knockback;
+    this.bouncing = bouncing;
   }
   
-  public IsaacProjectile(float x, float y, float dx, float dy, float speed, float time, float w, float damage, float knockback, boolean followingEnemy, IsaacEnemy targetEnemy) {
+  public IsaacProjectile(float x, float y, float dx, float dy, float speed, float time, float w, float damage, float knockback, boolean followingEnemy, IsaacEnemy targetEnemy, boolean bouncing) {
     this.w = w;
     this.r = w*.5;
     this.x = x + dx*r;
@@ -40,9 +41,10 @@ public class IsaacProjectile {
     this.knockback = knockback;
     this.followingEnemy = followingEnemy;
     this.targetEnemy = targetEnemy;
+    this.bouncing = bouncing;
   }
   
-  public IsaacProjectile(float x, float y, double radians, float speed, float time, float w, float damage, float knockback) {
+  public IsaacProjectile(float x, float y, double radians, float speed, float time, float w, float damage, float knockback, boolean bouncing) {
     this.w = w;
     this.r = w*.5;
     this.x = x;
@@ -53,9 +55,10 @@ public class IsaacProjectile {
     this.time = time;
     this.damage = damage;
     this.knockback = knockback;
+    this.bouncing = bouncing;
   }
   
-  public IsaacProjectile(float x, float y, float x2, float y2, float speed, float w, float damage, float knockback) {
+  public IsaacProjectile(float x, float y, float x2, float y2, float speed, float w, float damage, float knockback, boolean bouncing) {
     this.w = w;
     this.r = w*.5;
     this.x = x;
@@ -66,6 +69,7 @@ public class IsaacProjectile {
     this.speed = speed;
     this.damage = damage;
     this.knockback = knockback;
+    this.bouncing = bouncing;
   }
   
   void display() {
