@@ -171,7 +171,7 @@ void draw() {
     try {
       bgm.amp(volume.setVolume());
     } catch(Exception e) {
-      //println(e + "\n Can't set BGM volume.");
+      println(e + "\n Can't set BGM volume.");
     }
   }
   volume.update();
@@ -214,7 +214,13 @@ void mousePressed() {
 void mouseReleased() {
   homeButton.click();
   homeButton.clickCheck();
-  if(volume.mute()) bgm.amp(0.0);
+  if(volume.mute()) {
+    try {
+      bgm.amp(0.0);
+    } catch(Exception e) {
+      println(e + "\nCan't mute BGM.");
+    }
+  }
   volume.clickCheck();
   switch(game) {
     case MENU:

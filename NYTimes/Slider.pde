@@ -67,11 +67,7 @@ public class Slider {
   
   boolean mute() {
     if(this.status == 2){
-      if(muted) {
-        muted = false;
-      } else {
-        muted = true;
-      }
+      muted = !muted;
       return true;
     }
     return false;
@@ -90,6 +86,6 @@ public class Slider {
   }
   
   boolean getMuted() {
-    return this.muted;
+    return muted;
   }
 }
