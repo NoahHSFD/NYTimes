@@ -338,22 +338,52 @@ public class IsaacMap {
       void switchRoom() {
         switch(position) {
           case 0:
+            for(IsaacEnemy e : enemyList) {
+              if(e.dead) {
+                e.enemyProjectiles.clear();
+                e.enemyPuddles.clear();
+              }
+            }
             currentRoomY--;
             is.player.setY(height - (this.h + is.player.getR()));
             break;
           case 1:
+            for(IsaacEnemy e : enemyList) {
+              if(e.dead) {
+                e.enemyProjectiles.clear();
+                e.enemyPuddles.clear();
+              }
+            }
             currentRoomX++;
             is.player.setX(this.w + is.player.getR());
             break;
           case 2:
+            for(IsaacEnemy e : enemyList) {
+              if(e.dead) {
+                e.enemyProjectiles.clear();
+                e.enemyPuddles.clear();
+              }
+            }
             currentRoomY++;
             is.player.setY(this.h + is.player.getR());
             break;
           case 3:
+            for(IsaacEnemy e : enemyList) {
+              if(e.dead) {
+                e.enemyProjectiles.clear();
+                e.enemyPuddles.clear();
+              }
+            }
             currentRoomX--;
             is.player.setX(width - (this.w + is.player.getR()));
             break;
           case 4:
+            for(IsaacEnemy e : enemyList) {
+              if(e.dead) {
+                e.enemyProjectiles.clear();
+                e.enemyPuddles.clear();
+              }
+            }
             is.setCurrentMap((is.getCurrentMap()+1)%is.maps.size());
             is.maps.get(is.getCurrentMap()).init();
             break;
