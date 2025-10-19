@@ -14,26 +14,26 @@ public class Isaac {
     borderWidth = height*.1;
     try {
       isMap = loadJSONArray("/Maps/Map1.json");
+      rooms = new JSONObject[isMap.size()];
+      for(int i = 0; i < isMap.size(); i++) {
+        rooms[i] = isMap.getJSONObject(i);
+      }
+      map = new IsaacMap(rooms);
+      maps.add(map);
     } catch(Exception e) {
       println(e + "\n Can't find Isaac map 1.");
     }
-    rooms = new JSONObject[isMap.size()];
-    for(int i = 0; i < isMap.size(); i++) {
-      rooms[i] = isMap.getJSONObject(i);
-    }
-    map = new IsaacMap(rooms);
-    maps.add(map);
     try {
       isMap = loadJSONArray("/Maps/Map2.json");
+      rooms = new JSONObject[isMap.size()];
+      for(int i = 0; i < isMap.size(); i++) {
+        rooms[i] = isMap.getJSONObject(i);
+      }
+      map = new IsaacMap(rooms);
+      maps.add(map);
     } catch(Exception e) {
       println(e + "\n Can't find Isaac map 2.");
     }
-    rooms = new JSONObject[isMap.size()];
-    for(int i = 0; i < isMap.size(); i++) {
-      rooms[i] = isMap.getJSONObject(i);
-    }
-    map = new IsaacMap(rooms);
-    maps.add(map);
     currentMap = 0;
     player = new IsaacPlayer(id);
     state = GameState.PLAYING;
@@ -52,7 +52,7 @@ public class Isaac {
     maps.get(currentMap).minimap.display();
     switch(state) {
       case ANIMATION:
-        state = playAnimation(600);
+        state = playAnimation(500);
         break;
       case DEFEAT:
         state = showDefeatScreen();
@@ -72,7 +72,7 @@ public class Isaac {
   }
   
   void pressKey(int k) {
-    if(keyCode == ENTER) state = GameState.DEFEAT;
+    if(keyCode == ENTER) state = GameState.ANIMATION;
     if(state == GameState.PLAYING) player.pressKey(k);
   }
   
@@ -89,9 +89,14 @@ public class Isaac {
   }
   
   GameState playAnimation(int len) {
+    player.charging = false;
+    player.charge = 0;
     switch(player.id) {
       case 0:
-        image(bocchiMenu.get((animationTimer/5)%8 + 1), width/4., height/4., width/2., height/2.);
+        background(#000000);
+        image(bocchiMenu.get(0), (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-.4, width*.1) : width*.1, height*.5, height*.4, height*.4);
+        image(loadingScreen, (animationTimer >= len*.3) && (animationTimer <= len*.6) ? map(animationTimer, len*.3, len*.6, width+(height*.4), width*.9-height*.4) :
+                             (animationTimer < len*.3) ? width + height*.4 : width*.9-height*.4, height*.5, height*.4, height*.4);
         break;
       case 1:
         image(ryouMenu.get(((animationTimer/14)%8)), width/4., height/4., width/2., height/2.);

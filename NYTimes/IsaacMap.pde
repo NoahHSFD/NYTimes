@@ -28,6 +28,7 @@ public class IsaacMap {
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDestructibleDoors(rooms[i].getIntList("destructibledoors").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setBossRoom(rooms[i].getBoolean("bossroom"));
     }
     minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
     currentRoomX = rooms[0].getIntList("coordinates").get(0);
@@ -66,6 +67,7 @@ public class IsaacMap {
     ArrayList<IsaacCollectible> collectibleList = new ArrayList<IsaacCollectible>();
     ArrayList<IsaacObstacle> obstacleList = new ArrayList<IsaacObstacle>();
     PImage backgroundSprite;
+    boolean bossRoom;
     
     public IsaacRoom(int x, int y) {
       this.x = x;
@@ -105,13 +107,13 @@ public class IsaacMap {
       }
     }
     
+    void setBossRoom(boolean bossRoom) {
+      this.bossRoom = bossRoom;
+    }
+    
     void display() {
       pushStyle();
       image(backgroundSprite, 0, 0, width, height);
-      //line(is.borderWidth, is.borderWidth, width-is.borderWidth, is.borderWidth);
-      //line(is.borderWidth, height-is.borderWidth, width-is.borderWidth, height-is.borderWidth);
-      //line(is.borderWidth, is.borderWidth, is.borderWidth, height-is.borderWidth);
-      //line(width-is.borderWidth, is.borderWidth, width-is.borderWidth, height-is.borderWidth);
       for(IsaacEnemy e : enemyList) {
         for(IsaacPuddle pu : e.enemyPuddles) {
           pu.display();
@@ -396,6 +398,7 @@ public class IsaacMap {
             break;
           default:
         }
+        if(is.maps.get(is.getCurrentMap()).getCurrentRoom().bossRoom)is.state = is.playAnimation(500);
       }
     }
   }
