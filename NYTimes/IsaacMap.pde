@@ -173,7 +173,7 @@ public class IsaacMap {
       for(int i = 0; i < enemyList.size(); i++) {
         for(IsaacObstacle o : obstacleList) {
           if(!(enemyList.get(i).flying && o.traversible)) {
-            if(enemyList.get(i).intersects(o)) {
+            if(enemyList.get(i).intersects(o) && !(enemyList.get(i).jumping)) {
               enemyList.get(i).collision(o);
             }
           }

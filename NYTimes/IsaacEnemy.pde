@@ -243,18 +243,6 @@ public class IsaacEnemy {
     this.deathTime = puddleTime > projectileTime ? puddleTime : projectileTime;
   }
 
-  void init() {
-    this.x = width/2;
-    this.y = height*.1;
-    this.speed = 3;
-    this.clr = #F200FF;
-    enemyProjectiles.clear();
-    this.facingX = 1;
-    this.facingY = 0;
-    this.dx = facingX;
-    this.dy = facingY;
-  }
-
   void display() {
     pushStyle();
     if(!dead || leavesCorpse) {
@@ -262,9 +250,6 @@ public class IsaacEnemy {
     //circle(x, y, w);
     //fill(#FFFFFF);
     //circle(x + facingX*r*.5, y + facingY*r*.5, r);
-    //for(IsaacPuddle pu : enemyPuddles) {
-    //  pu.display();
-    //}
       fill(#000000, 70);
       noStroke();
       if(!noShadow) circle(x + (flying ? w*.15 : w*.05), y + (flying ? w*.5 : w*.05), ((airborneTime > 0) ? (((airborneTime/2.)-airborneTimer)/(airborneTime/2.))*w*1.1 : w*1.1));
@@ -411,7 +396,6 @@ public class IsaacEnemy {
                     gumsScream(projectileAmount, screamGap);
                     break;
                   case 3:
-                    gumsQuiver();
                     break;
                   case 4:
                     gumsRetch();
@@ -644,9 +628,14 @@ public class IsaacEnemy {
   }
   
   void gumsQuiver() {
-    if(bossAttackDurationTimer%150 == 0) {
+    if(bossAttackDurationTimer%100 == 0) {
       float xPos = random(height*.11, width-height*.1);
       float yPos = random(height*.11, height*.9);
+      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
+        if(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
+          yPos = o.y;
+        }
+      }
       spawnEnemy(int(random(31, 37)), 1, xPos, yPos);
       is.maps.get(is.currentMap).getCurrentRoom().enemyList.get(
       is.maps.get(is.currentMap).getCurrentRoom().enemyList.size()-1).fall();
@@ -877,6 +866,6 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacObstacle obstacle) {
-    return !jumping && x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y;
+    return x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y;
   }
 }
