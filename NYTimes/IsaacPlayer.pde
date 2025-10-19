@@ -87,7 +87,7 @@ public class IsaacPlayer {
     this.beamKnockback = .2;
     this.maxLives = 10;
     this.lives = maxLives;
-    this.bombs = 10;
+    this.bombs = 99;
     this.invulnerable = false;
     this.defaultInvulnerabilityTime = 120;
     this.invulnerabilityTime = defaultInvulnerabilityTime;

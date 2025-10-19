@@ -4,6 +4,7 @@ public class Connections {
   JSONArray coGame;
   JSONObject[] categories;
   int gameSize;
+  int submitType;                                                                                //0: submit, 1: submitTierSensitive, 2: submitAll, 3: submitAllTierSensitive
   float tileWidth, tileHeight;
   ConnectionsTile[] connectionsTiles;
   ArrayList<Integer> shuffleArray = new ArrayList<Integer>();
@@ -26,6 +27,7 @@ public class Connections {
       gameSize += categories[i].getStringList("words").size();
     }
     connectionsTiles = new ConnectionsTile[gameSize];
+    submitType = 2;
   }
   
   void init() {
@@ -56,7 +58,7 @@ public class Connections {
     for(ConnectionsTile t : connectionsTiles) {
       shuffleArray.add(shuffleIndex++);
     }
-    Collections.shuffle(shuffleArray, new Random(16));
+    Collections.shuffle(shuffleArray/*, new Random(16)*/);
     for(int i = 0; i < connectionsTiles.length; i++) {
       connectionsTiles[i].swap(shuffleArray.get(i));
     }
@@ -220,6 +222,24 @@ public class Connections {
     Collections.shuffle(shuffleArray);
     for(int i = 0; i < connectionsTiles.length; i++) {
       connectionsTiles[i].swap(shuffleArray.get(i));
+    }
+  }
+  
+  void submitSolution() {
+    switch(submitType) {
+      case 0:
+        submit();
+        break;
+      case 1:
+        submitTierSensitive();
+        break;
+      case 2:
+        submitAll();
+        break;
+      case 3:
+        submitAllTierSensitive();
+        break;
+      default:
     }
   }
   

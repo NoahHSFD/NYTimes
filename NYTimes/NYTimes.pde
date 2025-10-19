@@ -303,7 +303,7 @@ void keyPressed() {
     case CONNECTIONS:
   //if(key == CODED) {
       if(keyCode == ENTER) {
-        co.submitAll();
+        co.submitSolution();
       }
       break;
     case ISAAC:

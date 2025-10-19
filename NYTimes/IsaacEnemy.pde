@@ -861,19 +861,15 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacPlayer player) {
-    return !(flyable && player.flying) && !dead && !noContactDamage && !jumping && player.r + r >= sqrt(pow((player.x - this.x), 2) + pow((player.y - this.y), 2));
-      //if(this.x - this.r < player.x + player.r && this.x + this.r > player.x - player.r &&
-      //   this.y - this.r < player.y + player.r && this.y + this.r > player.y - player.r) {
+    return !(flyable && player.flying) && !dead && !noContactDamage && !jumping && player.r + r >= sqrt(pow((player.x - x), 2) + pow((player.y - y), 2));
   }
 
   boolean intersects(IsaacProjectile projectile) {
-    return !corpse && !dead && !untargetable && !jumping && projectile.r + r*1.05 >= sqrt(pow((projectile.x - this.x), 2) + pow((projectile.y - this.y), 2));
-    //if(!jumping && this.x - this.r < projectile.x + projectile.r && this.x + this.r > projectile.x - projectile.r &&
-    //   this.y - this.r < projectile.y + projectile.r && this.y + this.r > projectile.y - projectile.r) {
+    return !corpse && !dead && !untargetable && !jumping && projectile.r + r*1.05 >= sqrt(pow((projectile.x - x), 2) + pow((projectile.y - y), 2));
   }
 
   boolean intersects(IsaacBeam beam) {
-    return !corpse && !dead && !untargetable && !jumping && this.x - this.r < beam.x + beam.w && this.x + this.r > beam.x && this.y - this.r < beam.y + beam.h && this.y + this.r > beam.y;
+    return !corpse && !dead && !untargetable && !jumping && x - r < beam.x + beam.w && x + r > beam.x && y - r < beam.y + beam.h && y + r > beam.y;
   }
 
   boolean intersects(IsaacBomb bomb) {
@@ -881,6 +877,6 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacObstacle obstacle) {
-    return !jumping && this.x - this.r < obstacle.x + obstacle.w && this.x + this.r > obstacle.x && this.y - this.r < obstacle.y + obstacle.h && this.y + this.r > obstacle.y;
+    return !jumping && x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y;
   }
 }

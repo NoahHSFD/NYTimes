@@ -70,9 +70,9 @@ public class IsaacMap {
     public IsaacRoom(int x, int y) {
       this.x = x;
       this.y = y;
-      //obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 0));
-      obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 0));
-      //obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
+      obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 1));
+      obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 1));
+      obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
       obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
       backgroundSprite = backgrounds.get(0);
     }

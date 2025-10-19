@@ -46,11 +46,6 @@ public class IsaacCollectible {
     }
   }
   
-  void init() {
-    this.x = width*.5;
-    this.y = height*.5;
-  }
-  
   void display() {
     pushStyle();
     fill(clr);
@@ -91,6 +86,6 @@ public class IsaacCollectible {
   }
   
   boolean intersects(IsaacPlayer player) {
-    return this.x - this.r < player.x + player.r && this.x + this.r > player.x - player.r && this.y - this.r < player.y + player.r && this.y + this.r > player.y - player.r;
+    return x - r < player.x + player.r && x + r > player.x - player.r && y - r < player.y + player.r && y + r > player.y - player.r;
   }
 }
