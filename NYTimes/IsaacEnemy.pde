@@ -587,6 +587,10 @@ public class IsaacEnemy {
     enemyPuddles.add(new IsaacPuddle(x, y, puddleWidth, puddleHeight, puddleTime, 1));
   }
   
+  void leavePuddle(float x, float y, float pWidth, float pHeight, float pTime) {
+    enemyPuddles.add(new IsaacPuddle(x, y, pWidth, pHeight, pTime, 1));
+  }
+  
   void gravity(IsaacPlayer player, float strength) {
     player.setX(player.x + strength*Math.signum(x + r - player.x));
     player.setY(player.y + strength*Math.signum(y - player.y));
@@ -609,10 +613,33 @@ public class IsaacEnemy {
   
   void gumsCough(int minAmount, int maxAmount) {
     switch(int(bossAttackDurationTimer%150)) {
-      case 0:
+      case 10:
         for(int i = 0; i <= int(random(minAmount, maxAmount)); i++) {
           enemyProjectiles.add(new IsaacProjectile(x + r, height*.11, Math.toRadians(int(random(30, 151))), random(.5, 1.5)*projectileSpeed,
                                                    projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
+        }
+        for(int j = -1; j < 2; j++) {
+          leavePuddle(x+w*.4+(j*w*.2), y+h, w*.2, w*.2, 100);
+        }
+        break;
+      case 20:
+        for(int j = -1; j < 2; j++) {
+          leavePuddle(x+w*.4+(j*random(-w*.2, w*.2)), y+h+w*.2, w*.2, w*.2, 100);
+        }
+        break;
+      case 30:
+        for(int j = -1; j < 2; j++) {
+          leavePuddle(x+w*.4+(j*random(-w*.4, w*.4)), y+h+(w*.2*2), w*.2, w*.2, 100);
+        }
+        break;
+      case 40:
+        for(int j = -1; j < 2; j++) {
+          leavePuddle(x+w*.4+(j*random(-w*.6, w*.6)), y+h+(w*.2*3), w*.2, w*.2, 100);
+        }
+        break;
+      case 50:
+        for(int j = -1; j < 2; j++) {
+          leavePuddle(x+w*.4+(j*random(-w*.8, w*.8)), y+h+(w*.2*4), w*.2, w*.2, 100);
         }
         break;
       default:
@@ -632,14 +659,15 @@ public class IsaacEnemy {
     if(bossAttackDurationTimer%100 == 0) {
       float xPos = random(height*.11, width-height*.1);
       float yPos = random(height*.11, height*.9);
-      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
-        if(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
-          yPos = o.y;
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
+        while(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
+          xPos = random(height*.11, width-height*.1);
+          yPos = random(height*.11, height*.9);
         }
       }
       spawnEnemy(int(random(31, 37)), 1, xPos, yPos);
-      is.maps.get(is.currentMap).getCurrentRoom().enemyList.get(
-      is.maps.get(is.currentMap).getCurrentRoom().enemyList.size()-1).fall();
+      is.getCurrentMap().getCurrentRoom().enemyList.get(
+      is.getCurrentMap().getCurrentRoom().enemyList.size()-1).fall();
       shoot(6, xPos, yPos, airborneTime*.5);
     }
   }
