@@ -396,6 +396,7 @@ public class IsaacEnemy {
                     gumsScream(projectileAmount, screamGap);
                     break;
                   case 3:
+                    gumsQuiver();
                     break;
                   case 4:
                     gumsRetch();

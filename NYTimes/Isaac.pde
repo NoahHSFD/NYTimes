@@ -112,13 +112,61 @@ public class Isaac {
                                                                               (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
         break;
       case 1:
-        image(ryouMenu.get(((animationTimer/14)%8)), width/4., height/4., width/2., height/2.);
+        //image(ryouMenu.get(((animationTimer/14)%8)), width/4., height/4., width/2., height/2.);
+        background(#000000);
+        fill(#675252);
+        noStroke();
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1) + height*.2, height*.85, height*.45, height*.15);
+        image(ryouMenu.get(0), (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1, height*.5, height*.4, height*.4);
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                              width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
+        image(loadingScreen, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+        textSize(height*.1);
+        fill(#FFFFFF);
+        text("RYOU", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
+        text("VS", width*.5, (animationTimer >= len*.4) && (animationTimer <= len*.5) ? map(animationTimer, len*.4, len*.5, height*-1, height*.25) :
+                                                                                        (animationTimer < len*.4) ? height*-1 : height*.25);
+        text("GUMS", (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.9-height*.2) :
+                                                                              (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
         break;
       case 2:
-        image(kitaMenu.get((animationTimer/14)%7), width/4., height/4., width/2., height/2.);
+        //image(kitaMenu.get((animationTimer/14)%7), width/4., height/4., width/2., height/2.);
+        background(#000000);
+        fill(#675252);
+        noStroke();
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1) + height*.2, height*.85, height*.45, height*.15);
+        image(kitaMenu.get(0), (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1, height*.5, height*.4, height*.4);
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                              width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
+        image(loadingScreen, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+        textSize(height*.1);
+        fill(#FFFFFF);
+        text("KITA", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
+        text("VS", width*.5, (animationTimer >= len*.4) && (animationTimer <= len*.5) ? map(animationTimer, len*.4, len*.5, height*-1, height*.25) :
+                                                                                        (animationTimer < len*.4) ? height*-1 : height*.25);
+        text("GUMS", (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.9-height*.2) :
+                                                                              (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
         break;
       case 3:
-        image(nijikaMenu.get((animationTimer/12)%18), width/4., height/4., width/2., height/2.);
+        //image(nijikaMenu.get((animationTimer/12)%18), width/4., height/4., width/2., height/2.);
+        background(#000000);
+        fill(#675252);
+        noStroke();
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1) + height*.2, height*.85, height*.45, height*.15);
+        image(nijikaMenu.get(0), (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, height*-3, width*.1) : width*.1, height*.5, height*.4, height*.4);
+        ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                              width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
+        image(loadingScreen, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
+                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+        textSize(height*.1);
+        fill(#FFFFFF);
+        text("NIJIKA", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
+        text("VS", width*.5, (animationTimer >= len*.4) && (animationTimer <= len*.5) ? map(animationTimer, len*.4, len*.5, height*-1, height*.25) :
+                                                                                        (animationTimer < len*.4) ? height*-1 : height*.25);
+        text("GUMS", (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.9-height*.2) :
+                                                                              (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
         break;
       default:
         pushStyle();

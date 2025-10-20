@@ -21,9 +21,10 @@ public class IsaacPlayer {
   int maxLives;
   int lives;
   int bombs;
+  int keys;                                                                  //for chests/closed doors
   boolean invulnerable;
   boolean projectileBounce;
-  boolean flying;                                                            //for certain obstacles
+  boolean flying;                                                            //whether player can fly over flyable enemies/obstacles/puddles
   float invulnerableTimer;                                                   //timer to check invulnerability
   float defaultInvulnerabilityTime;                                          //time how long player stays invulberable after being hit
   float invulnerabilityTime;
@@ -88,6 +89,7 @@ public class IsaacPlayer {
     this.maxLives = 10;
     this.lives = maxLives;
     this.bombs = 99;
+    this.keys = 2;
     this.invulnerable = false;
     this.defaultInvulnerabilityTime = 120;
     this.invulnerabilityTime = defaultInvulnerabilityTime;
@@ -157,6 +159,9 @@ public class IsaacPlayer {
     circle(width*.075, height*.125, width*.03);
     fill(#FFFFFF);
     text("x " + bombs, width*.11, height*.125);
+    fill(#FFFFFF);
+    text("KEYS", width*.075, height*.175);
+    text("x " + keys, width*.11, height*.175);
     popStyle();
   }
   
@@ -425,6 +430,10 @@ public class IsaacPlayer {
   void placeBomb() {
     is.maps.get(is.currentMap).getCurrentRoom().bombList.add(new IsaacBomb(x, y, w, explosionWidth, 200, 100));
     bombs--;
+  }
+  
+  void removeKey() {
+    keys--;
   }
   
   void resetMovement() {

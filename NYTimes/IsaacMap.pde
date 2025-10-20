@@ -63,9 +63,9 @@ public class IsaacMap {
     IsaacDoor[] doors;
     ArrayList<IsaacEnemy> enemyList = new ArrayList<IsaacEnemy>();
     ArrayList<IsaacBomb> bombList = new ArrayList<IsaacBomb>();
-    boolean enemyRemoved;
     ArrayList<IsaacCollectible> collectibleList = new ArrayList<IsaacCollectible>();
     ArrayList<IsaacObstacle> obstacleList = new ArrayList<IsaacObstacle>();
+    ArrayList<IsaacChest> chestList = new ArrayList<IsaacChest>();
     PImage backgroundSprite;
     boolean bossRoom;
     
@@ -76,6 +76,7 @@ public class IsaacMap {
       obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 1));
       obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
       obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
+      chestList.add(new IsaacChest(width*.2, height*.2, 0));
       backgroundSprite = backgrounds.get(0);
     }
     
@@ -128,6 +129,9 @@ public class IsaacMap {
       for(IsaacBomb bo : bombList) {
         bo.display();
       }
+      for(IsaacChest ch : chestList) {
+        ch.display();
+      }
       for(IsaacEnemy e : enemyList) {
         e.display();
       }
@@ -140,12 +144,23 @@ public class IsaacMap {
     void update() {
       for(IsaacDoor d : doors) {
         d.update();
-        if(d.getPosition() == 4 && enemyList.isEmpty()) d.open();
+        if(bossRoom && d.position == 4) {
+          for(IsaacEnemy e : enemyList) {
+            if(!e.dead) break;
+            d.open();
+          }
+        }
       }
       for(int i = 0; i < bombList.size(); i++) {
         if(bombList.get(i).update()) {
           bombList.remove(i);
           i--;
+        }
+      }
+      for(int i = 0; i < chestList.size(); i++) {
+        if(chestList.get(i).update()) {
+          //chestList.remove(i);
+          //i--;
         }
       }
       for(int i = 0; i >= 0 && i < obstacleList.size(); i++) {

@@ -181,6 +181,6 @@
     "destructibledoors":[],
     "enemies":[10, 20, 21],
     "collectibles":[3],
-    "bossroom":false
+    "bossroom":true
   }
 ]
