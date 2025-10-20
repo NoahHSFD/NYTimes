@@ -360,60 +360,36 @@ public class IsaacMap {
       }
       
       void switchRoom() {
+        for(IsaacEnemy e : enemyList) {
+          if(e.dead) {
+            e.enemyProjectiles.clear();
+            e.enemyPuddles.clear();
+          }
+        }
         switch(position) {
           case 0:
-            for(IsaacEnemy e : enemyList) {
-              if(e.dead) {
-                e.enemyProjectiles.clear();
-                e.enemyPuddles.clear();
-              }
-            }
             currentRoomY--;
-            is.player.setY(height - (this.h + is.player.getR()));
+            is.player.setY(height - (h + is.player.getR()));
             break;
           case 1:
-            for(IsaacEnemy e : enemyList) {
-              if(e.dead) {
-                e.enemyProjectiles.clear();
-                e.enemyPuddles.clear();
-              }
-            }
             currentRoomX++;
-            is.player.setX(this.w + is.player.getR());
+            is.player.setX(w + is.player.getR());
             break;
           case 2:
-            for(IsaacEnemy e : enemyList) {
-              if(e.dead) {
-                e.enemyProjectiles.clear();
-                e.enemyPuddles.clear();
-              }
-            }
             currentRoomY++;
-            is.player.setY(this.h + is.player.getR());
+            is.player.setY(h + is.player.getR());
             break;
           case 3:
-            for(IsaacEnemy e : enemyList) {
-              if(e.dead) {
-                e.enemyProjectiles.clear();
-                e.enemyPuddles.clear();
-              }
-            }
             currentRoomX--;
-            is.player.setX(width - (this.w + is.player.getR()));
+            is.player.setX(width - (w + is.player.getR()));
             break;
           case 4:
-            for(IsaacEnemy e : enemyList) {
-              if(e.dead) {
-                e.enemyProjectiles.clear();
-                e.enemyPuddles.clear();
-              }
-            }
-            is.setCurrentMap((is.getCurrentMap()+1)%is.maps.size());
-            is.maps.get(is.getCurrentMap()).init();
+            is.setCurrentMap((is.currentMap+1)%is.maps.size());
+            is.getCurrentMap().init();
             break;
           default:
         }
-        if(is.maps.get(is.getCurrentMap()).getCurrentRoom().bossRoom)is.state = is.playAnimation(500);
+        if(is.getCurrentMap().getCurrentRoom().bossRoom) is.state = is.playAnimation(500);
       }
     }
   }

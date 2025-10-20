@@ -10,6 +10,7 @@ public class IsaacCollectible {
     this.x = x;
     this.y = y;
     this.effect = CollectibleEffect.FIRERATEUP;
+    this.clr = #000000;
   }
   
   public IsaacCollectible() {

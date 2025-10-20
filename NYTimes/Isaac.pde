@@ -80,8 +80,8 @@ public class Isaac {
     player.releaseKey(k);
   }
   
-  int getCurrentMap() {
-    return currentMap;
+  IsaacMap getCurrentMap() {
+    return maps.get(currentMap);
   }
   
   void setCurrentMap(int currentMap) {
