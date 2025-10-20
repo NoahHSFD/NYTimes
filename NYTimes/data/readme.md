@@ -9,7 +9,7 @@ We have NYTimes Games at home, honey.
 
 Create txt file ***.txt with each word in a new line.
 Load in your txt file in Wordle constructor inside the Wordle class.
-Random word from list will be selected
+Random word from list will be selected.
 Example:
 ```
 killua
@@ -63,4 +63,27 @@ ONE-T-E
 -FEAR-P
 RUN-A--
 ```
-### 
+### Connections
+
+Create JSON Array ***.json with 4 tiers (YELLOW, GREEN, BLUE, PURPLE) and 4 words per tier.
+Load in your JSON Array in Connections constructor inside the Connections class.
+Example:
+```
+[
+  {
+    "words":["Raiden Mei", "Kanbaru Suruga", "Kurapika", "Mosquito Girl"],
+    "connection":"Hiroyuki Sawano",
+    "tier":"YELLOW",
+  },
+  {
+    "words":["Shingeki no Kyojin", "Ore Dake Level Up na Ken", "Guilty Crown", "Kill la Kill"],
+    "connection":"Sawashiro Miyuki",
+    "tier":"GREEN",
+  },
+  {
+    "words":["Kobuchizawa Shirase", "Tsunemori Akane", "Sengoku Nadeko", "Satou-chan"],
+    "connection":"Hanazawa Kana",
+    "tier":"BLUE",
+  },...
+]
+```
