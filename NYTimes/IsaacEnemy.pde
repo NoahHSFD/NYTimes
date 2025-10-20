@@ -659,12 +659,17 @@ public class IsaacEnemy {
     if(bossAttackDurationTimer%100 == 0) {
       float xPos = random(height*.11, width-height*.1);
       float yPos = random(height*.11, height*.9);
-      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
-        while(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
-          xPos = random(height*.11, width-height*.1);
-          yPos = random(height*.11, height*.9);
+      boolean overlap;
+      do {
+        overlap = false;
+        for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
+          while(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
+            overlap = true;
+            xPos = random(height*.11, width-height*.1);
+            yPos = random(height*.11, height*.9);
+          }
         }
-      }
+      } while (overlap);
       spawnEnemy(int(random(31, 37)), 1, xPos, yPos);
       is.getCurrentMap().getCurrentRoom().enemyList.get(
       is.getCurrentMap().getCurrentRoom().enemyList.size()-1).fall();
