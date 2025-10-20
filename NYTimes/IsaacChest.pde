@@ -9,7 +9,7 @@ public class IsaacChest {
   public IsaacChest(float x, float y, int content) {
     this.x = x;
     this.y = y;
-    this.w = width*.025;
+    this.w = width*.05;
     this.h = w;
     this.content = content;
   }
@@ -32,7 +32,7 @@ public class IsaacChest {
   void open(IsaacPlayer player) {
     player.removeKey();
     clr = #FF0000;
-    is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(x, y));
+    is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(x+w*.5, y+h*.5));
     open = true;
   }
   

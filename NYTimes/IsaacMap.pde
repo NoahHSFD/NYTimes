@@ -76,7 +76,7 @@ public class IsaacMap {
       obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 1));
       obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
       obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
-      chestList.add(new IsaacChest(width*.2, height*.2, 0));
+      //chestList.add(new IsaacChest(width*.2, height*.2, 0));
       backgroundSprite = backgrounds.get(0);
     }
     
@@ -234,6 +234,10 @@ public class IsaacMap {
       int position;                                                             //0 = top, 1 = right, 2 = bottom, 3 = left,4 = middle
       boolean open;
       boolean destructible;                                                     //whether it can be opened with a bomb
+      boolean locked;                                                           //whether it can be opened with a key
+      boolean unlocking;                                                        //whether it is currently being unlocked
+      float unlockTimer;                                                        //timer to check when door is unlocked after being opened with a key
+                                                                                //so that player doesnt instantly enter a door when unlocking it
       
       public IsaacDoor(float x, float y) {
         this.x = x;
@@ -297,6 +301,8 @@ public class IsaacMap {
         for(IsaacBomb bo : bombList) {
           if(intersects(bo) && destructible) destroy();
         }
+        if(intersects(is.player) && locked && !unlocking && is.player.keys > 0) unlock();
+        if(unlocking && unlockTimer++ >= 100) open();
         if(intersects(is.player) && open) {
           switchRoom();
           is.player.invulnerable(FPS*.75);
@@ -315,8 +321,77 @@ public class IsaacMap {
                y - h*.5 < bomb.y + bomb.explosionR && y + h*.5 > bomb.y - bomb.explosionR);
       }
       
+      void lock() {
+        open = false;
+        locked = true;
+        switch(position) {
+          case 0:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
+              if(d.position == 2) {
+                d.open = false;
+                d.locked = true;
+              }
+            }
+            break;
+          case 1:
+            for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
+              if(d.position == 3) {
+                d.open = false;
+                d.locked = true;
+              }
+            }
+            break;
+          case 2:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
+              if(d.position == 0) {
+                d.open = false;
+                d.locked = true;
+              }
+            }
+            break;
+          case 3:
+            for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
+              if(d.position == 1) {
+                d.open = false;
+                d.locked = true;
+              }
+            }
+            break;
+          default:
+        }
+      }
+      
+      void unlock() {
+        is.player.removeKey();
+        unlocking = true;
+        switch(position) {
+          case 0:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
+              if(d.position == 2) d.open();
+            }
+            break;
+          case 1:
+            for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
+              if(d.position == 3) d.open();
+            }
+            break;
+          case 2:
+            for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
+              if(d.position == 0) d.open();
+            }
+            break;
+          case 3:
+            for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
+              if(d.position == 1) d.open();
+            }
+            break;
+          default:
+        }
+      }
+      
       void destroy() {
         open();
+        locked = false;
         switch(position) {
           case 0:
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {

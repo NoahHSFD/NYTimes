@@ -89,7 +89,7 @@ public class IsaacPlayer {
     this.maxLives = 10;
     this.lives = maxLives;
     this.bombs = 99;
-    this.keys = 2;
+    this.keys = 9;
     this.invulnerable = false;
     this.defaultInvulnerabilityTime = 120;
     this.invulnerabilityTime = defaultInvulnerabilityTime;
