@@ -197,7 +197,7 @@ public class IsaacPlayer {
             if(projectileFollowing) {
               float minX = width*width;
               float minY = height*height;
-              for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                 if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
                   if((float)Math.pow(e.x - x, 2) + (float)Math.pow(e.y - y, 2) < minX + minY) {
                     minX = (float)Math.pow(e.x - x, 2);
@@ -428,7 +428,7 @@ public class IsaacPlayer {
   }
   
   void placeBomb() {
-    is.maps.get(is.currentMap).getCurrentRoom().bombList.add(new IsaacBomb(x, y, w, explosionWidth, 200, 100));
+    is.getCurrentMap().getCurrentRoom().bombList.add(new IsaacBomb(x, y, w, explosionWidth, 200, 100));
     bombs--;
   }
   
@@ -681,7 +681,6 @@ public class IsaacPlayer {
         case 0:
           this.x = p.x - facingX*(p.r + w*.25);
           this.y = p.y + facingY*(p.r + w*.25);
-          this.autoShooting = true;
           break;
         case 1:
           this.x = p.x + facingX*(p.r + w*.25);
@@ -690,7 +689,6 @@ public class IsaacPlayer {
         case 2:
           this.x = p.x - facingX*(p.r + w*.25);
           this.y = p.y - facingY*(p.r + w*.25);
-          this.autoShooting = true;
           break;
         default:
       }
@@ -744,7 +742,7 @@ public class IsaacPlayer {
           if(projectileFollowing) {
             float minX = width*width;
             float minY = height*height;
-            for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+            for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
               if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
                 if((float)Math.pow(e.x - x, 2) + (float)Math.pow(e.y - y, 2) < minX + minY) {
                   minX = (float)Math.pow(e.x - x, 2);

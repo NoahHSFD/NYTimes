@@ -49,14 +49,14 @@ public class IsaacBeam {
       w = width - is.borderWidth - is.player.getX();
       x = is.player.getX();
       y = is.player.getY() - (h*.5);
-      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
         if(!o.traversible) {
           if(o.y < (y + h) && (o.y + o.h) > y && (o.x - x) > 0 && (o.x - x) < w) {
             w = o.x - x;
           }
         }
       }
-      for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
           if(e.y - e.r < (y + h) && (e.y + e.r) > y && (e.x - x) > 0 && (e.x - x) < w) {
             w = e.x - x;
@@ -67,7 +67,7 @@ public class IsaacBeam {
       w = is.player.getX() - is.borderWidth;
       x = is.player.getX() - w;
       y = is.player.getY() - (h*.5);
-      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
         if(!o.traversible) {
           if(o.y < (y + h) && (o.y + o.h) > y && is.player.getX() - (o.x + o.w) > 0 && is.player.getX() - (o.x + o.w) < x + w) {
             x = o.x + o.w;
@@ -75,7 +75,7 @@ public class IsaacBeam {
           }
         }
       }
-      for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
           if(e.y - e.r < (y + h) && (e.y + e.r) > y && is.player.getX() - (e.x) > 0 && is.player.getX() - (e.x) < w) {
             x = e.x;
@@ -87,7 +87,7 @@ public class IsaacBeam {
       h = is.player.getY() - is.borderWidth;
       x = is.player.getX() - (w*.5);
       y = is.player.getY() - h;
-      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
         if(!o.traversible) {
           if(o.x < (x + w) && (o.x + o.w) > x && is.player.getY() - (o.y + o.h) > 0 && is.player.getY() - (o.y + o.h) < y + h) {
             y = o.y + o.h;
@@ -95,7 +95,7 @@ public class IsaacBeam {
           }
         }
       }
-      for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
           if(e.x - e.r < (x + w) && (e.x + e.r) > x && is.player.getY() - (e.y) > 0 && is.player.getY() - (e.y) < h) {
             y = e.y;
@@ -107,14 +107,14 @@ public class IsaacBeam {
       h = height - is.borderWidth - is.player.getY();
       x = is.player.getX() - (w*.5);
       y = is.player.getY();
-      for(IsaacObstacle o : is.maps.get(is.currentMap).getCurrentRoom().obstacleList) {
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
         if(!o.traversible) {
           if(o.x < (x + w) && (o.x + o.w) > x && (o.y - y) > 0 && (o.y - y) < h) {
             h = o.y - y;
           }
         }
       }
-      for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
           if(e.x - e.r < (x + w) && (e.x + e.r) > x && (e.y - y) > 0 && (e.y - y) < h) {
             h = e.y - y;

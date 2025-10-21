@@ -275,7 +275,7 @@ public class IsaacEnemy {
           break;
         case 20:
           image(nijikaIconRight, x-w, spriteY-w, 2.*w, 2.*w);
-          for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+          for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
             if(e.type == 21 && !e.dead) {
               stroke(#000000);
               line(x, y, e.x, e.y);
@@ -299,7 +299,7 @@ public class IsaacEnemy {
     for(IsaacProjectile p : enemyProjectiles) {
       p.display();
     }
-    //text(revivalTimer, x-r, y+r);
+    //text(deathTime, x-r, y+r);
   }
 
   boolean update() {
@@ -423,7 +423,7 @@ public class IsaacEnemy {
           }
           switch(type) {
             case 21:
-              for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                 if(e.type == 20) {
                   if(!e.dead) {
                     if(Math.sqrt(Math.pow(Math.abs(x - e.x), 2) + Math.pow(Math.abs(y - e.y), 2)) > r*7) {
@@ -441,7 +441,7 @@ public class IsaacEnemy {
               break;
             case 30:
               int teeth = 0;
-              for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                 if((e.type == 31 && !e.corpse) ||
                    (e.type == 32 && !e.corpse) ||
                    (e.type == 33 && !e.corpse) ||
@@ -496,7 +496,7 @@ public class IsaacEnemy {
           case 34:
           case 35:
           case 36:
-            for(IsaacEnemy e : is.maps.get(is.currentMap).getCurrentRoom().enemyList) {
+            for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
               if(e.type == 30 && e.dead) {
                 leavesCorpse = false;
                 corpse = false;
@@ -575,7 +575,7 @@ public class IsaacEnemy {
   
   void spawnEnemy(int id, int amount, float x, float y) {
     for(int i = 0; i < amount; i++) {
-      is.maps.get(is.currentMap).getCurrentRoom().enemyList.add(new IsaacEnemy(id, x, y));
+      is.getCurrentMap().getCurrentRoom().enemyList.add(new IsaacEnemy(id, x, y));
     }
   }
   

@@ -28,7 +28,7 @@ public class IsaacMap {
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDestructibleDoors(rooms[i].getIntList("destructibledoors").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
-      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setBossRoom(rooms[i].getBoolean("bossroom"));
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setType(rooms[i].getString("type"));
     }
     minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
     currentRoomX = rooms[0].getIntList("coordinates").get(0);
@@ -67,7 +67,7 @@ public class IsaacMap {
     ArrayList<IsaacObstacle> obstacleList = new ArrayList<IsaacObstacle>();
     ArrayList<IsaacChest> chestList = new ArrayList<IsaacChest>();
     PImage backgroundSprite;
-    boolean bossRoom;
+    int type;                                                                              //0: normal room, 1: boss room, 2: store
     
     public IsaacRoom(int x, int y) {
       this.x = x;
@@ -108,8 +108,16 @@ public class IsaacMap {
       }
     }
     
-    void setBossRoom(boolean bossRoom) {
-      this.bossRoom = bossRoom;
+    void setType(String type) {
+      if(type.equals("normal")) {
+        this.type = 0;
+      } else if(type.equals("boss")) {
+        this.type = 1;
+      } else if(type.equals("store")){
+        this.type = 2;
+      } else {
+        this.type = 0;
+      }
     }
     
     void display() {
@@ -144,11 +152,12 @@ public class IsaacMap {
     void update() {
       for(IsaacDoor d : doors) {
         d.update();
-        if(bossRoom && d.position == 4) {
+        if(type == 1 && d.position == 4) {
           for(IsaacEnemy e : enemyList) {
             if(!e.dead) break;
             d.open();
           }
+          if(enemyList.isEmpty()) d.open();
         }
       }
       for(int i = 0; i < bombList.size(); i++) {
@@ -464,7 +473,7 @@ public class IsaacMap {
             break;
           default:
         }
-        if(is.getCurrentMap().getCurrentRoom().bossRoom) is.state = is.playAnimation(500);
+        if(is.getCurrentMap().getCurrentRoom().type == 1) is.state = is.playAnimation(500);
       }
     }
   }
