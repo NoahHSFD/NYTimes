@@ -16,7 +16,7 @@ public class IsaacEnemy {
   float projectileTime, puddleTime;                                            //how long projectiles/puddles stay
   float puddleWidth, puddleHeight;
   float projectileSize;
-  float projectileDamage;
+  int projectileDamage, puddleDamage;
   int projectileAmount;                                                        //how many projectiles at once an enemy shoots
   int maxBullets;                                                              //how often an enemy can shoot before having to reload
   int bullets;                                                                 //how many bullets are left in a magazine
@@ -88,6 +88,7 @@ public class IsaacEnemy {
     this.puddleTime = 200;
     this.projectileSize = r;
     this.projectileDamage = 1;
+    this.puddleDamage = 1;
     this.projectileAmount = 1;
     this.revivalTime = 200;
     this.maxHp = 200;
@@ -160,9 +161,7 @@ public class IsaacEnemy {
       case 8:
         this.w *= .5;
         this.r = w*.5;
-        this.randomMovementRate = random(.2, 2);
-        this.dx = random(-1, 1);
-        this.dy = random(-1, 1);
+        this.randomMovement = true;
         break;
       case 10:                                                                                  //monstro
         this.w = width*.075;
@@ -246,8 +245,19 @@ public class IsaacEnemy {
         this.w *= 2.;
         this.maxBullets = 5;
         this.bullets = maxBullets;
+        this.fireRate = .5;
+        this.reloadTime = 400;
+        this.projectileDamage = 2;
+        this.aiming = true;
+        this.randomMovement = true;
+        this.projectileTime = 300;
         break;
     default:
+    }
+    if(randomMovement) {
+      this.randomMovementRate = random(.2, 2);
+      this.dx = random(-1, 1);
+      this.dy = random(-1, 1);
     }
     this.speed = baseSpeed;
     this.r = w*.5;
@@ -526,11 +536,11 @@ public class IsaacEnemy {
           default:
         }
       }
-      if(intersects(is.player)) is.player.hit();
+      if(intersects(is.player)) is.player.hit(1);
     }
     for(int i = 0; i >= 0 && i < enemyProjectiles.size(); i++) {
       if(i >= 0 && enemyProjectiles.get(i).intersects(is.player)) {
-        is.player.hit();
+        is.player.hit(projectileDamage);
         enemyProjectiles.remove(i);
         i--;
       }
@@ -541,7 +551,7 @@ public class IsaacEnemy {
     }
     for(int i = 0; i >= 0 && i < enemyPuddles.size(); i++) {
       if(i >= 0 && enemyPuddles.get(i).intersects(is.player)) {
-        is.player.hit();
+        is.player.hit(puddleDamage);
       }
       if(i >= 0 && enemyPuddles.get(i).update()) {
         enemyPuddles.remove(i);
@@ -630,15 +640,15 @@ public class IsaacEnemy {
   }
   
   void leavePuddle() {
-    enemyPuddles.add(new IsaacPuddle(x - r, y - r, puddleWidth, puddleHeight, puddleTime, 1));
+    enemyPuddles.add(new IsaacPuddle(x - r, y - r, puddleWidth, puddleHeight, puddleTime, puddleDamage));
   }
   
   void leavePuddle(float x, float y) {
-    enemyPuddles.add(new IsaacPuddle(x, y, puddleWidth, puddleHeight, puddleTime, 1));
+    enemyPuddles.add(new IsaacPuddle(x, y, puddleWidth, puddleHeight, puddleTime, puddleDamage));
   }
   
   void leavePuddle(float x, float y, float pWidth, float pHeight, float pTime) {
-    enemyPuddles.add(new IsaacPuddle(x, y, pWidth, pHeight, pTime, 1));
+    enemyPuddles.add(new IsaacPuddle(x, y, pWidth, pHeight, pTime, puddleDamage));
   }
   
   void gravity(IsaacPlayer player, float strength) {

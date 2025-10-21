@@ -4,7 +4,7 @@ public class IsaacPuddle {
   float w, h;
   float time;
   color clr = #00FF00;
-  float damage = 1;
+  float damage;
   
   public IsaacPuddle(float x, float y, float w, float h, float time, float damage) {
     this.x = x;

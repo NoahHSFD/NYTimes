@@ -399,9 +399,9 @@ public class IsaacPlayer {
     invulnerable = true;
   }
   
-  void hit() {
+  void hit(int damage) {
     if(!invulnerable) {
-      lives--;
+      lives -= damage;
       invulnerable = true;
       if(lives <= 0) {
         lives = maxLives;

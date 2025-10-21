@@ -39,7 +39,7 @@ public class IsaacBomb {
       explosionTime = 0;
       explode();
     }
-    if(intersects(is.player)) is.player.hit();
+    if(intersects(is.player)) is.player.hit(1);
     return (exploding && (explosionTime++ >= explosionDuration));
   }
   

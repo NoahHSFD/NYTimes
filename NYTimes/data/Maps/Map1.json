@@ -3,7 +3,7 @@
     "coordinates":[0, 0],
     "doors":[1, 2],
     "destructibledoors":[1],
-    "enemies":[3, 8, 8, 8, 8, 8],
+    "enemies":[3, 8, 8, 8, 40],
     "collectibles":[],
     "type":"normal"
   },
