@@ -242,6 +242,7 @@ public class IsaacEnemy {
         this.leavesCorpse = true;
         break;
       case 40:                                                                                  //jhon
+        this.maxHp = 500;
         this.w *= 2.;
         this.maxBullets = 5;
         this.bullets = maxBullets;
@@ -250,7 +251,8 @@ public class IsaacEnemy {
         this.projectileDamage = 2;
         this.aiming = true;
         this.randomMovement = true;
-        this.projectileTime = 300;
+        this.projectileTime = 500;
+        this.projectileBounce = true;
         break;
     default:
     }
@@ -323,7 +325,7 @@ public class IsaacEnemy {
     for(IsaacProjectile p : enemyProjectiles) {
       p.display();
     }
-    text(reloadTimer, x-r, y+r);
+    text(reloadTimer + " " + standing, x-r, y+r);
   }
 
   boolean update() {
@@ -354,6 +356,7 @@ public class IsaacEnemy {
               standstillTimer -= standstillTime;
             }
             if(reloading && reloadTimer++ >= reloadTime) {
+              standing = false;
               reloading = false;
               reloadTimer -= reloadTime;
               bullets = maxBullets;
@@ -631,6 +634,8 @@ public class IsaacEnemy {
   
   void reload() {
     reloading = true;
+    standing = true;
+    standstillTime = reloadTime;
   }
   
   void spawnEnemy(int id, int amount, float x, float y) {
