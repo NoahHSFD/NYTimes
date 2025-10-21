@@ -18,6 +18,10 @@ public class IsaacEnemy {
   float projectileSize;
   float projectileDamage;
   int projectileAmount;                                                        //how many projectiles at once an enemy shoots
+  int maxBullets;                                                              //how often an enemy can shoot before having to reload
+  int bullets;                                                                 //how many bullets are left in a magazine
+  float reloadTime;                                                            //time needed to reload bullets
+  float reloadTimer;                                                           //timer to check when an enemy has finished reloading bullets
   float projectileKnockback;
   float knockbackEfficiency;                                                   //how much the enemy is affected by knockback
   float maxHp, hp;
@@ -38,7 +42,8 @@ public class IsaacEnemy {
   boolean revives, reviving;                                                   //whether an enemy can/is being revived
   boolean corpse;                                                              //whether enemy is a corpse left behind after dying
   boolean flyable;                                                             //whether an enemy can be flown over without taking contact damage
-  boolean projectileBounce;
+  boolean projectileBounce;                                                    //whether projectiles bounce off of walls and obstacles
+  boolean reloading;                                                           //whether an enemy is currently reloading bullets
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
@@ -88,155 +93,164 @@ public class IsaacEnemy {
     this.maxHp = 200;
     this.type = type;
     switch(type) {
-    case 0:
-      this.clr = #F200FF;
-      this.fireRate = 1;
-      this.knockbackEfficiency = 1;
-      this.projectileAmount = 7;
-      this.projectileBounce = true;
-      break;
-    case 1:
-      this.clr = #E7F00C;
-      this.flying = true;
-      this.fireRate = 1;
-      this.knockbackEfficiency = 1;
-      break;
-    case 2:
-      this.clr = #2836C6;
-      this.fireRate = .5;
-      this.shootTimer = 25;
-      this.standingRate = 1;
-      this.aiming = true;
-      this.projectileTime = 160;
-      break;
-    case 3:
-      this.clr = #E10DFA;
-      this.baseSpeed = 1;
-      this.fireRate = .5;
-      this.jumpingRate = .2;
-      this.flying = true;
-      this.following = true;
-      this.knockbackEfficiency = 1.2;
-      this.revives = true;
-      break;
-    case 4:
-      this.baseSpeed = 2;
-      this.puddleRate = 40;
-      this.knockbackEfficiency = .5;
-      break;
-    case 5:
-      this.baseSpeed = 7;
-      this.flying = true;
-      if(dx != 0) {
-        dx *= .5;
-        dy = random(-1, 1) > 0 ? .5 : -.5;
-      } else {
-        dx = random(-1, 1) > 0 ? .5 : -.5;
-        dy *= .5;
-      }
-      this.knockbackEfficiency = 1;
-      this.explodesOnDeath = true;
-      break;
-    case 6:
-      this.following = true;
-      this.baseSpeed = 1;
-      this.puddleRate = 40;
-      this.knockbackEfficiency = 2;
-      this.explodesOnDeath = true;
-      break;
-    case 7:
-      this.maxHp = 500;
-      this.following = true;
-      this.revives = true;
-      break;
-    case 8:
-      this.w *= .5;
-      this.r = w*.5;
-      this.randomMovementRate = random(.2, 2);
-      this.dx = random(-1, 1);
-      this.dy = random(-1, 1);
-      break;
-    case 10:                                                                                  //monstro
-      this.w = width*.075;
-      this.r = w*.5;
-      this.baseSpeed = 2;
-      this.fireRate = .5;
-      this.puddleRate = 40;
-      this.puddleTime = 500;
-      this.jumpingRate = .3;
-      this.airborneTime = 300;
-      this.flying = true;
-      this.following = true;
-      this.maxHp = 5000;
-      break;
-    case 20:                                                                                  //gemini - contusion
-      this.w *= 1.25;
-      this.r = w*.5;
-      this.following = true;
-      this.maxHp = 2500;
-      break;
-    case 21:                                                                                  //gemini - suture
-      this.w *= .5;
-      this.r = w*.5;
-      this.baseSpeed = 1;
-      this.fireRate = .5;
-      this.flying = true;
-      this.following = true;
-      this.maxHp = 2500;
-      break;
-    case 30:                                                                                  //gums - mouth
-      this.baseSpeed = 0;
-      this.w = width/3.;
-      this.r = w*.5;
-      this.h = height*.1;
-      this.x = width/2. - r;
-      this.y = 0;
-      this.projectileTime = 250;
-      this.untargetable = true;
-      this.noContactDamage = true;
-      this.noShadow = true;
-      this.screamGap = int(random(0, projectileAmount+1));
-      this.bossAttackAmount = 5;
-      this.bossAttackRate = .2;
-      break;
-    case 31:                                                                                  //gums - teeth (31-36)
-      this.baseSpeed = 0;                                                                     //healthy tooth
-      this.maxHp = 1000;
-      this.leavesCorpse = true;
-      break;
-    case 32:                                                                                  //brittle tooth
-      this.baseSpeed = 0;
-      this.shootsWhenHit = true;
-      this.leavesCorpse = true;
-      break;
-    case 320:                                                                                 //brittle tooth - enamel projectile
-      this.baseSpeed = 0;
-      break;
-    case 33:                                                                                  //bloody tooth
-      this.baseSpeed = 0;
-      this.explodesOnDeath = true;
-      this.leavesCorpse = true;
-      break;
-    case 34:                                                                                  //rotting tooth
-      this.baseSpeed = 0;
-      this.puddleWhenHit = true;
-      this.leavesCorpse = true;
-      break;
-    case 35:                                                                                  //infested tooth
-      this.baseSpeed = 0;
-      this.spawnsOnDeath = true;
-      this.deathSpawn = 8;
-      this.deathSpawnAmount = 6;
-      this.leavesCorpse = true;
-      break;
-    case 36:                                                                                  //gold tooth
-      this.baseSpeed = 0;
-      this.puddleWhenHit = true;
-      this.leavesCorpse = true;
-      break;
+      case 0:
+        this.clr = #F200FF;
+        this.fireRate = 1;
+        this.knockbackEfficiency = 1;
+        this.projectileAmount = 7;
+        this.projectileBounce = true;
+        this.maxBullets = 10;
+        this.bullets = maxBullets;
+        this.reloadTime = 250;
+        break;
+      case 1:
+        this.clr = #E7F00C;
+        this.flying = true;
+        this.fireRate = 1;
+        this.knockbackEfficiency = 1;
+        break;
+      case 2:
+        this.clr = #2836C6;
+        this.fireRate = .5;
+        this.shootTimer = 25;
+        this.standingRate = 1;
+        this.aiming = true;
+        this.projectileTime = 160;
+        break;
+      case 3:
+        this.clr = #E10DFA;
+        this.baseSpeed = 1;
+        this.fireRate = .5;
+        this.jumpingRate = .2;
+        this.flying = true;
+        this.following = true;
+        this.knockbackEfficiency = 1.2;
+        this.revives = true;
+        break;
+      case 4:
+        this.baseSpeed = 2;
+        this.puddleRate = 40;
+        this.knockbackEfficiency = .5;
+        break;
+      case 5:
+        this.baseSpeed = 7;
+        this.flying = true;
+        if(dx != 0) {
+          dx *= .5;
+          dy = random(-1, 1) > 0 ? .5 : -.5;
+        } else {
+          dx = random(-1, 1) > 0 ? .5 : -.5;
+          dy *= .5;
+        }
+        this.knockbackEfficiency = 1;
+        this.explodesOnDeath = true;
+        break;
+      case 6:
+        this.following = true;
+        this.baseSpeed = 1;
+        this.puddleRate = 40;
+        this.knockbackEfficiency = 2;
+        this.explodesOnDeath = true;
+        break;
+      case 7:
+        this.maxHp = 500;
+        this.following = true;
+        this.revives = true;
+        break;
+      case 8:
+        this.w *= .5;
+        this.r = w*.5;
+        this.randomMovementRate = random(.2, 2);
+        this.dx = random(-1, 1);
+        this.dy = random(-1, 1);
+        break;
+      case 10:                                                                                  //monstro
+        this.w = width*.075;
+        this.r = w*.5;
+        this.baseSpeed = 2;
+        this.fireRate = .5;
+        this.puddleRate = 40;
+        this.puddleTime = 500;
+        this.jumpingRate = .3;
+        this.airborneTime = 300;
+        this.flying = true;
+        this.following = true;
+        this.maxHp = 5000;
+        break;
+      case 20:                                                                                  //gemini - contusion
+        this.w *= 1.25;
+        this.r = w*.5;
+        this.following = true;
+        this.maxHp = 2500;
+        break;
+      case 21:                                                                                  //gemini - suture
+        this.w *= .5;
+        this.r = w*.5;
+        this.baseSpeed = 1;
+        this.fireRate = .5;
+        this.flying = true;
+        this.following = true;
+        this.maxHp = 2500;
+        break;
+      case 30:                                                                                  //gums - mouth
+        this.baseSpeed = 0;
+        this.w = width/3.;
+        this.r = w*.5;
+        this.h = height*.1;
+        this.x = width/2. - r;
+        this.y = 0;
+        this.projectileTime = 250;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.noShadow = true;
+        this.screamGap = int(random(0, projectileAmount+1));
+        this.bossAttackAmount = 5;
+        this.bossAttackRate = .2;
+        break;
+      case 31:                                                                                  //gums - teeth (31-36)
+        this.baseSpeed = 0;                                                                     //healthy tooth
+        this.maxHp = 1000;
+        this.leavesCorpse = true;
+        break;
+      case 32:                                                                                  //brittle tooth
+        this.baseSpeed = 0;
+        this.shootsWhenHit = true;
+        this.leavesCorpse = true;
+        break;
+      case 320:                                                                                 //brittle tooth - enamel projectile
+        this.baseSpeed = 0;
+        break;
+      case 33:                                                                                  //bloody tooth
+        this.baseSpeed = 0;
+        this.explodesOnDeath = true;
+        this.leavesCorpse = true;
+        break;
+      case 34:                                                                                  //rotting tooth
+        this.baseSpeed = 0;
+        this.puddleWhenHit = true;
+        this.leavesCorpse = true;
+        break;
+      case 35:                                                                                  //infested tooth
+        this.baseSpeed = 0;
+        this.spawnsOnDeath = true;
+        this.deathSpawn = 8;
+        this.deathSpawnAmount = 6;
+        this.leavesCorpse = true;
+        break;
+      case 36:                                                                                  //gold tooth
+        this.baseSpeed = 0;
+        this.puddleWhenHit = true;
+        this.leavesCorpse = true;
+        break;
+      case 40:                                                                                  //jhon
+        this.w *= 2.;
+        this.maxBullets = 5;
+        this.bullets = maxBullets;
+        break;
     default:
     }
     this.speed = baseSpeed;
+    this.r = w*.5;
     this.hp = maxHp;
     this.puddleWidth = w;
     this.puddleHeight = w;
@@ -299,7 +313,7 @@ public class IsaacEnemy {
     for(IsaacProjectile p : enemyProjectiles) {
       p.display();
     }
-    //text(deathTime, x-r, y+r);
+    text(reloadTimer, x-r, y+r);
   }
 
   boolean update() {
@@ -307,7 +321,7 @@ public class IsaacEnemy {
       if(!corpse) {
         if(!reviving) {
           if(!jumping) {
-            shootTimer += fireRate;
+            if(!reloading) shootTimer += fireRate;
             puddleTimer += puddleRate;
             jumpingTimer += jumpingRate;
             randomMovementTimer += randomMovementRate;
@@ -328,6 +342,11 @@ public class IsaacEnemy {
             if(standing && standstillTimer++ >= standstillTime) {
               standing = false;
               standstillTimer -= standstillTime;
+            }
+            if(reloading && reloadTimer++ >= reloadTime) {
+              reloading = false;
+              reloadTimer -= reloadTime;
+              bullets = maxBullets;
             }
             if(puddleTimer >= 100) {
               leavePuddle();
@@ -536,19 +555,37 @@ public class IsaacEnemy {
   void shoot() {
     enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, facingX, facingY, projectileSpeed, projectileTime,
                                              projectileSize, projectileDamage, projectileKnockback, projectileBounce));
+    if(maxBullets > 0 && bullets-- <= 0) {
+      reload();
+    }
   }
   
   void shootRandom() {
     enemyProjectiles.add(new IsaacProjectile(x, y, Math.toRadians(random(0, 360)), projectileSpeed, projectileTime, projectileSize,
                                              projectileDamage, projectileKnockback, projectileBounce));
+    if(maxBullets > 0 && bullets-- <= 0) {
+      reload();
+    }
   }
 
   void shoot(IsaacPlayer p) {
     enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, (p.x-x)/(Math.abs(p.x-x) + Math.abs(p.y-y)), (p.y-y)/(Math.abs(p.x-x) + Math.abs(p.y-y)),
       projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
+    if(maxBullets > 0 && bullets-- <= 0) {
+      reload();
+    }
   }
   
   void shoot(float amount) {
+    if(maxBullets > 0) {
+      if(amount >= bullets) {
+        amount = bullets;
+        bullets = 0;
+        reload();
+      } else {
+        bullets -= amount;
+      }
+    }
     if(amount == 1) {
       enemyProjectiles.add(new IsaacProjectile(x + facingX*r, y + facingY*r, dx, dy, projectileSpeed, projectileTime, projectileSize,
                                                projectileDamage, projectileKnockback, projectileBounce));
@@ -561,6 +598,15 @@ public class IsaacEnemy {
   }
   
   void shoot(float amount, float x, float y, float delay) {
+    if(maxBullets > 0) {
+      if(amount >= bullets) {
+        amount = bullets;
+        bullets = 0;
+        reload();
+      } else {
+        bullets -= amount;
+      }
+    }
     if(amount == 1) {
       enemyProjectiles.add(new IsaacProjectile(x, y, dx, dy, projectileSpeed, projectileTime, projectileSize, projectileDamage, projectileKnockback, projectileBounce));
       enemyProjectiles.get(enemyProjectiles.size()-1).setDelayTime(delay);
@@ -571,6 +617,10 @@ public class IsaacEnemy {
         enemyProjectiles.get(enemyProjectiles.size()-1).setDelayTime(delay);
       }
     }
+  }
+  
+  void reload() {
+    reloading = true;
   }
   
   void spawnEnemy(int id, int amount, float x, float y) {
