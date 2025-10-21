@@ -151,14 +151,19 @@ public class IsaacMap {
     
     void update() {
       for(IsaacDoor d : doors) {
-        d.update();
-        if(type == 1 && d.position == 4) {
+        if(type == 1) {
           for(IsaacEnemy e : enemyList) {
-            if(!e.dead) break;
+            if(!e.dead) {
+              d.close();
+              break;
+            }
             d.open();
+            //todo:
+            //for some reason sometimes doors dont open after all enemies are defeated
           }
           if(enemyList.isEmpty()) d.open();
         }
+        d.update();
       }
       for(int i = 0; i < bombList.size(); i++) {
         if(bombList.get(i).update()) {
