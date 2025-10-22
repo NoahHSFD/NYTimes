@@ -59,6 +59,7 @@ public class IsaacMap {
   class IsaacRoom {
   
     int x, y;
+    float offSetX, offSetY;                                                                //to move the screen around (e.g. for screen shake)
     color clr = #554646;
     IsaacDoor[] doors;
     ArrayList<IsaacEnemy> enemyList = new ArrayList<IsaacEnemy>();
@@ -120,9 +121,14 @@ public class IsaacMap {
       }
     }
     
+    void setOffSet(float offSetX, float offSetY) {
+      this.offSetX = offSetX;
+      this.offSetY = offSetY;
+    }
+    
     void display() {
       pushStyle();
-      image(backgroundSprite, 0, 0, width, height);
+      image(backgroundSprite, offSetX, offSetY, width, height);
       for(IsaacEnemy e : enemyList) {
         for(IsaacPuddle pu : e.enemyPuddles) {
           pu.display();

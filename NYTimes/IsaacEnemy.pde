@@ -724,6 +724,7 @@ public class IsaacEnemy {
   }
   
   void gumsQuiver() {
+    is.getCurrentMap().getCurrentRoom().setOffSet(random(-5, 5), random(-5, 5));
     if(bossAttackDurationTimer%100 == 0) {
       float xPos = random(height*.11, width-height*.1);
       float yPos = random(height*.11, height*.9);
