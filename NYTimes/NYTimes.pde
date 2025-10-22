@@ -19,7 +19,8 @@ PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
        kitaIcon, kitaIconLeft, kitaIconRight, kitaIconBack,
        nijikaIcon, nijikaIconLeft, nijikaIconRight, nijikaIconBack,
-       loadingScreen;
+       loadingScreen,
+       jhon;
 ArrayList<PImage> bocchiMenu = new ArrayList<PImage>();
 ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
@@ -430,4 +431,5 @@ void loadImages() {
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu3.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu2.png"));
   backgrounds.add(loadImage("/Images/Sprites/Background1.png"));
+  jhon = loadImage("/Images/Sprites/jhon.png");
 }

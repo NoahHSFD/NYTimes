@@ -314,6 +314,9 @@ public class IsaacEnemy {
         case 30:
           image(loadingScreen, x, spriteY, w, h);
           break;
+        case 40:
+          image(jhon, x-r, spriteY-r, w, w);
+          break;
         default:
           image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
       }
@@ -325,7 +328,7 @@ public class IsaacEnemy {
     for(IsaacProjectile p : enemyProjectiles) {
       p.display();
     }
-    text(reloadTimer + " " + standing, x-r, y+r);
+    //text(reloadTimer + " " + standing, x-r, y+r);
   }
 
   boolean update() {
