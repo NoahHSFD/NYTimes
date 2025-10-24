@@ -183,30 +183,6 @@ public class IsaacMap {
           //i--;
         }
       }
-      for(int i = 0; i >= 0 && i < obstacleList.size(); i++) {
-        IsaacObstacle o = obstacleList.get(i);
-        o.update();
-        for(int j = 0; j >= 0 && j < is.player.playerProjectiles.size(); j++) {
-          if(o.intersects(is.player.playerProjectiles.get(j))) {
-            is.player.playerProjectiles.remove(j);
-            j--;
-          }
-        }
-        for(IsaacEnemy e : enemyList) {
-          for(int k = 0; k >= 0 && k < e.enemyProjectiles.size(); k++) {
-            if(o.intersects(e.enemyProjectiles.get(k))) {
-              e.enemyProjectiles.remove(k);
-              k--;
-            }
-          }
-        }
-        for(IsaacBomb b : bombList) {
-          if(o.intersects(b) && o.destructible) {
-            obstacleList.remove(o);
-            i--;
-          }
-        }
-      }
       for(int i = 0; i < enemyList.size(); i++) {
         for(IsaacObstacle o : obstacleList) {
           if(!(enemyList.get(i).flying && o.traversible)) {
@@ -235,6 +211,30 @@ public class IsaacMap {
         if(i >= 0 && enemyList.get(i).update() && !enemyList.get(i).leavesCorpse) {
           enemyList.remove(i);
           i--;
+        }
+      }
+      for(int i = 0; i >= 0 && i < obstacleList.size(); i++) {
+        IsaacObstacle o = obstacleList.get(i);
+        o.update();
+        for(int j = 0; j >= 0 && j < is.player.playerProjectiles.size(); j++) {
+          if(o.intersects(is.player.playerProjectiles.get(j))) {
+            is.player.playerProjectiles.remove(j);
+            j--;
+          }
+        }
+        for(IsaacEnemy e : enemyList) {
+          for(int k = 0; k >= 0 && k < e.enemyProjectiles.size(); k++) {
+            if(o.intersects(e.enemyProjectiles.get(k))) {
+              e.enemyProjectiles.remove(k);
+              k--;
+            }
+          }
+        }
+        for(IsaacBomb b : bombList) {
+          if(o.intersects(b) && o.destructible) {
+            obstacleList.remove(o);
+            i--;
+          }
         }
       }
       for(IsaacCollectible c : collectibleList) {

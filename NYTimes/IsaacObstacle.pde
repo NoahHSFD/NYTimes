@@ -36,16 +36,16 @@ public class IsaacObstacle {
   
   void update() {
     if(!(is.player.getFlying() && traversible)) {
-      if(intersectsR(is.player) && is.player.moveKeys[3] == -1) {
+      if(intersectsR(is.player) && is.player.dx < 0) {
         is.player.setX(x + w + is.player.getR());
       }
-      if(intersectsL(is.player) && is.player.moveKeys[2] == 1) {
+      if(intersectsL(is.player) && is.player.dx > 0) {
         is.player.setX(x - is.player.getR());
       }
-      if(intersectsD(is.player) && is.player.moveKeys[0] == -1) {
+      if(intersectsD(is.player) && is.player.dy < 0) {
         is.player.setY(y + h + is.player.getR());
       }
-      if(intersectsU(is.player) && is.player.moveKeys[1] == 1) {
+      if(intersectsU(is.player) && is.player.dy > 0) {
         is.player.setY(y - is.player.getR());
       }
     }

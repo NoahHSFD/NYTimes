@@ -20,7 +20,7 @@ PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        kitaIcon, kitaIconLeft, kitaIconRight, kitaIconBack,
        nijikaIcon, nijikaIconLeft, nijikaIconRight, nijikaIconBack,
        loadingScreen,
-       jhon, gums;
+       jhon, gums, gumsToothHealthy;
 ArrayList<PImage> bocchiMenu = new ArrayList<PImage>();
 ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
@@ -433,4 +433,5 @@ void loadImages() {
   backgrounds.add(loadImage("/Images/Sprites/Background1.png"));
   jhon = loadImage("/Images/Sprites/jhon.png");
   gums = loadImage("/Images/Sprites/gums.png");
+  gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
 }

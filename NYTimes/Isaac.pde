@@ -64,6 +64,7 @@ public class Isaac {
   void update() {
     switch(state) {
       case PLAYING:
+        player.calcDXDY();
         maps.get(currentMap).update();
         player.update();
         break;
@@ -102,7 +103,7 @@ public class Isaac {
         ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
                                               width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
         image(gums, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
-                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+                                                          width*.9-height*.4, height*.6, height*.4, height*.2);
         textSize(height*.1);
         fill(#FFFFFF);
         text("BOBBY", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
@@ -121,7 +122,7 @@ public class Isaac {
         ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
                                               width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
         image(gums, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
-                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+                                                          width*.9-height*.4, height*.6, height*.4, height*.2);
         textSize(height*.1);
         fill(#FFFFFF);
         text("RYOU", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
@@ -140,7 +141,7 @@ public class Isaac {
         ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
                                               width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
         image(gums, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
-                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+                                                          width*.9-height*.4, height*.6, height*.4, height*.2);
         textSize(height*.1);
         fill(#FFFFFF);
         text("KITA", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
@@ -159,7 +160,7 @@ public class Isaac {
         ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
                                               width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
         image(gums, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
-                                                          width*.9-height*.4, height*.4, height*.4, height*.4);
+                                                          width*.9-height*.4, height*.6, height*.4, height*.2);
         textSize(height*.1);
         fill(#FFFFFF);
         text("NIJIKA", (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);

@@ -314,6 +314,14 @@ public class IsaacEnemy {
         case 30:
           image(gums, x, spriteY, w, h);
           break;
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+        case 35:
+        case 36:
+          image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
+          break;
         case 40:
           image(jhon, x-r, spriteY-r, w, w);
           break;
@@ -660,8 +668,8 @@ public class IsaacEnemy {
   }
   
   void gravity(IsaacPlayer player, float strength) {
-    player.setX(player.x + strength*Math.signum(x + r - player.x));
-    player.setY(player.y + strength*Math.signum(y - player.y));
+    player.dx += strength*Math.signum(x + r - player.x);
+    player.dy += strength*Math.signum(y - player.y);
   }
   
   void gumsBreatheIn() {
@@ -732,7 +740,7 @@ public class IsaacEnemy {
       do {
         overlap = false;
         for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
-          while(xPos > o.x && xPos < o.x + o.w && yPos > o.y && yPos < o.y + o.h) {
+          while(xPos + width*.05 > o.x && xPos - width*.05 < o.x + o.w && yPos + width*.05 > o.y && yPos - width*.05 < o.y + o.h) {
             overlap = true;
             xPos = random(height*.11, width-height*.1);
             yPos = random(height*.11, height*.9);

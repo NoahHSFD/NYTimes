@@ -1,6 +1,7 @@
 public class IsaacPlayer {
   
   float x, y;
+  float dx, dy;
   float w, r;
   float speed;
   color clr = #FF0000;
@@ -114,6 +115,7 @@ public class IsaacPlayer {
   
   void display() {
     pushStyle();
+    text(dx + " " + dy, x - w, y + w);
     fill(#000000, 70);
     noStroke();
     circle(x+w*.05, y+w*.05, w*1.1);
@@ -231,8 +233,8 @@ public class IsaacPlayer {
         j--;
       }
     }
-    x += (moveKeys[2] + moveKeys[3])*speed;
-    y += (moveKeys[0] + moveKeys[1])*speed;
+    x += dx;
+    y += dy;
     if (x <= r + is.borderWidth) {
       x = r + is.borderWidth;
     } else if (x >= width - (r + is.borderWidth)) {
@@ -289,6 +291,11 @@ public class IsaacPlayer {
         playerIconBack = bocchiIconBack;
         setBgm(0);
     }
+  }
+  
+  void calcDXDY() {
+    dx = (moveKeys[2] + moveKeys[3])*speed;
+    dy = (moveKeys[0] + moveKeys[1])*speed;
   }
   
   void changeStyle() {
