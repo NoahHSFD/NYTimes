@@ -227,6 +227,7 @@ public class IsaacEnemy {
       case 34:                                                                                  //rotting tooth
         this.baseSpeed = 0;
         this.puddleWhenHit = true;
+        this.puddleTime = 500;
         this.leavesCorpse = true;
         break;
       case 35:                                                                                  //infested tooth
@@ -366,9 +367,6 @@ public class IsaacEnemy {
       fill(#FF0000);
       if(!corpse) rect(x+r, y-r, map(hp, 0, maxHp, 0, 50), 10);
       popStyle();
-    }
-    for(IsaacProjectile p : enemyProjectiles) {
-      p.display();
     }
     //text(reloadTimer + " " + standing, x-r, y+r);
   }
@@ -804,7 +802,7 @@ public class IsaacEnemy {
     x += p.getKnockback()*p.getDx()*knockbackEfficiency;
     y += p.getKnockback()*p.getDy()*knockbackEfficiency;
     if(shootsWhenHit) shootRandom();
-    if(puddleWhenHit) leavePuddle(x + (random(-1.5, .5)*w), y + (random(-1.5, .5)*w));
+    if(puddleWhenHit) leavePuddle(x + (random(-1.5, 1.5)*w), y + (random(-1.5, 1.5)*w));
     if(hp <= 0) {
       if(revives && !reviving) {
         hp = maxHp;

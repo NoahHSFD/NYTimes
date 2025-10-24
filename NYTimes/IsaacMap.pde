@@ -152,6 +152,11 @@ public class IsaacMap {
       for(IsaacCollectible c : collectibleList) {
         c.display();
       }
+      for(IsaacEnemy e : enemyList) {
+        for(IsaacProjectile p : e.enemyProjectiles) {
+          p.display();
+        }
+      }
       popStyle();
     }
     
