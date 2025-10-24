@@ -315,12 +315,46 @@ public class IsaacEnemy {
           image(gums, x, spriteY, w, h);
           break;
         case 31:
+          if(jumping) {
+            image(gumsToothHealthyFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
+          }
+          break;
         case 32:
+          if(jumping) {
+            image(gumsToothBrittleFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothBrittle, x-w, spriteY-w, 2.*w, 2.*w);
+          }
+          break;
         case 33:
+          if(jumping) {
+            image(gumsToothBloodyFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothBloody, x-w, spriteY-w, 2.*w, 2.*w);
+          }
+          break;
         case 34:
+          if(jumping) {
+            image(gumsToothRottingFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothRotting, x-w, spriteY-w, 2.*w, 2.*w);
+          }
+          break;
         case 35:
+          if(jumping) {
+            image(gumsToothInfestedFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothInfested, x-w, spriteY-w, 2.*w, 2.*w);
+          }
+          break;
         case 36:
-          image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
+          if(jumping) {
+            image(gumsToothHealthyFalling, x-w, spriteY-w, 2.*w, 2.*w);
+          } else {
+            image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
+          }
           break;
         case 40:
           image(jhon, x-r, spriteY-r, w, w);

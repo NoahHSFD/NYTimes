@@ -115,7 +115,7 @@ public class IsaacPlayer {
   
   void display() {
     pushStyle();
-    text(dx + " " + dy, x - w, y + w);
+    //text(dx + " " + dy, x - w, y + w);
     fill(#000000, 70);
     noStroke();
     circle(x+w*.05, y+w*.05, w*1.1);

@@ -20,7 +20,10 @@ PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        kitaIcon, kitaIconLeft, kitaIconRight, kitaIconBack,
        nijikaIcon, nijikaIconLeft, nijikaIconRight, nijikaIconBack,
        loadingScreen,
-       jhon, gums, gumsToothHealthy;
+       jhon, gums, 
+       gumsToothHealthy, gumsToothBrittle, gumsToothBloody, gumsToothRotting, gumsToothInfested,
+       gumsToothHealthyFalling, gumsToothBrittleFalling,gumsToothBloodyFalling,
+       gumsToothRottingFalling, gumsToothInfestedFalling;
 ArrayList<PImage> bocchiMenu = new ArrayList<PImage>();
 ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
@@ -434,4 +437,13 @@ void loadImages() {
   jhon = loadImage("/Images/Sprites/jhon.png");
   gums = loadImage("/Images/Sprites/gums.png");
   gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
+  gumsToothHealthyFalling = loadImage("/Images/Sprites/gums_tooth_healthy_falling.png");
+  gumsToothBrittle = loadImage("/Images/Sprites/gums_tooth_brittle.png");
+  gumsToothBrittleFalling = loadImage("/Images/Sprites/gums_tooth_brittle_falling.png");
+  gumsToothBloody = loadImage("/Images/Sprites/gums_tooth_bloody.png");
+  gumsToothBloodyFalling = loadImage("/Images/Sprites/gums_tooth_bloody_falling.png");
+  gumsToothRotting = loadImage("/Images/Sprites/gums_tooth_rotting.png");
+  gumsToothRottingFalling = loadImage("/Images/Sprites/gums_tooth_rotting_falling.png");
+  gumsToothInfested = loadImage("/Images/Sprites/gums_tooth_infested.png");
+  gumsToothInfestedFalling = loadImage("/Images/Sprites/gums_tooth_infested_falling.png");
 }
