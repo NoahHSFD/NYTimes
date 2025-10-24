@@ -193,7 +193,7 @@ public class IsaacEnemy {
         break;
       case 30:                                                                                  //gums - mouth
         this.baseSpeed = 0;
-        this.w = width/3.;
+        this.w = width/4.;
         this.r = w*.5;
         this.h = height*.1;
         this.x = width/2. - r;
@@ -312,7 +312,7 @@ public class IsaacEnemy {
           image(nijikaIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
           break;
         case 30:
-          image(loadingScreen, x, spriteY, w, h);
+          image(gums, x, spriteY, w, h);
           break;
         case 40:
           image(jhon, x-r, spriteY-r, w, w);
