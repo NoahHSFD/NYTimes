@@ -112,8 +112,10 @@ public class IsaacMap {
     void setType(String type) {
       if(type.equals("normal")) {
         this.type = 0;
+        backgroundSprite = backgrounds.get(0);
       } else if(type.equals("boss")) {
         this.type = 1;
+        backgroundSprite = backgrounds.get(1);
       } else if(type.equals("store")){
         this.type = 2;
       } else {

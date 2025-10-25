@@ -434,6 +434,7 @@ void loadImages() {
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu3.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu2.png"));
   backgrounds.add(loadImage("/Images/Sprites/Background1.png"));
+  backgrounds.add(loadImage("/Images/Sprites/Background2.png"));
   jhon = loadImage("/Images/Sprites/jhon.png");
   gums = loadImage("/Images/Sprites/gums.png");
   gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
