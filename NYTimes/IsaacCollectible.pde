@@ -4,12 +4,12 @@ public class IsaacCollectible {
   float w = width*.0125;
   float r = w*.5;
   color clr = #2AF72C;
-  CollectibleEffect effect;
+  int effect;
   
   public IsaacCollectible(float x, float y) {
     this.x = x;
     this.y = y;
-    this.effect = CollectibleEffect.FIRERATEUP;
+    this.effect = 3;
     this.clr = #000000;
   }
   
@@ -18,7 +18,7 @@ public class IsaacCollectible {
     this.y = height*.5;
     this.w = width*.0125;
     this.r = w*.5;
-    this.effect = CollectibleEffect.FIRERATEUP;
+    this.effect = 3;
   }
   
   public IsaacCollectible(int effect) {
@@ -26,21 +26,18 @@ public class IsaacCollectible {
     this.y = height*.5;
     this.w = width*.0125;
     this.r = w*.5;
+    this.effect = effect;
     switch(effect) {
       case 0:
-        this.effect = CollectibleEffect.ADDFAMILIAR;
         this.clr = #2AF72C;
         break;
       case 1:
-        this.effect = CollectibleEffect.SPEEDUP;
         this.clr = #FFFFFF;
         break;
       case 2:
-        this.effect = CollectibleEffect.CHANGESTYLE;
         this.clr = #FF0000;
         break;
       case 3:
-        this.effect = CollectibleEffect.FIRERATEUP;
         this.clr = #000000;
         break;
       default:
@@ -64,25 +61,26 @@ public class IsaacCollectible {
   
   void pickUp(IsaacPlayer player) {
     switch(effect) {
-      case FIRERATEUP:
-        player.fireRateUp();
-        break;
-      case SPEEDUP:
-        player.speedUp();
-        break;
-      case PROJECTILESIZEUP:
-        player.projectileSizeUp();
-        break;
-      case CHANGESTYLE:
-        player.changeStyle();
-        break;
-      case CHANGEID:
-        player.changeId();
-        break;
-      case ADDFAMILIAR:
+      case 0:
         player.addFamiliar();
         break;
+      case 1:
+        player.speedUp();
+        break;
+      case 2:
+        player.changeStyle();
+        break;
+      case 3:
+        player.fireRateUp();
+        break;
+      case 4:
+        player.projectileSizeUp();
+        break;
+      case 5:
+        player.changeId();
+        break;
       default:
+        player.fireRateUp();
     }
   }
   

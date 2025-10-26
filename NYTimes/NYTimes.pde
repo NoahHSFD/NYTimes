@@ -66,16 +66,6 @@ enum ConnectionsTier {
   PURPLE
 }
 
-enum CollectibleEffect {
-  FIRERATEUP,
-  SPEEDUP,
-  SIZEDOWN,
-  PROJECTILESIZEUP,
-  CHANGESTYLE,
-  CHANGEID,
-  ADDFAMILIAR
-}
-
 enum GameState {
   PAUSED,
   PLAYING,
