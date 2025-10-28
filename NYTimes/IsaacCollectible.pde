@@ -79,6 +79,12 @@ public class IsaacCollectible {
       case 5:
         player.changeId();
         break;
+      case 6:
+        player.setFlying(true);
+        break;
+      case 7:
+        player.setProjectileFollowing(true);
+        break;
       default:
         player.fireRateUp();
     }

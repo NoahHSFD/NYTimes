@@ -94,10 +94,8 @@ public class IsaacPlayer {
     this.invulnerable = false;
     this.defaultInvulnerabilityTime = 120;
     this.invulnerabilityTime = defaultInvulnerabilityTime;
-    this.flying = true;
     this.projectileSize = r;
     this.explosionWidth = w*4.;
-    this.projectileFollowing = true;
     this.beamWidth = w;
     this.beamTime = FPS*.5;
     this.maxCharge = 50;
@@ -306,6 +304,14 @@ public class IsaacPlayer {
     }
   }
   
+  void setProjectileFollowing(boolean projectileFollowing) {
+    this.projectileFollowing = projectileFollowing;
+  }
+  
+  void rangeUp(float range) {
+    this.projectileTime += range;
+  }
+  
   void changeId() {
     setId((id+1)%4);
   }
@@ -408,6 +414,8 @@ public class IsaacPlayer {
   
   void hit(int damage) {
     if(!invulnerable) {
+      hitSound.stop();
+      if(!volume.muted) hitSound.play();
       lives -= damage;
       invulnerable = true;
       if(lives <= 0) {

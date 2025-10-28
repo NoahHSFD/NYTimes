@@ -29,7 +29,7 @@ ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
 ArrayList<PImage> nijikaMenu = new ArrayList<PImage>();
 ArrayList<PImage> backgrounds = new ArrayList<PImage>();
-SoundFile bgm;
+SoundFile bgm, hitSound;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
 NYTimes nyt;
 
@@ -164,6 +164,7 @@ void draw() {
   if(!volume.getMuted()) {
     try {
       bgm.amp(volume.setVolume());
+      hitSound.amp(2.*volume.setVolume());
     } catch(Exception e) {
       println(e + "\n Can't set BGM volume.");
     }
@@ -354,6 +355,7 @@ void loadAudioFiles() {
   bgms.get(4).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
   bgms.get(5).removeFromCache();
+  hitSound = new SoundFile(this, "/Audio/player_hit.mp3");
 }
 
 void loadImages() {
