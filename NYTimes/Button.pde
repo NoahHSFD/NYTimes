@@ -36,10 +36,10 @@ public class Button {
         break;
       case ISAACRYOU:
         if(status == 1) {
-          image(ryouMenu.get(((timer++/14)%8)), x, y, w, h);
+          image(ryouMenu.get(((timer++/14)%8) + 1), x, y, w, h);
         } else {
           timer = 0;
-          image(ryouMenu.get(0), x, y, w, h);
+          image(ryouMenu.get(1), x, y, w, h);
         }
         break;
       case ISAACKITA:

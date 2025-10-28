@@ -392,6 +392,7 @@ void loadImages() {
   bocchiMenu.add(loadImage("/Images/Sprites/Bocchi_Menu4.png"));
   bocchiMenu.add(loadImage("/Images/Sprites/Bocchi_Menu3.png"));
   bocchiMenu.add(loadImage("/Images/Sprites/Bocchi_Menu2.png"));
+  ryouMenu.add(loadImage("/Images/Sprites/Ryou_Icon.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu2.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu3.png"));
