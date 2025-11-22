@@ -117,7 +117,7 @@ void draw() {
       if(volume.getMuted()) bgm.amp(0.0);
       Sound.status();
     } catch(Exception e) {
-      println(e + "\n Audio file error.");
+      println(e + "\n Error loading audio or image files.");
     }
   }
   switch(game) {

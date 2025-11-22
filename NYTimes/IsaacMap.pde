@@ -497,7 +497,12 @@ public class IsaacMap {
             break;
           default:
         }
-        if(is.getCurrentMap().getCurrentRoom().type == 1) is.state = is.playAnimation(500);
+        if(is.getCurrentMap().getCurrentRoom().type == 1 &&
+           !is.getCurrentMap().getCurrentRoom().enemyList.isEmpty()) {
+          for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+            if(!e.dead) is.state = is.playAnimation(500);
+          }
+        }
       }
     }
   }
