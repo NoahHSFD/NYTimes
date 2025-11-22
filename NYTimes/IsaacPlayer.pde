@@ -26,11 +26,16 @@ public class IsaacPlayer {
   boolean invulnerable;
   boolean projectileBounce;
   boolean flying;                                                            //whether player can fly over flyable enemies/obstacles/puddles
+  boolean stoppingTime;                                                      //whether the player is currently stopping time
   float invulnerableTimer;                                                   //timer to check invulnerability
   float defaultInvulnerabilityTime;                                          //time how long player stays invulberable after being hit
   float invulnerabilityTime;
   float projectileSize, beamWidth, explosionWidth;
   float beamTime;                                                            //how long the beam stays
+  float maxTimeStopCharge, timeStopCharge;                                   //max/current charge for how long the player can stop time
+  boolean rechargingTimeStop;                                                //if the player completely depletes timestop charge, he cant use it again
+                                                                             //before it's fully recharged
+  
   int projectileStyle;                                                       //0 = shoot projectiles, 1 = charge attacks
   boolean charging, shooting;
   float maxCharge, charge, chargeRate;
@@ -100,6 +105,8 @@ public class IsaacPlayer {
     this.beamTime = FPS*.5;
     this.maxCharge = 50;
     this.chargeRate = .5;
+    this.maxTimeStopCharge = 240;
+    this.timeStopCharge = maxTimeStopCharge;
   }
   
   void init() {
@@ -109,11 +116,12 @@ public class IsaacPlayer {
     shootTimer = 0;
     invulnerabilityTime = defaultInvulnerabilityTime;
     charge = 0;
+    timeStopCharge = maxTimeStopCharge;
   }
   
   void display() {
     pushStyle();
-    //text(dx + " " + dy, x - w, y + w);
+    //text(timeStopCharge + " " + rechargingTimeStop, x - w, y + w);
     fill(#000000, 70);
     noStroke();
     circle(x+w*.05, y+w*.05, w*1.1);
@@ -136,6 +144,9 @@ public class IsaacPlayer {
     if(projectileStyle == 1) {
       rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
     }
+    fill(rechargingTimeStop ? #FF0000 : #00FF00);
+    rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
+    fill(clr);
     for(IsaacBeam b : playerBeams) {
       b.display();
     }
@@ -186,6 +197,19 @@ public class IsaacPlayer {
         invulnerabilityTime = defaultInvulnerabilityTime;
         invulnerable = false;
         clr = #FF0000;
+      }
+    }
+    is.getCurrentMap().getCurrentRoom().setTimeStopped(stoppingTime);
+    if(stoppingTime) {
+      if(timeStopCharge-- <= 0) {
+        stoppingTime = false;
+        rechargingTimeStop = true;
+      }
+    } else {
+      if(timeStopCharge < maxTimeStopCharge) {
+        timeStopCharge += rechargingTimeStop ? 1 : .5;
+      } else {
+        rechargingTimeStop = false;
       }
     }
     switch(projectileStyle) {
@@ -335,6 +359,10 @@ public class IsaacPlayer {
     } else {
       shootProjectile();
     }
+  }
+  
+  void stopTime() {
+    if(!rechargingTimeStop) stoppingTime = !stoppingTime;
   }
   
   void addFamiliar(int id, int position) {
@@ -614,6 +642,7 @@ public class IsaacPlayer {
       //}
     //} else {
     if(k == 16 && bombs > 0) placeBomb();
+    if(k == 32) stopTime();
     setMovement(k);
     //}
   }

@@ -44,6 +44,7 @@ public class IsaacEnemy {
   boolean flyable;                                                             //whether an enemy can be flown over without taking contact damage
   boolean projectileBounce;                                                    //whether projectiles bounce off of walls and obstacles
   boolean reloading;                                                           //whether an enemy is currently reloading bullets
+  boolean timeStopped;                                                         //timestopped enemies and their projectiles can't move
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
@@ -372,239 +373,241 @@ public class IsaacEnemy {
   }
 
   boolean update() {
-    if(!dead) {
-      if(!corpse) {
-        if(!reviving) {
-          if(!jumping) {
-            if(!reloading) shootTimer += fireRate;
-            puddleTimer += puddleRate;
-            jumpingTimer += jumpingRate;
-            randomMovementTimer += randomMovementRate;
-            if(!standing) standingTimer += standingRate;
-            if(!bossAttacking) bossAttackTimer += bossAttackRate;
-            if(shootTimer >= 100) {
-              if(aiming) {
-                shoot(is.player);
-              } else {
-                shoot(projectileAmount);
-              }
-              shootTimer -= 100;
-            }
-            if(standingTimer >= 100) {
-              stand();
-              standingTimer -= 100;
-            }
-            if(standing && standstillTimer++ >= standstillTime) {
-              standing = false;
-              standstillTimer -= standstillTime;
-            }
-            if(reloading && reloadTimer++ >= reloadTime) {
-              standing = false;
-              reloading = false;
-              reloadTimer -= reloadTime;
-              bullets = maxBullets;
-            }
-            if(puddleTimer >= 100) {
-              leavePuddle();
-              puddleTimer -= 100;
-            }
-            if(jumpingTimer >= 100) {
-              jump();
-              jumpingTimer = 0;
-            }
-            if(bossAttackTimer >= 100) {
-              bossAttack();
-              bossAttackTimer -= 100;
-            }
-            if(randomMovementTimer >= 100) {
-              dx = random(-1, 1);
-              dy = random(-1, 1);
-              randomMovementTimer -= 100;
-              randomMovementRate = random(.2, 2);
-            }
-            if(following) {
-              dx = (is.player.x-x)/(Math.abs(is.player.x-x) + Math.abs(is.player.y-y));
-              dy = (is.player.y-y)/(Math.abs(is.player.x-x) + Math.abs(is.player.y-y));
-              if(Math.abs(dy) >= Math.abs(dx)) {
-                facingX = 0;
-                if(dy > 0) {
-                  facingY = 1;
+    if(!timeStopped) {
+      if(!dead) {
+        if(!corpse) {
+          if(!reviving) {
+            if(!jumping) {
+              if(!reloading) shootTimer += fireRate;
+              puddleTimer += puddleRate;
+              jumpingTimer += jumpingRate;
+              randomMovementTimer += randomMovementRate;
+              if(!standing) standingTimer += standingRate;
+              if(!bossAttacking) bossAttackTimer += bossAttackRate;
+              if(shootTimer >= 100) {
+                if(aiming) {
+                  shoot(is.player);
                 } else {
-                  facingY = -1;
+                  shoot(projectileAmount);
                 }
-              } else {
-                facingY = 0;
-                if(dx > 0) {
-                  facingX = 1;
-                } else {
-                  facingX = -1;
-                }
+                shootTimer -= 100;
               }
-            }
-          } else {
-            if(airborneTimer++ >= airborneTime) {
-              airborneTimer = 0;
-              jumping = false;
-              switch(type) {
-                case 3:
-                  shoot(5);
-                  break;
-                case 10:
-                  shoot(8);
-                  break;
-                default:
+              if(standingTimer >= 100) {
+                stand();
+                standingTimer -= 100;
               }
-            }
-          }
-          if(bossAttacking && bossAttackDurationTimer++ <= bossAttackDuration) {
-            switch(type) {
-              case 30:
-                switch(bossAttackType) {
-                  case 0:
-                    gumsBreatheIn();
-                    break;
-                  case 1:
-                    gumsCough(8, 16);
-                    break;
-                  case 2:
-                    bossAttackDuration = 750;
-                    gumsScream(projectileAmount, screamGap);
-                    break;
-                  case 3:
-                    gumsQuiver();
-                    break;
-                  case 4:
-                    gumsRetch();
-                    break;
-                  default:
-                }
-                break;
-              default:
-            }
-          } else {
-            switch(type) {
-              case 30:
-                projectileAmount = int(random(12, 17));
-                screamGap = int(random(projectileAmount/3, (2*projectileAmount/3)+1));
-                break;
-              default:
-            }
-            bossAttackDurationTimer = 0;
-            bossAttacking = false;
-          }
-          if(!standing) {
-            x += dx*speed;
-            y += dy*speed;
-          }
-          switch(type) {
-            case 21:
-              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                if(e.type == 20) {
-                  if(!e.dead) {
-                    if(Math.sqrt(Math.pow(Math.abs(x - e.x), 2) + Math.pow(Math.abs(y - e.y), 2)) > r*7) {
-                      setX(x + Math.signum(e.x - x));
-                      setY(y + Math.signum(e.y - y));
-                    }
+              if(standing && standstillTimer++ >= standstillTime) {
+                standing = false;
+                standstillTimer -= standstillTime;
+              }
+              if(reloading && reloadTimer++ >= reloadTime) {
+                standing = false;
+                reloading = false;
+                reloadTimer -= reloadTime;
+                bullets = maxBullets;
+              }
+              if(puddleTimer >= 100) {
+                leavePuddle();
+                puddleTimer -= 100;
+              }
+              if(jumpingTimer >= 100) {
+                jump();
+                jumpingTimer = 0;
+              }
+              if(bossAttackTimer >= 100) {
+                bossAttack();
+                bossAttackTimer -= 100;
+              }
+              if(randomMovementTimer >= 100) {
+                dx = random(-1, 1);
+                dy = random(-1, 1);
+                randomMovementTimer -= 100;
+                randomMovementRate = random(.2, 2);
+              }
+              if(following) {
+                dx = (is.player.x-x)/(Math.abs(is.player.x-x) + Math.abs(is.player.y-y));
+                dy = (is.player.y-y)/(Math.abs(is.player.x-x) + Math.abs(is.player.y-y));
+                if(Math.abs(dy) >= Math.abs(dx)) {
+                  facingX = 0;
+                  if(dy > 0) {
+                    facingY = 1;
                   } else {
-                    phase = 1;
-                    fireRate = 0;
-                    speed = baseSpeed*5;
-                    knockbackEfficiency = 3;
+                    facingY = -1;
+                  }
+                } else {
+                  facingY = 0;
+                  if(dx > 0) {
+                    facingX = 1;
+                  } else {
+                    facingX = -1;
                   }
                 }
               }
-              break;
-            case 30:
-              int teeth = 0;
-              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                if((e.type == 31 && !e.corpse) ||
-                   (e.type == 32 && !e.corpse) ||
-                   (e.type == 33 && !e.corpse) ||
-                   (e.type == 34 && !e.corpse) ||
-                   (e.type == 35 && !e.corpse) ||
-                   (e.type == 36 && !e.corpse)) {
-                  teeth++;
+            } else {
+              if(airborneTimer++ >= airborneTime) {
+                airborneTimer = 0;
+                jumping = false;
+                switch(type) {
+                  case 3:
+                    shoot(5);
+                    break;
+                  case 10:
+                    shoot(8);
+                    break;
+                  default:
                 }
               }
-              dead = (teeth <= 0);
-              break;
-            default:
-          }
-          if(!(type == 30)) {
-            if(x <= (r + is.borderWidth)) {
-              x = (r + is.borderWidth);
-              dx *= -1;
-              facingX *= -1;
-            } else if(x >= width - (r + is.borderWidth)) {
-              x = width - (r + is.borderWidth);
-              dx *= -1;
-              facingX *= -1;
             }
-            if(y <= (r + is.borderWidth)) {
-              y = (r + is.borderWidth);
-              dy *= -1;
-              facingY *= -1;
-            } else if(y >= height - (r + is.borderWidth)) {
-              y = height - (r + is.borderWidth);
-              dy *= -1;
-              facingY *= -1;
+            if(bossAttacking && bossAttackDurationTimer++ <= bossAttackDuration) {
+              switch(type) {
+                case 30:
+                  switch(bossAttackType) {
+                    case 0:
+                      gumsBreatheIn();
+                      break;
+                    case 1:
+                      gumsCough(8, 16);
+                      break;
+                    case 2:
+                      bossAttackDuration = 750;
+                      gumsScream(projectileAmount, screamGap);
+                      break;
+                    case 3:
+                      gumsQuiver();
+                      break;
+                    case 4:
+                      gumsRetch();
+                      break;
+                    default:
+                  }
+                  break;
+                default:
+              }
+            } else {
+              switch(type) {
+                case 30:
+                  projectileAmount = int(random(12, 17));
+                  screamGap = int(random(projectileAmount/3, (2*projectileAmount/3)+1));
+                  break;
+                default:
+              }
+              bossAttackDurationTimer = 0;
+              bossAttacking = false;
             }
-          }
-        } else {
-          if(revivalTimer++ >= revivalTime) {
+            if(!standing) {
+              x += dx*speed;
+              y += dy*speed;
+            }
             switch(type) {
-              case 7:
-                maxHp *= .7;
+              case 21:
+                for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+                  if(e.type == 20) {
+                    if(!e.dead) {
+                      if(Math.sqrt(Math.pow(Math.abs(x - e.x), 2) + Math.pow(Math.abs(y - e.y), 2)) > r*7) {
+                        setX(x + Math.signum(e.x - x));
+                        setY(y + Math.signum(e.y - y));
+                      }
+                    } else {
+                      phase = 1;
+                      fireRate = 0;
+                      speed = baseSpeed*5;
+                      knockbackEfficiency = 3;
+                    }
+                  }
+                }
+                break;
+              case 30:
+                int teeth = 0;
+                for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+                  if((e.type == 31 && !e.corpse) ||
+                     (e.type == 32 && !e.corpse) ||
+                     (e.type == 33 && !e.corpse) ||
+                     (e.type == 34 && !e.corpse) ||
+                     (e.type == 35 && !e.corpse) ||
+                     (e.type == 36 && !e.corpse)) {
+                    teeth++;
+                  }
+                }
+                dead = (teeth <= 0);
                 break;
               default:
             }
-            hp = maxHp;
-            revivalTimer = 0;
-            reviving = false;
-          }
-        }
-      } else {
-        switch(type) {
-          case 31:
-          case 32:
-          case 33:
-          case 34:
-          case 35:
-          case 36:
-            for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-              if(e.type == 30 && e.dead) {
-                leavesCorpse = false;
-                corpse = false;
-                dead = true;
+            if(!(type == 30)) {
+              if(x <= (r + is.borderWidth)) {
+                x = (r + is.borderWidth);
+                dx *= -1;
+                facingX *= -1;
+              } else if(x >= width - (r + is.borderWidth)) {
+                x = width - (r + is.borderWidth);
+                dx *= -1;
+                facingX *= -1;
+              }
+              if(y <= (r + is.borderWidth)) {
+                y = (r + is.borderWidth);
+                dy *= -1;
+                facingY *= -1;
+              } else if(y >= height - (r + is.borderWidth)) {
+                y = height - (r + is.borderWidth);
+                dy *= -1;
+                facingY *= -1;
               }
             }
-            break;
-          default:
+          } else {
+            if(revivalTimer++ >= revivalTime) {
+              switch(type) {
+                case 7:
+                  maxHp *= .7;
+                  break;
+                default:
+              }
+              hp = maxHp;
+              revivalTimer = 0;
+              reviving = false;
+            }
+          }
+        } else {
+          switch(type) {
+            case 31:
+            case 32:
+            case 33:
+            case 34:
+            case 35:
+            case 36:
+              for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+                if(e.type == 30 && e.dead) {
+                  leavesCorpse = false;
+                  corpse = false;
+                  dead = true;
+                }
+              }
+              break;
+            default:
+          }
+        }
+        if(intersects(is.player)) is.player.hit(1);
+      }
+      for(int i = 0; i >= 0 && i < enemyProjectiles.size(); i++) {
+        if(i >= 0 && enemyProjectiles.get(i).intersects(is.player)) {
+          is.player.hit(projectileDamage);
+          enemyProjectiles.remove(i);
+          i--;
+        }
+        if(i >= 0 && enemyProjectiles.get(i).update()) {
+          enemyProjectiles.remove(i);
+          i--;
         }
       }
-      if(intersects(is.player)) is.player.hit(1);
-    }
-    for(int i = 0; i >= 0 && i < enemyProjectiles.size(); i++) {
-      if(i >= 0 && enemyProjectiles.get(i).intersects(is.player)) {
-        is.player.hit(projectileDamage);
-        enemyProjectiles.remove(i);
-        i--;
+      for(int i = 0; i >= 0 && i < enemyPuddles.size(); i++) {
+        if(i >= 0 && enemyPuddles.get(i).intersects(is.player)) {
+          is.player.hit(puddleDamage);
+        }
+        if(i >= 0 && enemyPuddles.get(i).update()) {
+          enemyPuddles.remove(i);
+          i--;
+        }
       }
-      if(i >= 0 && enemyProjectiles.get(i).update()) {
-        enemyProjectiles.remove(i);
-        i--;
-      }
-    }
-    for(int i = 0; i >= 0 && i < enemyPuddles.size(); i++) {
-      if(i >= 0 && enemyPuddles.get(i).intersects(is.player)) {
-        is.player.hit(puddleDamage);
-      }
-      if(i >= 0 && enemyPuddles.get(i).update()) {
-        enemyPuddles.remove(i);
-        i--;
-      }
-    }
     if(dead) deathTime--;
+    }
     return (deathTime < 0);
   }
 
@@ -896,6 +899,10 @@ public class IsaacEnemy {
     bossAttackDuration = random(800, 1000);
     bossAttackType = int(random(0, bossAttackAmount));
     if(oldAttackType == bossAttackType) bossAttack();
+  }
+  
+  void setTimeStopped(boolean timeStopped) {
+    this.timeStopped = timeStopped;
   }
   
   void stand() {

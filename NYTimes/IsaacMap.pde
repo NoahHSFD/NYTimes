@@ -69,6 +69,7 @@ public class IsaacMap {
     ArrayList<IsaacChest> chestList = new ArrayList<IsaacChest>();
     PImage backgroundSprite;
     int type;                                                                              //0: normal room, 1: boss room, 2: store
+    boolean timeStopped;                                                                   //whether enemies and projectiles in the room are timestopped
     
     public IsaacRoom(int x, int y) {
       this.x = x;
@@ -121,6 +122,10 @@ public class IsaacMap {
       } else {
         this.type = 0;
       }
+    }
+    
+    void setTimeStopped(boolean timeStopped) {
+      this.timeStopped = timeStopped;
     }
     
     void setOffSet(float offSetX, float offSetY) {
@@ -191,6 +196,7 @@ public class IsaacMap {
         }
       }
       for(int i = 0; i < enemyList.size(); i++) {
+        enemyList.get(i).setTimeStopped(timeStopped);
         for(IsaacObstacle o : obstacleList) {
           if(!(enemyList.get(i).flying && o.traversible)) {
             if(enemyList.get(i).intersects(o) && !(enemyList.get(i).jumping)) {
