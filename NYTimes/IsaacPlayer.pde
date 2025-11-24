@@ -32,13 +32,11 @@ public class IsaacPlayer {
   float invulnerabilityTime;
   float projectileSize, beamWidth, explosionWidth;
   float beamTime;                                                            //how long the beam stays
-  float maxTimeStopCharge, timeStopCharge;                                   //max/current charge for how long the player can stop time
-  boolean rechargingTimeStop;                                                //if the player completely depletes timestop charge, he cant use it again
-                                                                             //before it's fully recharged
-  
+  float maxTimeStopCharge, timeStopCharge, timeStopChargeRate;               //max/current charge and charge rate for how long the player can stop time
+  boolean rechargingTimeStop;                                                //if the player completely depletes timestop charge, they have to wait until it's fully charged
   int projectileStyle;                                                       //0 = shoot projectiles, 1 = charge attacks
   boolean charging, shooting;
-  float maxCharge, charge, chargeRate;
+  float maxCharge, charge, chargeRate;                                       //max/current charge and charge rate for beams
   int id;                                                                    //0 = Bocchi, 1 = Ryou, 2 = Kita, 3 = Nijika
   PImage playerIcon, playerIconLeft, playerIconRight, playerIconBack;
   
@@ -107,6 +105,7 @@ public class IsaacPlayer {
     this.chargeRate = .5;
     this.maxTimeStopCharge = 240;
     this.timeStopCharge = maxTimeStopCharge;
+    this.timeStopChargeRate = 1;
   }
   
   void init() {
@@ -207,7 +206,7 @@ public class IsaacPlayer {
       }
     } else {
       if(timeStopCharge < maxTimeStopCharge) {
-        timeStopCharge += rechargingTimeStop ? 1 : .5;
+        timeStopCharge += rechargingTimeStop ? timeStopChargeRate : timeStopChargeRate*.5;
       } else {
         rechargingTimeStop = false;
       }
@@ -654,7 +653,7 @@ public class IsaacPlayer {
         //charging = false;
       //}
     //} else {
-      stopMovement(k);
+    stopMovement(k);
     //}
   }
   

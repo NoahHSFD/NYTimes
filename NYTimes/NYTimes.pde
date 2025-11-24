@@ -408,6 +408,7 @@ void loadImages() {
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu5.png"));
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu6.png"));
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu7.png"));
+  nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Icon.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu.png"));

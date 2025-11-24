@@ -163,6 +163,7 @@ public class IsaacEnemy {
         this.w *= .5;
         this.r = w*.5;
         this.randomMovement = true;
+        this.knockbackEfficiency = 1;
         break;
       case 10:                                                                                  //monstro
         this.w = width*.075;

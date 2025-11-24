@@ -52,10 +52,10 @@ public class Button {
         break;
       case ISAACNIJIKA:
         if(status == 1) {
-          image(nijikaMenu.get((timer++/12)%18), x, y, w, h);
+          image(nijikaMenu.get(((timer++/12)%18) + 1), x, y, w, h);
         } else {
           timer = 0;
-          image(nijikaMenu.get(0), x, y, w, h);
+          image(nijikaMenu.get(1), x, y, w, h);
         }
         break;
       default:
