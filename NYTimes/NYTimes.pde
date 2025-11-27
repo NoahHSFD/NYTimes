@@ -401,6 +401,7 @@ void loadImages() {
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu4.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu3.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu2.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/Kita_Icon.png"));
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu.png"));
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu2.png"));
   kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu3.png"));

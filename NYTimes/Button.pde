@@ -28,7 +28,7 @@ public class Button {
     switch(id) {
       case ISAACBOCCHI:
         if(status == 1) {
-          image(bocchiMenu.get((timer++/5)%8 + 1), x, y, w, h);
+          image(bocchiMenu.get(((timer++/5)%8) + 1), x, y, w, h);
         } else {
           timer = 0;
           image(bocchiMenu.get(1), x, y, w, h);
@@ -44,10 +44,10 @@ public class Button {
         break;
       case ISAACKITA:
         if(status == 1) {
-          image(kitaMenu.get((timer++/14)%7), x, y, w, h);
+          image(kitaMenu.get(((timer++/14)%7) + 1), x, y, w, h);
         } else {
           timer = 0;
-          image(kitaMenu.get(0), x, y, w, h);
+          image(kitaMenu.get(1), x, y, w, h);
         }
         break;
       case ISAACNIJIKA:
