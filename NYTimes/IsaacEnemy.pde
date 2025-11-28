@@ -68,7 +68,7 @@ public class IsaacEnemy {
     this.y = y;
     this.w = width*.05;
     this.r = w*.5;
-    this.h = width*.05;
+    //this.h = width*.05;
     this.facingX = int(round(random(-1, 1)));
     if(facingX != 0) {
       this.facingY = 0;
@@ -208,7 +208,7 @@ public class IsaacEnemy {
         this.bossAttackAmount = 5;
         this.bossAttackRate = .2;
         break;
-      case 31:                                                                                  //gums - teeth (31-36)
+      case 31:                                                                                  //gums - teeth (31-39)
         this.baseSpeed = 0;                                                                     //healthy tooth
         this.maxHp = 1000;
         this.leavesCorpse = true;
@@ -257,6 +257,21 @@ public class IsaacEnemy {
         this.projectileTime = 500;
         this.projectileBounce = true;
         break;
+      case 50:                                                                                   //mom
+        this.baseSpeed = 0;
+        this.w = 0;
+        this.h = 0;
+        this.x = 0;
+        this.y = 0;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.noShadow = true;
+        this.bossAttackAmount = 1;
+        this.bossAttackRate = .2;
+        break;
+      case 51:                                                                                   //mom - body parts (51-59)
+        this.baseSpeed = 0;                                                                      //leg
+        this.h = height*.5;
     default:
     }
     if(randomMovement) {
@@ -361,6 +376,14 @@ public class IsaacEnemy {
           break;
         case 40:
           image(jhon, x-r, spriteY-r, w, w);
+          break;
+        case 50:
+          stroke(#000000);
+          fill(#FF0000);
+          rect(width*.3, height*.9, map(hp, 0, maxHp, 0, width*.4), 20);
+          break;
+        case 51:
+          image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         default:
           image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
@@ -482,6 +505,14 @@ public class IsaacEnemy {
                     default:
                   }
                   break;
+                case 50:
+                  switch(bossAttackType) {
+                    case 0:
+                      momStomp();
+                      break;
+                    default:
+                    
+                  }
                 default:
               }
             } else {
@@ -529,7 +560,15 @@ public class IsaacEnemy {
                     teeth++;
                   }
                 }
-                dead = (teeth <= 0);
+                dead = (teeth <= 0);                                                                  //gums dies when all teeth are dead
+                break;
+              case 51:
+              case 52:
+                for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+                  if(e.type == 50 && e.dead) {
+                    dead = true;                                                                      //when mom dies, all her body parts die
+                  }
+                }
                 break;
               default:
             }
@@ -796,110 +835,161 @@ public class IsaacEnemy {
     }
   }
   
+  void momStomp() {
+    if(bossAttackDurationTimer == 1) {
+      println("stomep");
+    }
+  }
+  
   void fall() {
     jumping = true;
     airborneTimer = airborneTime*.5;
   }
 
   void hit(IsaacProjectile p) {
-    hp -= p.getDamage();
-    x += p.getKnockback()*p.getDx()*knockbackEfficiency;
-    y += p.getKnockback()*p.getDy()*knockbackEfficiency;
-    if(shootsWhenHit) shootRandom();
-    if(puddleWhenHit) leavePuddle(x + (random(-1.5, 1.5)*w), y + (random(-1.5, 1.5)*w));
-    if(hp <= 0) {
-      if(revives && !reviving) {
-        hp = maxHp;
-        reviving = true;
-      } else {
-        if(explodesOnDeath) shoot(6);
-        if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-        if(leavesCorpse) {
-          switch(type) {
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-              this.flyable = true;
-              break;
-            default:
+    switch(type) {
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+        for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+          if(e.type == 50) {
+            e.hit(p);
           }
-          corpse = true;
-        } else {
-          dead = true;
         }
-      }
+        break;
+      default:
+        hp -= p.getDamage();
+        x += p.getKnockback()*p.getDx()*knockbackEfficiency;
+        y += p.getKnockback()*p.getDy()*knockbackEfficiency;
+        if(shootsWhenHit) shootRandom();
+        if(puddleWhenHit) leavePuddle(x + (random(-1.5, 1.5)*w), y + (random(-1.5, 1.5)*w));
+        if(hp <= 0) {
+          if(revives && !reviving) {
+            hp = maxHp;
+            reviving = true;
+          } else {
+            if(explodesOnDeath) shoot(6);
+            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
+            if(leavesCorpse) {
+              switch(type) {
+                case 31:
+                case 32:
+                case 33:
+                case 34:
+                case 35:
+                case 36:
+                  this.flyable = true;
+                  break;
+                default:
+              }
+              corpse = true;
+            } else {
+              dead = true;
+            }
+          }
+        }
     }
   }
 
   void hit(IsaacBeam b) {
-    hp -= b.getDamage();
-    x += b.getKnockback()*b.getDx()*knockbackEfficiency;
-    y += b.getKnockback()*b.getDy()*knockbackEfficiency;
-    if(hp <= 0) {
-      if(revives && !reviving) {
-        hp = maxHp;
-        reviving = true;
-      } else {
-        if(explodesOnDeath) shoot(6);
-        if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-        if(leavesCorpse) {
-          switch(type) {
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-              this.flyable = true;
-              break;
-            default:
+    switch(type) {
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+        for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+          if(e.type == 50) {
+            e.hit(b);
           }
-          corpse = true;
-        } else {
-          dead = true;
         }
-      }
+        break;
+      default:
+        hp -= b.getDamage();
+        x += b.getKnockback()*b.getDx()*knockbackEfficiency;
+        y += b.getKnockback()*b.getDy()*knockbackEfficiency;
+        if(hp <= 0) {
+          if(revives && !reviving) {
+            hp = maxHp;
+            reviving = true;
+          } else {
+            if(explodesOnDeath) shoot(6);
+            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
+            if(leavesCorpse) {
+              switch(type) {
+                case 31:
+                case 32:
+                case 33:
+                case 34:
+                case 35:
+                case 36:
+                  this.flyable = true;
+                  break;
+                default:
+              }
+              corpse = true;
+            } else {
+              dead = true;
+            }
+          }
+        }
     }
   }
   
   void hit(IsaacBomb bo) {
-    hp -= bo.getDamage();
-    if(hp <= 0) {
-      if(revives && !reviving) {
-        hp = maxHp;
-        reviving = true;
-      } else {
-        if(explodesOnDeath) shoot(6);
-        if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-        if(leavesCorpse) {
-          switch(type) {
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
-              this.flyable = true;
-              break;
-            default:
+    switch(type) {
+      case 51:
+      case 52:
+      case 53:
+      case 54:
+        for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+          if(e.type == 50) {
+            e.hit(bo);
           }
-          corpse = true;
-        } else {
-          dead = true;
         }
-      }
+        break;
+      default:
+        hp -= bo.getDamage();
+        if(hp <= 0) {
+          if(revives && !reviving) {
+            hp = maxHp;
+            reviving = true;
+          } else {
+            if(explodesOnDeath) shoot(6);
+            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
+            if(leavesCorpse) {
+              switch(type) {
+                case 31:
+                case 32:
+                case 33:
+                case 34:
+                case 35:
+                case 36:
+                  this.flyable = true;
+                  break;
+                default:
+              }
+              corpse = true;
+            } else {
+              dead = true;
+            }
+          }
+        }
     }
   }
   
   void bossAttack() {
-    int oldAttackType = bossAttackType;
-    bossAttacking = true;
-    bossAttackDuration = random(800, 1000);
-    bossAttackType = int(random(0, bossAttackAmount));
-    if(oldAttackType == bossAttackType) bossAttack();
+    if(bossAttackAmount > 1) {
+      int oldAttackType = bossAttackType;
+      bossAttacking = true;
+      bossAttackDuration = random(800, 1000);
+      bossAttackType = int(random(0, bossAttackAmount));
+      if(oldAttackType == bossAttackType) bossAttack();
+    } else {
+      bossAttacking = true;
+      bossAttackDuration = random(800, 1000);
+      bossAttackType = 0;
+    }
   }
   
   void setTimeStopped(boolean timeStopped) {
@@ -1001,15 +1091,21 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacPlayer player) {
-    return !(flyable && player.flying) && !dead && !noContactDamage && !jumping && player.r + r >= sqrt(pow((player.x - x), 2) + pow((player.y - y), 2));
+    return !(flyable && player.flying) && !dead && !noContactDamage && !jumping && 
+            (h == 0 ? player.r + r >= sqrt(pow((player.x - x), 2) + pow((player.y - y), 2))
+            : x - r < player.x + player.r && x + r > player.x - player.r && y - h < player.y + player.r && y > player.y - player.r);
   }
 
   boolean intersects(IsaacProjectile projectile) {
-    return !corpse && !dead && !untargetable && !jumping && projectile.r + r*1.05 >= sqrt(pow((projectile.x - x), 2) + pow((projectile.y - y), 2));
+    return !corpse && !dead && !untargetable && !jumping && 
+            (h == 0 ? projectile.r + r*1.05 >= sqrt(pow((projectile.x - x), 2) + pow((projectile.y - y), 2))
+            : x - r < projectile.x + projectile.r && x + r > projectile.x - projectile.r && y - h < projectile.y + projectile.r && y > projectile.y - projectile.r);
   }
 
   boolean intersects(IsaacBeam beam) {
-    return !corpse && !dead && !untargetable && !jumping && x - r < beam.x + beam.w && x + r > beam.x && y - r < beam.y + beam.h && y + r > beam.y;
+    return !corpse && !dead && !untargetable && !jumping && 
+            (h == 0 ? x - r < beam.x + beam.w && x + r > beam.x && y - r < beam.y + beam.h && y + r > beam.y
+            : x - r < beam.x + beam.w && x + r > beam.x && y - h < beam.y + beam.h && y > beam.y);
   }
 
   boolean intersects(IsaacBomb bomb) {

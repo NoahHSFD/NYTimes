@@ -58,8 +58,14 @@ public class IsaacBeam {
       }
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
-          if(e.y - e.r < (y + h) && (e.y + e.r) > y && (e.x - x) > 0 && (e.x - x) < w) {
-            w = e.x - x;
+          if(e.h != 0) {
+            if(e.y - e.h < (y + h) && e.y > y && (e.x - x) > 0 && (e.x - x) < w) {
+              w = e.x - e.r - x + 1;
+            }
+          } else {
+            if(e.y - e.r < (y + h) && (e.y + e.r) > y && (e.x - x) > 0 && (e.x - x) < w) {
+              w = e.x - x;
+            }
           }
         }
       }
@@ -77,9 +83,16 @@ public class IsaacBeam {
       }
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
-          if(e.y - e.r < (y + h) && (e.y + e.r) > y && is.player.getX() - (e.x) > 0 && is.player.getX() - (e.x) < w) {
-            x = e.x;
-            w = is.player.getX() - x;
+          if(e.h != 0) {
+            if(e.y - e.h < (y + h) && e.y > y && (is.player.getX() - e.x) > 0 && (is.player.getX() - e.x) < w) {
+              x = e.x + e.r - 1;
+              w = is.player.getX() - x;
+            }
+          } else {
+            if(e.y - e.r < (y + h) && (e.y + e.r) > y && is.player.getX() - (e.x) > 0 && is.player.getX() - (e.x) < w) {
+              x = e.x;
+              w = is.player.getX() - x;
+            }
           }
         }
       }
@@ -97,9 +110,16 @@ public class IsaacBeam {
       }
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
-          if(e.x - e.r < (x + w) && (e.x + e.r) > x && is.player.getY() - (e.y) > 0 && is.player.getY() - (e.y) < h) {
-            y = e.y;
-            h = is.player.getY() - y;
+          if(e.h != 0) {
+            if(e.x - e.r < (x + w) && (e.x + e.r) > x && is.player.getY() - (e.y) > 0 && is.player.getY() - (e.y) < h) {
+              y = e.y - 1;
+              h = is.player.getY() - y;
+            }
+          } else {
+            if(e.x - e.r < (x + w) && (e.x + e.r) > x && is.player.getY() - (e.y) > 0 && is.player.getY() - (e.y) < h) {
+              y = e.y;
+              h = is.player.getY() - y;
+            }
           }
         }
       }
@@ -116,8 +136,14 @@ public class IsaacBeam {
       }
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(!e.dead && !e.corpse && !e.jumping && !e.untargetable) {
-          if(e.x - e.r < (x + w) && (e.x + e.r) > x && (e.y - y) > 0 && (e.y - y) < h) {
-            h = e.y - y;
+          if(e.h != 0) {
+            if(e.x - e.r < (x + w) && (e.x + e.r) > x && (e.y - e.h - y) > 0 && (e.y - e.h - y) < h) {
+              h = e.y - e.h - y + 1;
+            }
+          } else {
+            if(e.x - e.r < (x + w) && (e.x + e.r) > x && (e.y - y) > 0 && (e.y - y) < h) {
+              h = e.y - y;
+            }
           }
         }
       }
