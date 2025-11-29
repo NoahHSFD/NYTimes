@@ -13,7 +13,7 @@ Audio au;
 IsaacMenu isM;
 Isaac is;
 ButtonID game;
-Slider volume;
+ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: bgm, 1: player sounds
 PFont font;
 PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
@@ -86,7 +86,8 @@ void setup() {
 
   game = ButtonID.MENU;
   homeButton = new Button(0, 0, width*.05, height*.025, ButtonID.MENU);
-  volume = new Slider(width*.975, 0, width*.025, height*.1);
+  volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1));
+  volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1));
   men = new Menu();
   wor = new Wordle();
   wor.init();
@@ -114,7 +115,8 @@ void draw() {
       loadAudioFiles();
       bgm = bgms.get(4);
       bgm.loop();
-      if(volume.getMuted()) bgm.amp(0.0);
+      if(volumeSliders.get(0).getMuted()) bgm.amp(0.0);
+      if(volumeSliders.get(1).getMuted()) hitSound.amp(0.0);
       Sound.status();
     } catch(Exception e) {
       println(e + "\n Error loading audio or image files.");
@@ -161,22 +163,34 @@ void draw() {
   }
   homeButton.update();
   homeButton.display();
-  if(!volume.getMuted()) {
+  if(!volumeSliders.get(0).getMuted()) {
     try {
-      bgm.amp(volume.setVolume());
-      hitSound.amp(2.*volume.setVolume());
+      bgm.amp(volumeSliders.get(0).setVolume());
+      //hitSound.amp(2.*volumeSliders.get(0).setVolume());
     } catch(Exception e) {
       println(e + "\n Can't set BGM volume.");
     }
   }
-  volume.update();
-  volume.display();
+  if(!volumeSliders.get(1).getMuted()) {
+    try {
+      //bgm.amp(volumeSliders.get(0).setVolume());
+      hitSound.amp(2.*volumeSliders.get(1).setVolume());
+    } catch(Exception e) {
+      println(e + "\n Can't set player sound volume.");
+    }
+  }
+  for(Slider s : volumeSliders) {
+    s.update();
+    s.display();
+  }
   text(round(frameRate), width*.9, height*.1);
 }
 
 void mousePressed() {
   homeButton.clickCheck();
-  volume.clickCheck();
+  for(Slider s : volumeSliders) {
+    s.clickCheck();
+  }
   switch(game) {
     case MENU:
       men.clickChecks();
@@ -209,14 +223,23 @@ void mousePressed() {
 void mouseReleased() {
   homeButton.click();
   homeButton.clickCheck();
-  if(volume.mute()) {
+  if(volumeSliders.get(0).mute()) {
     try {
       bgm.amp(0.0);
     } catch(Exception e) {
       println(e + "\nCan't mute BGM.");
     }
   }
-  volume.clickCheck();
+  if(volumeSliders.get(1).mute()) {
+    try {
+      hitSound.amp(0.0);
+    } catch(Exception e) {
+      println(e + "\nCan't mute player sound.");
+    }
+  }
+  for(Slider s : volumeSliders) {
+    s.clickCheck();
+  }
   switch(game) {
     case MENU:
       men.clicks();
@@ -324,7 +347,7 @@ void setBgm(int id) {
     this.bgm.removeFromCache();
     this.bgm = bgms.get(id);
     this.bgm.loop();
-    if(volume.getMuted()) this.bgm.amp(0.0);
+    if(volumeSliders.get(0).getMuted()) this.bgm.amp(0.0);
   } catch(Exception e) {
     println(e + "\n Can't change BGM.");
   }

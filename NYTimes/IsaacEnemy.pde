@@ -263,6 +263,7 @@ public class IsaacEnemy {
         this.h = 0;
         this.x = 0;
         this.y = 0;
+        this.maxHp = 500;
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
@@ -272,6 +273,7 @@ public class IsaacEnemy {
       case 51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                      //leg
         this.h = height*.5;
+        this.maxHp = 0;
     default:
     }
     if(randomMovement) {

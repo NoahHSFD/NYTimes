@@ -442,7 +442,7 @@ public class IsaacPlayer {
   void hit(int damage) {
     if(!invulnerable) {
       hitSound.stop();
-      if(!volume.muted) hitSound.play();
+      if(!volumeSliders.get(1).muted) hitSound.play();
       lives -= damage;
       invulnerable = true;
       if(lives <= 0) {
