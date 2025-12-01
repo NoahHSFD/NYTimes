@@ -88,7 +88,7 @@ public class IsaacObstacle {
   }
   
   boolean intersects(IsaacBomb bomb) {
-    return bomb.exploding && (bomb.explosionTime == 1) &&  (x < bomb.x + bomb.explosionR && x + w > bomb.x - bomb.explosionR &&
-           y < bomb.y + bomb.explosionR && y + h > bomb.y - bomb.explosionR);
+    return bomb.exploding && (bomb.explosionTime == 1) &&
+            (x < bomb.x + bomb.explosionR && x + w > bomb.x - bomb.explosionR && y < bomb.y + bomb.explosionR && y + h > bomb.y - bomb.explosionR);
   }
 }

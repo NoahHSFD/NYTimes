@@ -38,7 +38,8 @@ public class IsaacPlayer {
   boolean charging, shooting;
   float maxCharge, charge, chargeRate;                                       //max/current charge and charge rate for beams
   int id;                                                                    //0 = Bocchi, 1 = Ryou, 2 = Kita, 3 = Nijika
-  PImage playerIcon, playerIconLeft, playerIconRight, playerIconBack;
+  PImage playerIcon, playerIconLeft, playerIconRight, playerIconBack;        //image files only have the middle part as the head,
+                                                                             //the outer ring is to have room for hair etc. that doesn't count for the hitbox
   
   public IsaacPlayer(int id) {
     this.id = id;
@@ -140,7 +141,7 @@ public class IsaacPlayer {
     for(IsaacFamiliar f : playerFamiliars) {
       f.display();
     }
-    if(projectileStyle == 1) {
+    if(projectileStyle == 1 && charge > 0) {
       rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
     }
     fill(rechargingTimeStop ? #FF0000 : #00FF00);

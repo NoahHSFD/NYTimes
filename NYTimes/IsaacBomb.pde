@@ -4,7 +4,7 @@ public class IsaacBomb {
   float r, w;
   float explosionWidth, explosionHeight;
   float explosionR, explosionW;
-  float explosionTime, explosionDuration;                                                 //time until explosion
+  float explosionTime, explosionDuration;                                                 //time until explosion, duration of explosion itself
   float damage;
   boolean exploding;                                                                      //whether the bomb is currently exploding
   color clr = #000000;

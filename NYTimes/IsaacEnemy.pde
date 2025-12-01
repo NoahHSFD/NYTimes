@@ -16,6 +16,8 @@ public class IsaacEnemy {
   float projectileTime, puddleTime;                                            //how long projectiles/puddles stay
   float puddleWidth, puddleHeight;
   float projectileSize;
+  float shadowOffsetX, shadowOffsetY;                                          //offset for the shadow so it's visible under the sprite
+  float shadowW;                                                               //shadow width
   int projectileDamage, puddleDamage;
   int projectileAmount;                                                        //how many projectiles at once an enemy shoots
   int maxBullets;                                                              //how often an enemy can shoot before having to reload
@@ -268,12 +270,16 @@ public class IsaacEnemy {
         this.noContactDamage = true;
         this.noShadow = true;
         this.bossAttackAmount = 1;
-        this.bossAttackRate = .2;
+        this.bossAttackRate = 1;
         break;
       case 51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                      //leg
-        this.h = height*.5;
+        this.w = width*.1;
+        this.h = height;
         this.maxHp = 0;
+        this.airborneTime = 150;
+        this.jumping = true;
+        this.airborneTimer = airborneTime*.5 - 1;
     default:
     }
     if(randomMovement) {
@@ -281,6 +287,9 @@ public class IsaacEnemy {
       this.dx = random(-1, 1);
       this.dy = random(-1, 1);
     }
+    this.shadowOffsetX = (type == 51) ? 0 : (flying ? w*.15 : w*.05);
+    this.shadowOffsetY = (type == 51) ? 0 : (flying ? w*.5 : w*.05);
+    this.shadowW = (type == 51) ? w*1.3 : w*1.1;
     this.speed = baseSpeed;
     this.r = w*.5;
     this.hp = maxHp;
@@ -298,7 +307,7 @@ public class IsaacEnemy {
     //circle(x + facingX*r*.5, y + facingY*r*.5, r);
       fill(#000000, 70);
       noStroke();
-      if(!noShadow) circle(x + (flying ? w*.15 : w*.05), y + (flying ? w*.5 : w*.05), ((airborneTime > 0) ? (((airborneTime/2.)-airborneTimer)/(airborneTime/2.))*w*1.1 : w*1.1));
+      if(!noShadow) circle(x + shadowOffsetX, y + shadowOffsetY, ((airborneTime > 0) ? (((airborneTime/2.)-airborneTimer)/(airborneTime/2.))*shadowW : shadowW));
       spriteY = jumping ? y + ((Math.abs(airborneTimer-airborneTime/2.)-airborneTime/2.)/(airborneTime/2.))*height : y;
       switch(type) {
         case 0:
@@ -392,10 +401,10 @@ public class IsaacEnemy {
       }
       stroke(#000000);
       fill(#FF0000);
-      if(!corpse) rect(x+r, y-r, map(hp, 0, maxHp, 0, 50), 10);
+      if(!corpse && hp > 0) rect(x+r, y-r, map(hp, 0, maxHp, 0, 50), 10);
       popStyle();
     }
-    //text(reloadTimer + " " + standing, x-r, y+r);
+    text(bossAttackDurationTimer + " " + bossAttackDuration +  " " + bossAttacking, x-r, y+r);
   }
 
   boolean update() {
@@ -470,18 +479,31 @@ public class IsaacEnemy {
                 }
               }
             } else {
-              if(airborneTimer++ >= airborneTime) {
-                airborneTimer = 0;
-                jumping = false;
-                switch(type) {
-                  case 3:
-                    shoot(5);
-                    break;
-                  case 10:
-                    shoot(8);
-                    break;
-                  default:
-                }
+              switch(type) {
+                case 51:
+                  if(airborneTimer < airborneTime*.5 - 1) {
+                    airborneTimer++;
+                  } else if(airborneTimer > airborneTime*.5) {
+                    if(airborneTimer++ >= airborneTime) {
+                      airborneTimer = 0;
+                      jumping = false;
+                    }
+                  }
+                  break;
+                default:
+                  if(airborneTimer++ >= airborneTime) {
+                    airborneTimer = 0;
+                    jumping = false;
+                    switch(type) {
+                      case 3:
+                        shoot(5);
+                        break;
+                      case 10:
+                        shoot(8);
+                        break;
+                      default:
+                    }
+                  }
               }
             }
             if(bossAttacking && bossAttackDurationTimer++ <= bossAttackDuration) {
@@ -510,6 +532,7 @@ public class IsaacEnemy {
                 case 50:
                   switch(bossAttackType) {
                     case 0:
+                      bossAttackDuration = 200;
                       momStomp();
                       break;
                     default:
@@ -522,6 +545,7 @@ public class IsaacEnemy {
                 case 30:
                   projectileAmount = int(random(12, 17));
                   screamGap = int(random(projectileAmount/3, (2*projectileAmount/3)+1));
+                  is.getCurrentMap().getCurrentRoom().setOffSet(0, 0);
                   break;
                 default:
               }
@@ -839,8 +863,51 @@ public class IsaacEnemy {
   
   void momStomp() {
     if(bossAttackDurationTimer == 1) {
-      println("stomep");
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == 51) {
+          e.setX(is.player.getX());
+          e.setY(is.player.getY());
+          e.fall();
+          e.airborneTimer++;
+        }
+      }
     }
+    float shakeTimer = 0;
+    for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+      if(e.type == 51) {
+        shakeTimer = e.airborneTime*.5;
+      }
+    }
+    if(bossAttackDurationTimer >= shakeTimer && bossAttackDurationTimer <= shakeTimer + 50) {
+      is.getCurrentMap().getCurrentRoom().setOffSet(random(-5, 5), random(-5, 5));
+    } else if(bossAttackDurationTimer > shakeTimer + 50) {
+      is.getCurrentMap().getCurrentRoom().setOffSet(0, 0);
+    }
+    if(bossAttackDurationTimer == bossAttackDuration - 1) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == 51) {
+          e.jump();
+        }
+      }
+    }
+  }
+  
+  void randomizeLocation() {
+    float xPos = random(height*.11, width-height*.1);
+    float yPos = random(height*.11, height*.9);
+    boolean overlap;
+    do {
+      overlap = false;
+      for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
+        while(xPos + width*.05 > o.x && xPos - width*.05 < o.x + o.w && yPos + width*.05 > o.y && yPos - width*.05 < o.y + o.h) {
+          overlap = true;
+          xPos = random(height*.11, width-height*.1);
+          yPos = random(height*.11, height*.9);
+        }
+      }
+    } while (overlap);
+    x = xPos;
+    y = yPos;
   }
   
   void fall() {
@@ -984,12 +1051,12 @@ public class IsaacEnemy {
     if(bossAttackAmount > 1) {
       int oldAttackType = bossAttackType;
       bossAttacking = true;
-      bossAttackDuration = random(800, 1000);
+      bossAttackDuration = int(random(800, 1000));
       bossAttackType = int(random(0, bossAttackAmount));
       if(oldAttackType == bossAttackType) bossAttack();
     } else {
       bossAttacking = true;
-      bossAttackDuration = random(800, 1000);
+      bossAttackDuration = int(random(800, 1000));
       bossAttackType = 0;
     }
   }
@@ -1111,7 +1178,9 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacBomb bomb) {
-    return !corpse && !dead && !untargetable && !jumping && bomb.exploding && (bomb.explosionTime == 1) &&  (r + bomb.explosionR >= sqrt(pow((bomb.x - x), 2) + pow((bomb.y - y), 2)));
+    return !corpse && !dead && !untargetable && !jumping && bomb.exploding && (bomb.explosionTime == 1) && 
+            (h == 0 ? (r + bomb.explosionR >= sqrt(pow((bomb.x - x), 2) + pow((bomb.y - y), 2)))
+            : x - r < bomb.x + bomb.explosionR && x + r > bomb.x - bomb.explosionR && y - h < bomb.y + bomb.explosionR && y > bomb.y - bomb.explosionR);
   }
 
   boolean intersects(IsaacObstacle obstacle) {
