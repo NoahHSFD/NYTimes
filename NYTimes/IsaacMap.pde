@@ -175,11 +175,11 @@ public class IsaacMap {
               d.close();
               break;
             }
-            d.open();
+            if(!d.destructible && !d.locked) d.open();
             //todo:
             //for some reason sometimes doors dont open after all enemies are defeated
           }
-          if(enemyList.isEmpty()) d.open();
+          if(enemyList.isEmpty() && !d.destructible && !d.locked) d.open();
         }
         d.update();
       }
@@ -327,6 +327,8 @@ public class IsaacMap {
         }
         rectMode(CENTER);
         rect(x, y, w, h);
+        fill(#000000);
+        text(type + " " + enemyList.isEmpty() + " " + open, x + w, y);
         popStyle();
       }
       

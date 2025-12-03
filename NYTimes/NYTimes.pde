@@ -13,7 +13,7 @@ Audio au;
 IsaacMenu isM;
 Isaac is;
 ButtonID game;
-ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: bgm, 1: player sounds
+ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: bgm, 1: player sounds, 2: enemy sounds
 PFont font;
 PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
@@ -31,6 +31,7 @@ ArrayList<PImage> nijikaMenu = new ArrayList<PImage>();
 ArrayList<PImage> backgrounds = new ArrayList<PImage>();
 SoundFile bgm, hitSound;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
+ArrayList<SoundFile> enemySounds = new ArrayList<SoundFile>();
 NYTimes nyt;
 
 enum ButtonID {
@@ -86,8 +87,9 @@ void setup() {
 
   game = ButtonID.MENU;
   homeButton = new Button(0, 0, width*.05, height*.025, ButtonID.MENU);
-  volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1));
-  volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1));
+  volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1, "bgm"));
+  volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "player"));
+  volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "enemy"));
   men = new Menu();
   wor = new Wordle();
   wor.init();
@@ -117,6 +119,11 @@ void draw() {
       bgm.loop();
       if(volumeSliders.get(0).getMuted()) bgm.amp(0.0);
       if(volumeSliders.get(1).getMuted()) hitSound.amp(0.0);
+      if(volumeSliders.get(2).getMuted()) {
+        for(SoundFile f : enemySounds) {
+          f.amp(0.0);
+        }
+      }
       Sound.status();
     } catch(Exception e) {
       println(e + "\n Error loading audio or image files.");
@@ -166,17 +173,44 @@ void draw() {
   if(!volumeSliders.get(0).getMuted()) {
     try {
       bgm.amp(volumeSliders.get(0).setVolume());
-      //hitSound.amp(2.*volumeSliders.get(0).setVolume());
+    } catch(Exception e) {
+      println(e + "\n Can't set BGM volume.");
+    }
+  } else {
+    try {
+      bgm.amp(0.0);
     } catch(Exception e) {
       println(e + "\n Can't set BGM volume.");
     }
   }
   if(!volumeSliders.get(1).getMuted()) {
     try {
-      //bgm.amp(volumeSliders.get(0).setVolume());
       hitSound.amp(2.*volumeSliders.get(1).setVolume());
     } catch(Exception e) {
       println(e + "\n Can't set player sound volume.");
+    }
+  } else {
+    try {
+      hitSound.amp(0.0);
+    } catch(Exception e) {
+      println(e + "\n Can't set player sound volume.");
+    }
+  }
+  if(!volumeSliders.get(2).getMuted()) {
+    try {
+      for(SoundFile f : enemySounds) {
+        f.amp(2.*volumeSliders.get(2).setVolume());
+      }
+    } catch(Exception e) {
+      println(e + "\n Can't set enemy sound volume.");
+    }
+  } else {
+    try {
+      for(SoundFile f : enemySounds) {
+        f.amp(0.0);
+      }
+    } catch(Exception e) {
+      println(e + "\n Can't set enemy sound volume.");
     }
   }
   for(Slider s : volumeSliders) {
@@ -235,6 +269,15 @@ void mouseReleased() {
       hitSound.amp(0.0);
     } catch(Exception e) {
       println(e + "\nCan't mute player sound.");
+    }
+  }
+  if(!volumeSliders.get(2).mute()) {
+    try {
+      for(SoundFile f : enemySounds) {
+        f.amp(0.0);
+      }
+    } catch(Exception e) {
+      println(e + "\n Can't mute enemy sound.");
     }
   }
   for(Slider s : volumeSliders) {
@@ -379,6 +422,7 @@ void loadAudioFiles() {
   bgms.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
   bgms.get(5).removeFromCache();
   hitSound = new SoundFile(this, "/Audio/player_hit.mp3");
+  enemySounds.add(new SoundFile(this, "/Audio/player_hit.mp3"));
 }
 
 void loadImages() {

@@ -62,6 +62,7 @@ public class IsaacEnemy {
   float randomMovementTimer;                                                   //timer for enemies with random movement to change direction
   float revivalTimer;                                                          //timer for when the enemy revives
   float revivalTime;                                                           //time an enemy needs to revive
+  SoundFile attackSound0;
   int phase;                                                                   //boss phases
   int type;
 
@@ -271,6 +272,7 @@ public class IsaacEnemy {
         this.noShadow = true;
         this.bossAttackAmount = 1;
         this.bossAttackRate = 1;
+        this.attackSound0 = enemySounds.get(0);
         break;
       case 51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                      //leg
@@ -280,6 +282,13 @@ public class IsaacEnemy {
         this.airborneTime = 150;
         this.jumping = true;
         this.airborneTimer = airborneTime*.5 - 1;
+        break;
+      case 52:                                                                                   //hand
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        this.h = height*.1;
+        break;
     default:
     }
     if(randomMovement) {
@@ -289,7 +298,7 @@ public class IsaacEnemy {
     }
     this.shadowOffsetX = (type == 51) ? 0 : (flying ? w*.15 : w*.05);
     this.shadowOffsetY = (type == 51) ? 0 : (flying ? w*.5 : w*.05);
-    this.shadowW = (type == 51) ? w*1.3 : w*1.1;
+    this.shadowW = (type == 51) ? w*2 : w*1.1;
     this.speed = baseSpeed;
     this.r = w*.5;
     this.hp = maxHp;
@@ -396,6 +405,9 @@ public class IsaacEnemy {
         case 51:
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
+        case 52:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
         default:
           image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
       }
@@ -404,7 +416,7 @@ public class IsaacEnemy {
       if(!corpse && hp > 0) rect(x+r, y-r, map(hp, 0, maxHp, 0, 50), 10);
       popStyle();
     }
-    text(bossAttackDurationTimer + " " + bossAttackDuration +  " " + bossAttacking, x-r, y+r);
+    //text(bossAttackDurationTimer + " " + bossAttackDuration +  " " + bossAttacking, x-r, y+r);
   }
 
   boolean update() {
@@ -482,12 +494,16 @@ public class IsaacEnemy {
               switch(type) {
                 case 51:
                   if(airborneTimer < airborneTime*.5 - 1) {
+                    noShadow = false;
                     airborneTimer++;
                   } else if(airborneTimer > airborneTime*.5) {
+                    noShadow = false;
                     if(airborneTimer++ >= airborneTime) {
                       airborneTimer = 0;
                       jumping = false;
                     }
+                  } else {
+                    noShadow = true;
                   }
                   break;
                 default:
@@ -535,8 +551,9 @@ public class IsaacEnemy {
                       bossAttackDuration = 200;
                       momStomp();
                       break;
+                    case 1:
+                      momGrab();
                     default:
-                    
                   }
                 default:
               }
@@ -863,6 +880,14 @@ public class IsaacEnemy {
   
   void momStomp() {
     if(bossAttackDurationTimer == 1) {
+      try {
+        attackSound0.stop();
+        attackSound0.play();
+      } catch(Exception e) {
+        println("Can't play enemy attack sound: " + e);
+      }
+    }
+    if(bossAttackDurationTimer == 50) {
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(e.type == 51) {
           e.setX(is.player.getX());
@@ -875,7 +900,7 @@ public class IsaacEnemy {
     float shakeTimer = 0;
     for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
       if(e.type == 51) {
-        shakeTimer = e.airborneTime*.5;
+        shakeTimer = e.airborneTime*.5 + 50;
       }
     }
     if(bossAttackDurationTimer >= shakeTimer && bossAttackDurationTimer <= shakeTimer + 50) {
@@ -890,6 +915,10 @@ public class IsaacEnemy {
         }
       }
     }
+  }
+  
+  void momGrab() {
+    
   }
   
   void randomizeLocation() {
@@ -934,29 +963,7 @@ public class IsaacEnemy {
         if(shootsWhenHit) shootRandom();
         if(puddleWhenHit) leavePuddle(x + (random(-1.5, 1.5)*w), y + (random(-1.5, 1.5)*w));
         if(hp <= 0) {
-          if(revives && !reviving) {
-            hp = maxHp;
-            reviving = true;
-          } else {
-            if(explodesOnDeath) shoot(6);
-            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-            if(leavesCorpse) {
-              switch(type) {
-                case 31:
-                case 32:
-                case 33:
-                case 34:
-                case 35:
-                case 36:
-                  this.flyable = true;
-                  break;
-                default:
-              }
-              corpse = true;
-            } else {
-              dead = true;
-            }
-          }
+          die();
         }
     }
   }
@@ -978,29 +985,7 @@ public class IsaacEnemy {
         x += b.getKnockback()*b.getDx()*knockbackEfficiency;
         y += b.getKnockback()*b.getDy()*knockbackEfficiency;
         if(hp <= 0) {
-          if(revives && !reviving) {
-            hp = maxHp;
-            reviving = true;
-          } else {
-            if(explodesOnDeath) shoot(6);
-            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-            if(leavesCorpse) {
-              switch(type) {
-                case 31:
-                case 32:
-                case 33:
-                case 34:
-                case 35:
-                case 36:
-                  this.flyable = true;
-                  break;
-                default:
-              }
-              corpse = true;
-            } else {
-              dead = true;
-            }
-          }
+          die();
         }
     }
   }
@@ -1020,30 +1005,34 @@ public class IsaacEnemy {
       default:
         hp -= bo.getDamage();
         if(hp <= 0) {
-          if(revives && !reviving) {
-            hp = maxHp;
-            reviving = true;
-          } else {
-            if(explodesOnDeath) shoot(6);
-            if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
-            if(leavesCorpse) {
-              switch(type) {
-                case 31:
-                case 32:
-                case 33:
-                case 34:
-                case 35:
-                case 36:
-                  this.flyable = true;
-                  break;
-                default:
-              }
-              corpse = true;
-            } else {
-              dead = true;
-            }
-          }
+          die();
         }
+    }
+  }
+  
+  void die() {
+    if(revives && !reviving) {
+      hp = maxHp;
+      reviving = true;
+    } else {
+      if(explodesOnDeath) shoot(6);
+      if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
+      if(leavesCorpse) {
+        switch(type) {
+          case 31:
+          case 32:
+          case 33:
+          case 34:
+          case 35:
+          case 36:
+            this.flyable = true;
+            break;
+          default:
+        }
+        corpse = true;
+      } else {
+        dead = true;
+      }
     }
   }
   

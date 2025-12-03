@@ -5,14 +5,16 @@ public class Slider {
   color clr = #FFFFFF;
   int status = 0;                                //0 = not hovered, 1 = hovered, 2 = clicked
   float slider;
+  String type;
   boolean muted = false;
   
-  public Slider(float x, float y, float w, float h) {
+  public Slider(float x, float y, float w, float h, String type) {
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
     this.slider = y + h*.9;
+    this.type = type;
   }
   
   public Slider(float x, float y) {
@@ -30,6 +32,8 @@ public class Slider {
     if(muted) fill(#6F6F6F);
     square(x, y+h, w);
     fill(#000000);
+    textSize(w*.3);
+    text(type, x+w*.5, y+h+w*.5);
     line(x, slider, x+w, slider);
     popStyle();
   }
