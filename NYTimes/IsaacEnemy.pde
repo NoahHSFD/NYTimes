@@ -1,6 +1,6 @@
 public class IsaacEnemy {
 
-  float x, y;
+  float x, y;                                                                  //if h == 0: x and y are at the center; if h > 0: x is at the center and y is at the bottom (for shadow display)
   float spriteY;                                                               //y coordinate where the enemy sprite is displayed (for example for jumping enemies)
   float w, r;
   float h;
@@ -47,7 +47,7 @@ public class IsaacEnemy {
   boolean projectileBounce;                                                    //whether projectiles bounce off of walls and obstacles
   boolean reloading;                                                           //whether an enemy is currently reloading bullets
   boolean timeStopped;                                                         //timestopped enemies and their projectiles can't move
-  boolean ignoresObstacles;                                                    //whether an enemy is unaffected by obstacles
+  boolean ignoresObstacles, ignoresBorder;                                     //whether an enemy is unaffected by obstacles/screenborder
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
@@ -211,6 +211,7 @@ public class IsaacEnemy {
         this.screamGap = int(random(0, projectileAmount+1));
         this.bossAttackAmount = 5;
         this.bossAttackRate = .2;
+        this.ignoresBorder = true;
         break;
       case 31:                                                                                  //gums - teeth (31-39)
         this.baseSpeed = 0;                                                                     //healthy tooth
@@ -271,9 +272,11 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
-        this.bossAttackAmount = 1;
+        this.bossAttackAmount = 2;
         this.bossAttackRate = 1;
         this.attackSound0 = enemySounds.get(0);
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
         break;
       case 51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                      //leg
@@ -284,14 +287,18 @@ public class IsaacEnemy {
         this.jumping = true;
         this.airborneTimer = airborneTime*.5 - 1;
         this.ignoresObstacles = true;
+        this.ignoresBorder = true;
         break;
       case 52:                                                                                   //hand
         this.baseSpeed = 0;
         this.maxHp = 0;
-        this.w = width*.1;
-        this.h = height*.1;
-        this.x = borderWidth;
-        this.y = height*.5;
+        this.w = width*.3;
+        this.h = width*.1;
+        this.x = borderWidth - w*.5;
+        this.y = height*.5 + h*.5;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
         break;
     default:
     }
@@ -619,31 +626,25 @@ public class IsaacEnemy {
                 break;
               default:
             }
-            switch(type) {
-              case 30:
-              case 50:
-              case 51:
-                break;
-              default:
-                if(x <= (r + borderWidth)) {
-                  x = (r + borderWidth);
-                  dx *= -1;
-                  facingX *= -1;
-                } else if(x >= width - (r + borderWidth)) {
-                  x = width - (r + borderWidth);
-                  dx *= -1;
-                  facingX *= -1;
-                }
-                if(y <= (r + borderWidth)) {
-                  y = (r + borderWidth);
-                  dy *= -1;
-                  facingY *= -1;
-                } else if(y >= height - (r + borderWidth)) {
-                  y = height - (r + borderWidth);
-                  dy *= -1;
-                  facingY *= -1;
-                }
-                break;
+            if(!ignoresBorder) {
+              if(x <= (r + borderWidth)) {
+                x = (r + borderWidth);
+                dx *= -1;
+                facingX *= -1;
+              } else if(x >= width - (r + borderWidth)) {
+                x = width - (r + borderWidth);
+                dx *= -1;
+                facingX *= -1;
+              }
+              if(y <= (r + borderWidth)) {
+                y = (r + borderWidth);
+                dy *= -1;
+                facingY *= -1;
+              } else if(y >= height - (r + borderWidth)) {
+                y = height - (r + borderWidth);
+                dy *= -1;
+                facingY *= -1;
+              }
             }
           } else {
             if(revivalTimer++ >= revivalTime) {
@@ -939,17 +940,49 @@ public class IsaacEnemy {
   }
   
   void momGrab() {
-    if(bossAttackDurationTimer < bossAttackDuration*.5) {
-      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-        if(e.type == 52) {
-          if(x < width*.3) {
-            
-          } else if(x > width*.7) {
-            
-          } else if(y < height*.3) {
-            
-          } else {
-            
+    for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+      if(e.type == 52) {
+        if(bossAttackDurationTimer < bossAttackDuration*.5) {
+          e.untargetable = false;
+          e.noContactDamage = false;
+          if(e.x < borderWidth + e.w*.5) {
+            e.x = e.x + 2;
+          } else if(e.x > width-borderWidth - e.w*.5) {
+            e.x = e.x - 2;
+          } else if(e.y < borderWidth + e.h) {
+            e.y = e.y + 2;
+          } else if(e.y > height-borderWidth){
+            e.y = e.y - 2;
+          }
+        } else {
+          if(e.x <= borderWidth + e.w*.5 + 1) {
+            e.x = e.x - 2;
+            if(e.x < borderWidth - e.w*.5) {
+              e.x = borderWidth - e.w*.5;
+              e.untargetable = true;
+              e.noContactDamage = true;
+            }
+          } else if(e.x >= width-borderWidth - e.w*.5 - 1) {
+            e.x = e.x + 2;
+            if(e.x > width-borderWidth + e.w*.5) {
+              e.x = width-borderWidth + e.w*.5;
+              e.untargetable = true;
+              e.noContactDamage = true;
+            }
+          } else if(e.y <= borderWidth + e.h + 1) {
+            e.y = e.y - 2;
+            if(e.y < borderWidth) {
+              e.y = borderWidth;
+              e.untargetable = true;
+              e.noContactDamage = true;
+            }
+          } else if(e.y >= height-borderWidth - 1){
+            e.y = e.y + 2;
+            if(e.y > height-borderWidth + e.h) {
+              e.y = height-borderWidth + e.h;
+              e.untargetable = true;
+              e.noContactDamage = true;
+            }
           }
         }
       }

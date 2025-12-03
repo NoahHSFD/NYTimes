@@ -220,6 +220,8 @@ void draw() {
     s.display();
   }
   text(round(frameRate), width*.9, height*.1);
+  line(width*.5, 0, width*.5, height);
+  line(0, height*.5, width, height*.5);
 }
 
 void mousePressed() {
