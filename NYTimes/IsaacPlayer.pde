@@ -257,15 +257,15 @@ public class IsaacPlayer {
     }
     x += dx;
     y += dy;
-    if (x <= r + is.borderWidth) {
-      x = r + is.borderWidth;
-    } else if (x >= width - (r + is.borderWidth)) {
-      x = width - (r + is.borderWidth);
+    if (x <= r + borderWidth) {
+      x = r + borderWidth;
+    } else if (x >= width - (r + borderWidth)) {
+      x = width - (r + borderWidth);
     }
-    if (y <= r + is.borderWidth) {
-      y = r + is.borderWidth;
-    } else if (y >= height - (r + is.borderWidth)) {
-      y = height - (r + is.borderWidth);
+    if (y <= r + borderWidth) {
+      y = r + borderWidth;
+    } else if (y >= height - (r + borderWidth)) {
+      y = height - (r + borderWidth);
     }
     for(IsaacFamiliar f : playerFamiliars) {
       f.update(this);

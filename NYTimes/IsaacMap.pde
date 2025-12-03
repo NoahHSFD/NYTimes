@@ -199,7 +199,7 @@ public class IsaacMap {
         enemyList.get(i).setTimeStopped(timeStopped);
         for(IsaacObstacle o : obstacleList) {
           if(!(enemyList.get(i).flying && o.traversible)) {
-            if(enemyList.get(i).intersects(o) && !(enemyList.get(i).jumping)) {
+            if(enemyList.get(i).intersects(o) && !(enemyList.get(i).jumping) && !(enemyList.get(i).ignoresObstacles)) {
               enemyList.get(i).collision(o);
             }
           }

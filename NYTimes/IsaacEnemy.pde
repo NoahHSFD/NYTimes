@@ -47,6 +47,7 @@ public class IsaacEnemy {
   boolean projectileBounce;                                                    //whether projectiles bounce off of walls and obstacles
   boolean reloading;                                                           //whether an enemy is currently reloading bullets
   boolean timeStopped;                                                         //timestopped enemies and their projectiles can't move
+  boolean ignoresObstacles;                                                    //whether an enemy is unaffected by obstacles
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
@@ -282,12 +283,15 @@ public class IsaacEnemy {
         this.airborneTime = 150;
         this.jumping = true;
         this.airborneTimer = airborneTime*.5 - 1;
+        this.ignoresObstacles = true;
         break;
       case 52:                                                                                   //hand
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
         this.h = height*.1;
+        this.x = borderWidth;
+        this.y = height*.5;
         break;
     default:
     }
@@ -615,25 +619,31 @@ public class IsaacEnemy {
                 break;
               default:
             }
-            if(!(type == 30)) {
-              if(x <= (r + is.borderWidth)) {
-                x = (r + is.borderWidth);
-                dx *= -1;
-                facingX *= -1;
-              } else if(x >= width - (r + is.borderWidth)) {
-                x = width - (r + is.borderWidth);
-                dx *= -1;
-                facingX *= -1;
-              }
-              if(y <= (r + is.borderWidth)) {
-                y = (r + is.borderWidth);
-                dy *= -1;
-                facingY *= -1;
-              } else if(y >= height - (r + is.borderWidth)) {
-                y = height - (r + is.borderWidth);
-                dy *= -1;
-                facingY *= -1;
-              }
+            switch(type) {
+              case 30:
+              case 50:
+              case 51:
+                break;
+              default:
+                if(x <= (r + borderWidth)) {
+                  x = (r + borderWidth);
+                  dx *= -1;
+                  facingX *= -1;
+                } else if(x >= width - (r + borderWidth)) {
+                  x = width - (r + borderWidth);
+                  dx *= -1;
+                  facingX *= -1;
+                }
+                if(y <= (r + borderWidth)) {
+                  y = (r + borderWidth);
+                  dy *= -1;
+                  facingY *= -1;
+                } else if(y >= height - (r + borderWidth)) {
+                  y = height - (r + borderWidth);
+                  dy *= -1;
+                  facingY *= -1;
+                }
+                break;
             }
           } else {
             if(revivalTimer++ >= revivalTime) {
@@ -905,6 +915,17 @@ public class IsaacEnemy {
     }
     if(bossAttackDurationTimer >= shakeTimer && bossAttackDurationTimer <= shakeTimer + 50) {
       is.getCurrentMap().getCurrentRoom().setOffSet(random(-5, 5), random(-5, 5));
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == 51) {
+          for(int i = 0; i >= 0 && i < is.getCurrentMap().getCurrentRoom().obstacleList.size(); i++) {
+            if(e.stompIntersects(is.getCurrentMap().getCurrentRoom().obstacleList.get(i)) &&
+               !is.getCurrentMap().getCurrentRoom().obstacleList.get(i).traversible) {
+              is.getCurrentMap().getCurrentRoom().obstacleList.remove(i);
+              i--;
+            }
+          }
+        }
+      }
     } else if(bossAttackDurationTimer > shakeTimer + 50) {
       is.getCurrentMap().getCurrentRoom().setOffSet(0, 0);
     }
@@ -918,7 +939,21 @@ public class IsaacEnemy {
   }
   
   void momGrab() {
-    
+    if(bossAttackDurationTimer < bossAttackDuration*.5) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == 52) {
+          if(x < width*.3) {
+            
+          } else if(x > width*.7) {
+            
+          } else if(y < height*.3) {
+            
+          } else {
+            
+          }
+        }
+      }
+    }
   }
   
   void randomizeLocation() {
@@ -1147,6 +1182,10 @@ public class IsaacEnemy {
       }
     }
   }
+  
+  boolean stompIntersects(IsaacObstacle obstacle) {
+    return x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y > obstacle.y;
+  }
 
   boolean intersects(IsaacPlayer player) {
     return !(flyable && player.flying) && !dead && !noContactDamage && !jumping && 
@@ -1173,6 +1212,7 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacObstacle obstacle) {
-    return x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y;
+    return h == 0 ? x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y :
+            x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - h < obstacle.y + obstacle.h && y > obstacle.y;
   }
 }

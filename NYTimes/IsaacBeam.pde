@@ -46,7 +46,7 @@ public class IsaacBeam {
   
   boolean update() {
     if(dx == 1) {
-      w = width - is.borderWidth - is.player.getX();
+      w = width - borderWidth - is.player.getX();
       x = is.player.getX();
       y = is.player.getY() - (h*.5);
       for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
@@ -70,7 +70,7 @@ public class IsaacBeam {
         }
       }
     } else if(dx == -1) {
-      w = is.player.getX() - is.borderWidth;
+      w = is.player.getX() - borderWidth;
       x = is.player.getX() - w;
       y = is.player.getY() - (h*.5);
       for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
@@ -97,7 +97,7 @@ public class IsaacBeam {
         }
       }
     } else if(dy == -1) {
-      h = is.player.getY() - is.borderWidth;
+      h = is.player.getY() - borderWidth;
       x = is.player.getX() - (w*.5);
       y = is.player.getY() - h;
       for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {
@@ -124,7 +124,7 @@ public class IsaacBeam {
         }
       }
     } else {
-      h = height - is.borderWidth - is.player.getY();
+      h = height - borderWidth - is.player.getY();
       x = is.player.getX() - (w*.5);
       y = is.player.getY();
       for(IsaacObstacle o : is.getCurrentMap().getCurrentRoom().obstacleList) {

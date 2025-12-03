@@ -93,30 +93,30 @@ public class IsaacProjectile {
       }
       x += dx*speed;
       y += dy*speed;
-      if(x <= is.borderWidth) {
-        setX(is.borderWidth);
+      if(x <= borderWidth) {
+        setX(borderWidth);
         if(bouncing) {
           dx *= -1;
         } else {
           return true;
         }
-      } else if(x >= width-is.borderWidth) {
-        setX(width-is.borderWidth);
+      } else if(x >= width-borderWidth) {
+        setX(width-borderWidth);
         if(bouncing) {
           dx *= -1;
         } else {
           return true;
         }
       }
-      if(y <= is.borderWidth) {
-        setY(is.borderWidth);
+      if(y <= borderWidth) {
+        setY(borderWidth);
         if(bouncing) {
           dy *= -1;
         } else {
           return true;
         }
-      } else if(y >= height-is.borderWidth) {
-        setY(height-is.borderWidth);
+      } else if(y >= height-borderWidth) {
+        setY(height-borderWidth);
         if(bouncing) {
           dy *= -1;
         } else {

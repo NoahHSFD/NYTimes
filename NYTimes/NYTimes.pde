@@ -32,6 +32,7 @@ ArrayList<PImage> backgrounds = new ArrayList<PImage>();
 SoundFile bgm, hitSound;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
 ArrayList<SoundFile> enemySounds = new ArrayList<SoundFile>();
+float borderWidth;
 NYTimes nyt;
 
 enum ButtonID {
@@ -90,6 +91,7 @@ void setup() {
   volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1, "bgm"));
   volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "player"));
   volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "enemy"));
+  borderWidth = height*.1;
   men = new Menu();
   wor = new Wordle();
   wor.init();
