@@ -51,6 +51,7 @@ public class IsaacEnemy {
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
+  int fleshPos;                                                                //position where Mom flesh summons enemies
   float bossAttackRate;                                                        //controls rate at which boss launches new attack after an old one is finished
   float bossAttackTimer;                                                       //timer for when a new boss attack starts
   float bossAttackDuration;                                                    //duration of boss attack
@@ -272,7 +273,7 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
-        this.bossAttackAmount = 1;
+        this.bossAttackAmount = 2;
         this.bossAttackRate = 1;
         this.attackSound0 = enemySounds.get(0);
         this.ignoresObstacles = true;
@@ -296,6 +297,20 @@ public class IsaacEnemy {
         this.h = width*.1;
         this.x = borderWidth - w*.5;
         this.y = height*.5 + h*.5;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        break;
+      case 530:                                                                                  //flesh top
+      case 531:                                                                                  //flesh right
+      case 532:                                                                                  //flesh bottom
+      case 533:                                                                                  //flesh left
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        this.h = width*.1;
+        this.x = width + w;
+        this.y = height + h;
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.noShadow = true;
@@ -417,6 +432,18 @@ public class IsaacEnemy {
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         case 52:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 530:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 531:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 532:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 533:
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         default:
@@ -569,6 +596,9 @@ public class IsaacEnemy {
                       bossAttackDuration = 200;
                       momStomp();
                       break;
+                    case 1:
+                      momSummon();
+                      break;
                     default:
                   }
                 default:
@@ -623,6 +653,10 @@ public class IsaacEnemy {
                 break;
               case 51:
               case 52:
+              case 530:
+              case 531:
+              case 532:
+              case 533:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                   if(e.type == 50 && e.dead) {
                     dead = true;                                                                      //when mom dies, all her body parts die
@@ -952,26 +986,22 @@ public class IsaacEnemy {
             case -1:
               e.w = width*.1;
               e.h = width*.3;
-              e.x = width*.5;
-              e.y = borderWidth;
+              e.setPosition(width*.5, borderWidth);
               break;
             case -2:
               e.w = width*.3;
               e.h = width*.1;
-              e.x = width-borderWidth + e.w*.5;
-              e.y = height*.5 + e.h*.5;
+              e.setPosition(width-borderWidth + e.w*.5, height*.5 + e.h*.5);
               break;
             case -3:
               e.w = width*.1;
               e.h = width*.3;
-              e.x = width*.5;
-              e.y = height-borderWidth + e.h;
+              e.setPosition(width*.5, height-borderWidth + e.h);
               break;
             case -4:
               e.w = width*.3;
               e.h = width*.1;
-              e.x = borderWidth - e.w*.5;
-              e.y = height*.5 + e.h*.5;
+              e.setPosition(borderWidth - e.w*.5, height*.5 + e.h*.5);
               break;
             default:
           }
@@ -1024,6 +1054,53 @@ public class IsaacEnemy {
     }
   }
   
+  void momSummon() {
+    if(bossAttackDurationTimer == 1) {
+      fleshPos = int(random(530, 534));
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == fleshPos) {
+          switch(fleshPos) {
+            case 530:
+              e.setPosition(width*.5, borderWidth + e.h*.5);
+              break;
+            case 531:
+              e.setPosition(width-borderWidth, height*.5 + e.h*.5);
+              break;
+            case 532:
+              e.setPosition(width*.5, height - borderWidth + e.h*.5);
+              break;
+            case 533:
+              e.setPosition(borderWidth, height*.5 + e.h*.5);
+              break;
+            default:
+          }
+        }
+      }
+    } else if(bossAttackDurationTimer == (bossAttackDuration >= 50 ? 50 : 1)) {
+      switch(fleshPos) {
+        case 530:
+          spawnEnemy(8, 1, width*.5, borderWidth);
+          break;
+        case 531:
+          spawnEnemy(8, 1, width-borderWidth, height*.5);
+          break;
+        case 532:
+          spawnEnemy(8, 1, width*.5, height - borderWidth);
+          break;
+        case 533:
+          spawnEnemy(8, 1, borderWidth, height*.5);
+          break;
+        default:
+      }
+    } else if(bossAttackDurationTimer >= bossAttackDuration - 1) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == fleshPos) {
+          e.setPosition(width+e.w, height+e.h);
+        }
+      }
+    }
+  }
+  
   int checkPlayerPosition(IsaacPlayer p) {
     if(p.x > width*.35 && p.x < width*.65 && p.y < height*.3) {
       return -1;
@@ -1066,6 +1143,10 @@ public class IsaacEnemy {
       case 51:
       case 52:
       case 53:
+      case 530:
+      case 531:
+      case 532:
+      case 533:
       case 54:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
@@ -1090,6 +1171,10 @@ public class IsaacEnemy {
       case 51:
       case 52:
       case 53:
+      case 530:
+      case 531:
+      case 532:
+      case 533:
       case 54:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
@@ -1112,6 +1197,10 @@ public class IsaacEnemy {
       case 51:
       case 52:
       case 53:
+      case 530:
+      case 531:
+      case 532:
+      case 533:
       case 54:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
