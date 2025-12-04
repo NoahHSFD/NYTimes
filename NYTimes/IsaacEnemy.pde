@@ -272,7 +272,7 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
-        this.bossAttackAmount = 2;
+        this.bossAttackAmount = 1;
         this.bossAttackRate = 1;
         this.attackSound0 = enemySounds.get(0);
         this.ignoresObstacles = true;
@@ -557,13 +557,18 @@ public class IsaacEnemy {
                   }
                   break;
                 case 50:
+                  if(bossAttackDurationTimer == 1 && checkPlayerPosition(is.player) != 0) bossAttackType = checkPlayerPosition(is.player);
                   switch(bossAttackType) {
+                    case -1:
+                    case -2:
+                    case -3:
+                    case -4:
+                      momGrab();
+                      break;
                     case 0:
                       bossAttackDuration = 200;
                       momStomp();
                       break;
-                    case 1:
-                      momGrab();
                     default:
                   }
                 default:
@@ -942,43 +947,73 @@ public class IsaacEnemy {
   void momGrab() {
     for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
       if(e.type == 52) {
-        if(bossAttackDurationTimer < bossAttackDuration*.5) {
+        if(bossAttackDurationTimer == 1) {
+          switch(bossAttackType) {
+            case -1:
+              e.w = width*.1;
+              e.h = width*.3;
+              e.x = width*.5;
+              e.y = borderWidth;
+              break;
+            case -2:
+              e.w = width*.3;
+              e.h = width*.1;
+              e.x = width-borderWidth + e.w*.5;
+              e.y = height*.5 + e.h*.5;
+              break;
+            case -3:
+              e.w = width*.1;
+              e.h = width*.3;
+              e.x = width*.5;
+              e.y = height-borderWidth + e.h;
+              break;
+            case -4:
+              e.w = width*.3;
+              e.h = width*.1;
+              e.x = borderWidth - e.w*.5;
+              e.y = height*.5 + e.h*.5;
+              break;
+            default:
+          }
+          e.r = e.w*.5;
+        }
+        if(bossAttackDurationTimer < bossAttackDuration*.75) {
           e.untargetable = false;
           e.noContactDamage = false;
           if(e.x < borderWidth + e.w*.5) {
-            e.x = e.x + 2;
+            e.x = e.x + 5;
           } else if(e.x > width-borderWidth - e.w*.5) {
-            e.x = e.x - 2;
+            e.x = e.x - 5;
           } else if(e.y < borderWidth + e.h) {
-            e.y = e.y + 2;
+            e.y = e.y + 5;
           } else if(e.y > height-borderWidth){
-            e.y = e.y - 2;
+            e.y = e.y - 5;
           }
         } else {
           if(e.x <= borderWidth + e.w*.5 + 1) {
-            e.x = e.x - 2;
-            if(e.x < borderWidth - e.w*.5) {
+            e.x = e.x - (e.w/(bossAttackDuration*.2));
+            if(e.x <= borderWidth - e.w*.5) {
               e.x = borderWidth - e.w*.5;
               e.untargetable = true;
               e.noContactDamage = true;
             }
           } else if(e.x >= width-borderWidth - e.w*.5 - 1) {
-            e.x = e.x + 2;
-            if(e.x > width-borderWidth + e.w*.5) {
+            e.x = e.x + (e.w/(bossAttackDuration*.2));
+            if(e.x >= width-borderWidth + e.w*.5) {
               e.x = width-borderWidth + e.w*.5;
               e.untargetable = true;
               e.noContactDamage = true;
             }
           } else if(e.y <= borderWidth + e.h + 1) {
-            e.y = e.y - 2;
-            if(e.y < borderWidth) {
+            e.y = e.y - (e.h/(bossAttackDuration*.2));
+            if(e.y <= borderWidth) {
               e.y = borderWidth;
               e.untargetable = true;
               e.noContactDamage = true;
             }
           } else if(e.y >= height-borderWidth - 1){
-            e.y = e.y + 2;
-            if(e.y > height-borderWidth + e.h) {
+            e.y = e.y + (e.h/(bossAttackDuration*.2));
+            if(e.y >= height-borderWidth + e.h) {
               e.y = height-borderWidth + e.h;
               e.untargetable = true;
               e.noContactDamage = true;
@@ -986,6 +1021,20 @@ public class IsaacEnemy {
           }
         }
       }
+    }
+  }
+  
+  int checkPlayerPosition(IsaacPlayer p) {
+    if(p.x > width*.35 && p.x < width*.65 && p.y < height*.3) {
+      return -1;
+    } else if(p.x > width*.7 && p.y > height*.35 && p.y < height*.65) {
+      return -2;
+    } else if(p.x > width*.35 && p.x < width*.65 && p.y > height*.7) {
+      return -3;
+    } else if(p.x < width*.3 && p.y > height*.35 && p.y < height*.65) {
+      return -4;
+    } else {
+      return 0;
     }
   }
   
@@ -1108,12 +1157,18 @@ public class IsaacEnemy {
     if(bossAttackAmount > 1) {
       int oldAttackType = bossAttackType;
       bossAttacking = true;
-      bossAttackDuration = int(random(800, 1000));
+      switch(type) {
+        case 50:
+          bossAttackDuration = int(random(400, 500));
+          break;
+        default:
+          bossAttackDuration = int(random(800, 1000));
+      }
       bossAttackType = int(random(0, bossAttackAmount));
       if(oldAttackType == bossAttackType) bossAttack();
     } else {
       bossAttacking = true;
-      bossAttackDuration = int(random(800, 1000));
+      bossAttackDuration = int(random(400, 500));
       bossAttackType = 0;
     }
   }

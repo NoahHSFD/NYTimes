@@ -147,14 +147,14 @@ public class IsaacMap {
       for(IsaacDoor d : doors) {
         d.display();
       }
-      for(IsaacBomb bo : bombList) {
-        bo.display();
-      }
       for(IsaacChest ch : chestList) {
         ch.display();
       }
       for(IsaacEnemy e : enemyList) {
         e.display();
+      }
+      for(IsaacBomb bo : bombList) {
+        bo.display();
       }
       for(IsaacCollectible c : collectibleList) {
         c.display();
