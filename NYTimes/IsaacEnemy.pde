@@ -51,7 +51,7 @@ public class IsaacEnemy {
   int bossAttackType, bossAttackAmount;                                        //different attacks a boss can execute; amount of how many total different attacks a boss has
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
-  int fleshPos;                                                                //position where Mom flesh summons enemies
+  int fleshPos, eyePos;                                                        //position of Mom flesh/eye
   float bossAttackRate;                                                        //controls rate at which boss launches new attack after an old one is finished
   float bossAttackTimer;                                                       //timer for when a new boss attack starts
   float bossAttackDuration;                                                    //duration of boss attack
@@ -273,7 +273,7 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
-        this.bossAttackAmount = 2;
+        this.bossAttackAmount = 3;
         this.bossAttackRate = 1;
         this.attackSound0 = enemySounds.get(0);
         this.ignoresObstacles = true;
@@ -305,6 +305,20 @@ public class IsaacEnemy {
       case 531:                                                                                  //flesh right
       case 532:                                                                                  //flesh bottom
       case 533:                                                                                  //flesh left
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        this.h = width*.1;
+        this.x = width + w;
+        this.y = height + h;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        break;
+      case 540:                                                                                  //eye top
+      case 541:                                                                                  //eye right
+      case 542:                                                                                  //eye bottom
+      case 543:                                                                                  //eye left
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
@@ -444,6 +458,18 @@ public class IsaacEnemy {
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         case 533:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 540:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 541:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 542:
+          image(loadingScreen, x-r, spriteY-h, w, h);
+          break;
+        case 543:
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         default:
@@ -599,6 +625,9 @@ public class IsaacEnemy {
                     case 1:
                       momSummon();
                       break;
+                    case 2:
+                      momLook();
+                      break;
                     default:
                   }
                 default:
@@ -657,6 +686,10 @@ public class IsaacEnemy {
               case 531:
               case 532:
               case 533:
+              case 540:
+              case 541:
+              case 542:
+              case 543:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                   if(e.type == 50 && e.dead) {
                     dead = true;                                                                      //when mom dies, all her body parts die
@@ -1101,6 +1134,41 @@ public class IsaacEnemy {
     }
   }
   
+  void momLook() {
+    if(bossAttackDurationTimer == 1) {
+      eyePos = int(random(540, 544));
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == eyePos) {
+          e.untargetable = false;
+          e.noContactDamage = false;
+          switch(eyePos) {
+            case 540:
+              e.setPosition(width*.5, borderWidth + e.h*.5);
+              break;
+            case 541:
+              e.setPosition(width-borderWidth, height*.5 + e.h*.5);
+              break;
+            case 542:
+              e.setPosition(width*.5, height - borderWidth + e.h*.5);
+              break;
+            case 543:
+              e.setPosition(borderWidth, height*.5 + e.h*.5);
+              break;
+            default:
+          }
+        }
+      }
+    } else if(bossAttackDurationTimer >= bossAttackDuration - 1) {
+      for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+        if(e.type == eyePos) {
+          e.untargetable = true;
+          e.noContactDamage = true;
+          e.setPosition(width+e.w, height+e.h);
+        }
+      }
+    }
+  }
+  
   int checkPlayerPosition(IsaacPlayer p) {
     if(p.x > width*.35 && p.x < width*.65 && p.y < height*.3) {
       return -1;
@@ -1147,7 +1215,10 @@ public class IsaacEnemy {
       case 531:
       case 532:
       case 533:
-      case 54:
+      case 540:
+      case 541:
+      case 542:
+      case 543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
             e.hit(p);
@@ -1175,7 +1246,10 @@ public class IsaacEnemy {
       case 531:
       case 532:
       case 533:
-      case 54:
+      case 540:
+      case 541:
+      case 542:
+      case 543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
             e.hit(b);
@@ -1201,7 +1275,10 @@ public class IsaacEnemy {
       case 531:
       case 532:
       case 533:
-      case 54:
+      case 540:
+      case 541:
+      case 542:
+      case 543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
           if(e.type == 50) {
             e.hit(bo);
