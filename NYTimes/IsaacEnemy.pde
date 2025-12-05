@@ -269,7 +269,7 @@ public class IsaacEnemy {
         this.h = 0;
         this.x = 0;
         this.y = 0;
-        this.maxHp = 500;
+        this.maxHp = 5000;
         this.untargetable = true;
         this.noContactDamage = true;
         this.noShadow = true;
@@ -295,11 +295,13 @@ public class IsaacEnemy {
         this.maxHp = 0;
         this.w = width*.3;
         this.h = width*.1;
-        this.x = borderWidth - w*.5;
-        this.y = height*.5 + h*.5;
+        this.x = width + w;
+        this.y = height + h;
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
         break;
       case 530:                                                                                  //flesh top
       case 531:                                                                                  //flesh right
@@ -314,6 +316,8 @@ public class IsaacEnemy {
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
         break;
       case 540:                                                                                  //eye top
       case 541:                                                                                  //eye right
@@ -328,6 +332,8 @@ public class IsaacEnemy {
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
         break;
     default:
     }
@@ -438,7 +444,10 @@ public class IsaacEnemy {
           image(jhon, x-r, spriteY-r, w, w);
           break;
         case 50:
-          stroke(#000000);
+          image(loadingScreen, width*.45, borderWidth-width*.05, width*.1, width*.1);
+          image(loadingScreen, width*.95-borderWidth, height*.5-width*.05, width*.1, width*.1);
+          image(loadingScreen, width*.45, height-borderWidth-width*.05, width*.1, width*.1);
+          image(loadingScreen, borderWidth-width*.05, height*.5-width*.05, width*.1, width*.1);
           fill(#FF0000);
           rect(width*.3, height*.9, map(hp, 0, maxHp, 0, width*.4), 20);
           break;
@@ -449,28 +458,28 @@ public class IsaacEnemy {
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
         case 530:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momFlesh, x-r, spriteY-h, w, h);
           break;
         case 531:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momFlesh, x-r, spriteY-h, w, h);
           break;
         case 532:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momFlesh, x-r, spriteY-h, w, h);
           break;
         case 533:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momFlesh, x-r, spriteY-h, w, h);
           break;
         case 540:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momEye, x-r, spriteY-h, w, h);
           break;
         case 541:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momEye, x-r, spriteY-h, w, h);
           break;
         case 542:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momEye, x-r, spriteY-h, w, h);
           break;
         case 543:
-          image(loadingScreen, x-r, spriteY-h, w, h);
+          image(momEye, x-r, spriteY-h, w, h);
           break;
         default:
           image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
@@ -1056,30 +1065,30 @@ public class IsaacEnemy {
           if(e.x <= borderWidth + e.w*.5 + 1) {
             e.x = e.x - (e.w/(bossAttackDuration*.2));
             if(e.x <= borderWidth - e.w*.5) {
-              e.x = borderWidth - e.w*.5;
               e.untargetable = true;
               e.noContactDamage = true;
+              e.setPosition(width+e.w, height+e.h);
             }
           } else if(e.x >= width-borderWidth - e.w*.5 - 1) {
             e.x = e.x + (e.w/(bossAttackDuration*.2));
             if(e.x >= width-borderWidth + e.w*.5) {
-              e.x = width-borderWidth + e.w*.5;
               e.untargetable = true;
               e.noContactDamage = true;
+              e.setPosition(width+e.w, height+e.h);
             }
           } else if(e.y <= borderWidth + e.h + 1) {
             e.y = e.y - (e.h/(bossAttackDuration*.2));
             if(e.y <= borderWidth) {
-              e.y = borderWidth;
               e.untargetable = true;
               e.noContactDamage = true;
+              e.setPosition(width+e.w, height+e.h);
             }
           } else if(e.y >= height-borderWidth - 1){
             e.y = e.y + (e.h/(bossAttackDuration*.2));
             if(e.y >= height-borderWidth + e.h) {
-              e.y = height-borderWidth + e.h;
               e.untargetable = true;
               e.noContactDamage = true;
+              e.setPosition(width+e.w, height+e.h);
             }
           }
         }
@@ -1092,6 +1101,8 @@ public class IsaacEnemy {
       fleshPos = int(random(530, 534));
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(e.type == fleshPos) {
+          e.untargetable = false;
+          e.noContactDamage = false;
           switch(fleshPos) {
             case 530:
               e.setPosition(width*.5, borderWidth + e.h*.5);
@@ -1128,7 +1139,10 @@ public class IsaacEnemy {
     } else if(bossAttackDurationTimer >= bossAttackDuration - 1) {
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(e.type == fleshPos) {
+          e.untargetable = true;
+          e.noContactDamage = true;
           e.setPosition(width+e.w, height+e.h);
+          fleshPos = 0;
         }
       }
     }
@@ -1164,6 +1178,7 @@ public class IsaacEnemy {
           e.untargetable = true;
           e.noContactDamage = true;
           e.setPosition(width+e.w, height+e.h);
+          eyePos = 0;
         }
       }
     }

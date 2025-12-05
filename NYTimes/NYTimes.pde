@@ -20,10 +20,11 @@ PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        kitaIcon, kitaIconLeft, kitaIconRight, kitaIconBack,
        nijikaIcon, nijikaIconLeft, nijikaIconRight, nijikaIconBack,
        loadingScreen,
-       jhon, gums, 
+       jhon, gums, mom,
        gumsToothHealthy, gumsToothBrittle, gumsToothBloody, gumsToothRotting, gumsToothInfested,
        gumsToothHealthyFalling, gumsToothBrittleFalling,gumsToothBloodyFalling,
-       gumsToothRottingFalling, gumsToothInfestedFalling;
+       gumsToothRottingFalling, gumsToothInfestedFalling,
+       momEye, momFlesh;
 ArrayList<PImage> bocchiMenu = new ArrayList<PImage>();
 ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
@@ -513,4 +514,6 @@ void loadImages() {
   gumsToothRottingFalling = loadImage("/Images/Sprites/gums_tooth_rotting_falling.png");
   gumsToothInfested = loadImage("/Images/Sprites/gums_tooth_infested.png");
   gumsToothInfestedFalling = loadImage("/Images/Sprites/gums_tooth_infested_falling.png");
+  momEye = loadImage("/Images/Sprites/Bocchi_Menu.png");
+  momFlesh = loadImage("/Images/Sprites/Nijika_Icon.png");
 }

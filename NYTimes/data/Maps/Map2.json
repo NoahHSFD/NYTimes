@@ -179,7 +179,7 @@
     "coordinates":[6, 7],
     "doors":[3, 4],
     "destructibledoors":[],
-    "enemies":[10, 20, 21],
+    "enemies":[10, 20],
     "collectibles":[3],
     "type":"boss"
   }

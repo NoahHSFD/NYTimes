@@ -3,7 +3,7 @@
     "coordinates":[0, 0],
     "doors":[1, 2],
     "destructibledoors":[1],
-    "enemies":[50],
+    "enemies":[3, 4, 10],
     "collectibles":[],
     "type":"normal"
   },
@@ -75,7 +75,7 @@
     "coordinates":[3, 2],
     "doors":[0, 3, 4],
     "destructibledoors":[],
-    "enemies":[10, 20],
+    "enemies":[50],
     "collectibles":[],
     "type":"boss"
   }
