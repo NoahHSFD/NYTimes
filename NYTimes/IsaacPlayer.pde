@@ -4,6 +4,7 @@ public class IsaacPlayer {
   float dx, dy;
   float w, r;
   float speed;
+  float shadowW;                                                             //shadow width
   color clr = #FF0000;
   int[] moveKeys = new int[4];
   int[] facingKeys = new int[4];
@@ -23,6 +24,7 @@ public class IsaacPlayer {
   int lives;
   int bombs;
   int keys;                                                                  //for chests/closed doors
+  int coins;
   boolean invulnerable;
   boolean projectileBounce;
   boolean flying;                                                            //whether player can fly over flyable enemies/obstacles/puddles
@@ -31,11 +33,11 @@ public class IsaacPlayer {
   float defaultInvulnerabilityTime;                                          //time how long player stays invulberable after being hit
   float invulnerabilityTime;
   float projectileSize, beamWidth, explosionWidth;
-  float beamTime;                                                            //how long the beam stays
+  float beamTime, beamTimer;                                                 //max time and timer for how long the beam stays
   float maxTimeStopCharge, timeStopCharge, timeStopChargeRate;               //max/current charge and charge rate for how long the player can stop time
   boolean rechargingTimeStop;                                                //if the player completely depletes timestop charge, they have to wait until it's fully charged
   int projectileStyle;                                                       //0 = shoot projectiles, 1 = charge attacks
-  boolean charging, shooting;
+  boolean charging, shootingBeam, shooting;                                  //charging/shooting beam, shooting projectiles
   float maxCharge, charge, chargeRate;                                       //max/current charge and charge rate for beams
   int id;                                                                    //0 = Bocchi, 1 = Ryou, 2 = Kita, 3 = Nijika
   PImage playerIcon, playerIconLeft, playerIconRight, playerIconBack;        //image files only have the middle part as the head,
@@ -84,6 +86,7 @@ public class IsaacPlayer {
     this.w = width*.05;
     this.r = w*.5;
     this.speed = 5;
+    this.shadowW = w*1.1;
     this.facingY = 1;
     this.fireRate = 1;
     this.projectileSpeed = 7;
@@ -121,10 +124,10 @@ public class IsaacPlayer {
   
   void display() {
     pushStyle();
-    //text(timeStopCharge + " " + rechargingTimeStop, x - w, y + w);
+    //text(shootingBeam + " " + beamTimer + " " + beamTime, x - w, y + w);
     fill(#000000, 70);
     noStroke();
-    circle(x+w*.05, y+w*.05, w*1.1);
+    circle(x + (flying ? w*.15 : w*.05), y + (flying ? w*.5 : w*.05), shadowW);
     stroke(#000000);
     fill(clr);
     imageMode(CENTER);
@@ -141,11 +144,6 @@ public class IsaacPlayer {
     for(IsaacFamiliar f : playerFamiliars) {
       f.display();
     }
-    if(projectileStyle == 1 && charge > 0) {
-      rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
-    }
-    fill(rechargingTimeStop ? #FF0000 : #00FF00);
-    rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
     fill(clr);
     for(IsaacBeam b : playerBeams) {
       b.display();
@@ -153,6 +151,12 @@ public class IsaacPlayer {
     for(IsaacProjectile p : playerProjectiles) {
       p.display();
     }
+    if(projectileStyle == 1 && charge > 0) {
+      fill(#FF0000);
+      rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
+    }
+    fill(rechargingTimeStop ? #FF0000 : #00FF00);
+    rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
     fill(#FFFFFF, 1);
     noStroke();
     circle(x, y, w*10);
@@ -173,6 +177,10 @@ public class IsaacPlayer {
     fill(#FFFFFF);
     text("KEYS", width*.075, height*.175);
     text("x " + keys, width*.11, height*.175);
+    fill(#FFFF00);
+    circle(width*.075, height*.225, width*.03);
+    fill(#FFFFFF);
+    text("x " + coins, width*.11, height*.225);
     popStyle();
   }
   
@@ -237,8 +245,11 @@ public class IsaacPlayer {
         }
         break;
       case 1:
-        if(charging && charge < maxCharge) {
+        if(charging && charge < maxCharge && !shootingBeam) {
           charge += chargeRate;
+        } else if(shootingBeam && beamTimer++ >= beamTime) {
+          shootingBeam = false;
+          beamTimer = 0;
         }
         break;
       default:
@@ -330,6 +341,10 @@ public class IsaacPlayer {
   
   void setProjectileFollowing(boolean projectileFollowing) {
     this.projectileFollowing = projectileFollowing;
+  }
+  
+  void addCoin() {
+    coins++;
   }
   
   void rangeUp(float range) {
@@ -470,8 +485,11 @@ public class IsaacPlayer {
   }
   
   void shootBeam() {
-    playerBeams.add(new IsaacBeam(x, y, beamWidth, height*.4, facingX, facingY, beamTime, charge, beamKnockback));
-    charge = 0;
+    if(charge > 0) {
+      playerBeams.add(new IsaacBeam(x, y, beamWidth, height*.4, facingX, facingY, beamTime, charge, beamKnockback));
+      charge = 0;
+      shootingBeam = true;
+    }
   }
   
   void placeBomb() {
@@ -489,7 +507,6 @@ public class IsaacPlayer {
     moveKeys[2] = 0;
     moveKeys[3] = 0;
   }
-    
   
   void setMovement(int k) {
     switch (k) {
@@ -533,7 +550,7 @@ public class IsaacPlayer {
     }
   }
   
-  void stopMovement(int k) {
+  void releaseKey(int k) {
     switch (k) {
       case 87:                              //W
         moveKeys[0] = 0;
@@ -651,16 +668,16 @@ public class IsaacPlayer {
     //}
   }
   
-  void releaseKey(int k){
+  //void releaseKey(int k){
     //if(k == 32 && projectileStyle == 1) {
       //if(charging) {
         //shootBeam();
         //charging = false;
       //}
     //} else {
-    stopMovement(k);
+    //stopMovement(k);
     //}
-  }
+  //}
   
   public class IsaacFamiliar {
     

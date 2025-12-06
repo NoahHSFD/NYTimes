@@ -29,6 +29,7 @@ public class IsaacMap {
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setType(rooms[i].getString("type"));
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setLayout(rooms[i].getInt("layout"));
     }
     minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
     currentRoomX = rooms[0].getIntList("coordinates").get(0);
@@ -74,10 +75,6 @@ public class IsaacMap {
     public IsaacRoom(int x, int y) {
       this.x = x;
       this.y = y;
-      obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 1));
-      obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 1));
-      obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
-      obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
       //chestList.add(new IsaacChest(width*.2, height*.2, 0));
       backgroundSprite = backgrounds.get(0);
     }
@@ -147,6 +144,24 @@ public class IsaacMap {
         this.type = 2;
       } else {
         this.type = 0;
+      }
+    }
+    
+    void setLayout(int layout) {
+      switch(layout) {
+        case 0:
+          obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 0));
+          break;
+        case 1:
+          obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 1));
+          obstacleList.add(new IsaacObstacle(width*.2, height*.6, width*.1, height*.1, 1));
+          obstacleList.add(new IsaacObstacle(width*.5, height*.8, width*.1, height*.1, 1));
+          obstacleList.add(new IsaacObstacle(width*.7, height*.6, width*.1, height*.1, 1));
+          break;
+        case 2:
+          obstacleList.add(new IsaacObstacle(width*.2, height*.25, width*.2, height*.15, 1));
+          break;
+        default:
       }
     }
     

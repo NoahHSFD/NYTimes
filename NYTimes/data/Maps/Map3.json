@@ -5,7 +5,8 @@
     "destructibledoors":[1],
     "enemies":[3, 4, 10],
     "collectibles":[],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[1, 0],
@@ -13,7 +14,8 @@
     "destructibledoors":[3],
     "enemies":[4, 4, 4, 5, 6, 5, 6],
     "collectibles":[3],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[2, 0],
@@ -21,7 +23,8 @@
     "destructibledoors":[],
     "enemies":[30],
     "collectibles":[3],
-    "type":"boss"
+    "type":"boss",
+    "layout":2
   },
   {
     "coordinates":[0, 1],
@@ -29,7 +32,8 @@
     "destructibledoors":[],
     "enemies":[0, 5, 5, 1, 2, 3, 4, 6],
     "collectibles":[2],
-    "type":"store"
+    "type":"store",
+    "layout":0
   },
   {
     "coordinates":[1, 1],
@@ -37,7 +41,8 @@
     "destructibledoors":[],
     "enemies":[0, 0, 1, 2, 4, 6],
     "collectibles":[1],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[3, 1],
@@ -45,7 +50,8 @@
     "destructibledoors":[],
     "enemies":[0, 0, 7, 7, 7, 7],
     "collectibles":[3],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[0, 2],
@@ -53,7 +59,8 @@
     "destructibledoors":[],
     "enemies":[0, 0, 1, 0, 4, 4],
     "collectibles":[1],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[1, 2],
@@ -61,7 +68,8 @@
     "destructibledoors":[],
     "enemies":[0, 0, 1, 0, 4, 4],
     "collectibles":[2],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[2, 2],
@@ -69,7 +77,8 @@
     "destructibledoors":[],
     "enemies":[0, 0, 1, 0, 4, 4],
     "collectibles":[3],
-    "type":"normal"
+    "type":"normal",
+    "layout":0
   },
   {
     "coordinates":[3, 2],
@@ -77,6 +86,7 @@
     "destructibledoors":[],
     "enemies":[50],
     "collectibles":[],
-    "type":"boss"
+    "type":"boss",
+    "layout":0
   }
 ]

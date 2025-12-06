@@ -52,6 +52,7 @@ public class IsaacEnemy {
   int deathSpawn, deathSpawnAmount;                                            //type/amount of enemies that get spawned when enemy dies
   int screamGap;                                                               //projectile gap in scream attack
   int fleshPos, eyePos;                                                        //position of Mom flesh/eye
+  int itemDrop;                                                                //type of collectible the enemy drops upon death
   float bossAttackRate;                                                        //controls rate at which boss launches new attack after an old one is finished
   float bossAttackTimer;                                                       //timer for when a new boss attack starts
   float bossAttackDuration;                                                    //duration of boss attack
@@ -97,6 +98,7 @@ public class IsaacEnemy {
     this.puddleDamage = 1;
     this.projectileAmount = 1;
     this.revivalTime = 200;
+    this.itemDrop = -1;
     this.maxHp = 200;
     this.type = type;
     switch(type) {
@@ -182,12 +184,14 @@ public class IsaacEnemy {
         this.flying = true;
         this.following = true;
         this.maxHp = 5000;
+        this.itemDrop = 4;
         break;
       case 20:                                                                                  //gemini - contusion
         this.w *= 1.25;
         this.r = w*.5;
         this.following = true;
         this.maxHp = 2500;
+        this.itemDrop = 3;
         break;
       case 21:                                                                                  //gemini - suture
         this.w *= .5;
@@ -197,6 +201,7 @@ public class IsaacEnemy {
         this.flying = true;
         this.following = true;
         this.maxHp = 2500;
+        this.itemDrop = 1;
         break;
       case 30:                                                                                  //gums - mouth
         this.baseSpeed = 0;
@@ -213,6 +218,7 @@ public class IsaacEnemy {
         this.bossAttackAmount = 5;
         this.bossAttackRate = .2;
         this.ignoresBorder = true;
+        this.itemDrop = 0;
         break;
       case 31:                                                                                  //gums - teeth (31-39)
         this.baseSpeed = 0;                                                                     //healthy tooth
@@ -262,6 +268,7 @@ public class IsaacEnemy {
         this.randomMovement = true;
         this.projectileTime = 500;
         this.projectileBounce = true;
+        this.itemDrop = 7;
         break;
       case 50:                                                                                   //mom
         this.baseSpeed = 0;
@@ -278,6 +285,7 @@ public class IsaacEnemy {
         this.attackSound0 = enemySounds.get(0);
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
+        this.itemDrop = 6;
         break;
       case 51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                      //leg
@@ -687,7 +695,7 @@ public class IsaacEnemy {
                     teeth++;
                   }
                 }
-                dead = (teeth <= 0);                                                                  //gums dies when all teeth are dead
+                if(teeth <= 0) die();                                                                  //gums dies when all teeth are dead
                 break;
               case 51:
               case 52:
@@ -701,7 +709,7 @@ public class IsaacEnemy {
               case 543:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                   if(e.type == 50 && e.dead) {
-                    dead = true;                                                                      //when mom dies, all her body parts die
+                    die();                                                                      //when mom dies, all her body parts die
                   }
                 }
                 break;
@@ -752,6 +760,7 @@ public class IsaacEnemy {
                 if(e.type == 30 && e.dead) {
                   leavesCorpse = false;
                   corpse = false;
+                  if(itemDrop != -1) spawnCollectible(); 
                   dead = true;
                 }
               }
@@ -862,6 +871,17 @@ public class IsaacEnemy {
   void spawnEnemy(int id, int amount, float x, float y) {
     for(int i = 0; i < amount; i++) {
       is.getCurrentMap().getCurrentRoom().enemyList.add(new IsaacEnemy(id, x, y));
+    }
+  }
+  
+  void spawnCollectible() {
+    switch(type) {
+     case 30:
+     case 50:
+       is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, width*.5, height*.75));
+       break;
+     default:
+       is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, x, h == 0 ? y : y + h*.5));
     }
   }
   
@@ -1330,6 +1350,7 @@ public class IsaacEnemy {
         corpse = true;
       } else {
         dead = true;
+        if(itemDrop != -1) spawnCollectible();
       }
     }
   }

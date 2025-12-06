@@ -29,7 +29,30 @@ public class IsaacCollectible {
     this.effect = effect;
     switch(effect) {
       case 0:
-        this.clr = #2AF72C;
+        this.clr = #FFFF00;
+        break;
+      case 1:
+        this.clr = #FFFFFF;
+        break;
+      case 2:
+        this.clr = #FF0000;
+        break;
+      case 3:
+        this.clr = #000000;
+        break;
+      default:
+    }
+  }
+  
+  public IsaacCollectible(int effect, float x, float y) {
+    this.x = x;
+    this.y = y;
+    this.w = width*.0125;
+    this.r = w*.5;
+    this.effect = effect;
+    switch(effect) {
+      case 0:
+        this.clr = #FFFF00;
         break;
       case 1:
         this.clr = #FFFFFF;
@@ -62,7 +85,7 @@ public class IsaacCollectible {
   void pickUp(IsaacPlayer player) {
     switch(effect) {
       case 0:
-        player.addFamiliar();
+        player.addCoin();
         break;
       case 1:
         player.speedUp();
@@ -77,7 +100,7 @@ public class IsaacCollectible {
         player.projectileSizeUp();
         break;
       case 5:
-        player.changeId();
+        player.addFamiliar();
         break;
       case 6:
         player.setFlying(true);
