@@ -5,6 +5,7 @@ public class IsaacCollectible {
   float r = w*.5;
   color clr = #2AF72C;
   int effect;
+  boolean collectable;                                                                    //whether the player can pick up the item
   
   public IsaacCollectible(float x, float y) {
     this.x = x;
@@ -26,6 +27,7 @@ public class IsaacCollectible {
     this.y = height*.5;
     this.w = width*.0125;
     this.r = w*.5;
+    this.collectable = true;
     this.effect = effect;
     switch(effect) {
       case 0:
@@ -49,9 +51,11 @@ public class IsaacCollectible {
     this.y = y;
     this.w = width*.0125;
     this.r = w*.5;
+    this.collectable = true;
     this.effect = effect;
     switch(effect) {
       case 0:
+        this.collectable = false;
         this.clr = #FFFF00;
         break;
       case 1:
@@ -75,7 +79,7 @@ public class IsaacCollectible {
   }
   
   boolean update() {
-    if(intersects(is.player)) {
+    if(collectable && intersects(is.player)) {
       pickUp(is.player);
       return true;
     }

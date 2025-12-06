@@ -68,6 +68,9 @@ public class Isaac {
       case DEFEAT:
         state = showDefeatScreen();
         break;
+      case CREDITS:
+        state = rollCredits();
+        break;
       default:
     }
   }
@@ -84,7 +87,7 @@ public class Isaac {
   }
   
   void pressKey(int k) {
-    if(keyCode == ENTER) state = GameState.ANIMATION;
+    //if(keyCode == ENTER) state = GameState.ANIMATION;
     if(state == GameState.PLAYING) player.pressKey(k);
   }
   
@@ -181,5 +184,9 @@ public class Isaac {
     text("YOU DIED", width/2., height/2.);
     popStyle();
     return GameState.DEFEAT;
+  }
+  
+  GameState rollCredits() {
+    return GameState.CREDITS;
   }
 }

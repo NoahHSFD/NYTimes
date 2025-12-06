@@ -13,7 +13,7 @@ Audio au;
 IsaacMenu isM;
 Isaac is;
 ButtonID game;
-ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: bgm, 1: player sounds, 2: enemy sounds
+ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: master, 1: bgm, 2: player sounds, 3: enemy sounds
 PFont font;
 PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
@@ -73,7 +73,8 @@ enum GameState {
   PAUSED,
   PLAYING,
   DEFEAT,
-  ANIMATION
+  ANIMATION,
+  CREDITS
 }
 
 void setup() {
@@ -89,9 +90,10 @@ void setup() {
 
   game = ButtonID.MENU;
   homeButton = new Button(0, 0, width*.05, height*.025, ButtonID.MENU);
-  volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1, "bgm"));
-  volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "player"));
-  volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "enemy"));
+  volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1, "master"));
+  volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "bgm"));
+  volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "player"));
+  volumeSliders.add(new Slider(width*.9, 0, width*.025, height*.1, "enemy"));
   borderWidth = height*.1;
   men = new Menu();
   wor = new Wordle();
@@ -120,13 +122,13 @@ void draw() {
       loadAudioFiles();
       bgm = bgms.get(4);
       bgm.loop();
-      if(volumeSliders.get(0).getMuted()) bgm.amp(0.0);
-      if(volumeSliders.get(1).getMuted()) hitSound.amp(0.0);
-      if(volumeSliders.get(2).getMuted()) {
-        for(SoundFile f : enemySounds) {
-          f.amp(0.0);
-        }
-      }
+      //if(volumeSliders.get(1).getMuted()) bgm.amp(0.0);
+      //if(volumeSliders.get(2).getMuted()) hitSound.amp(0.0);
+      //if(volumeSliders.get(3).getMuted()) {
+      //  for(SoundFile f : enemySounds) {
+      //    f.amp(0.0);
+      //  }
+      //}
       Sound.status();
     } catch(Exception e) {
       println(e + "\n Error loading audio or image files.");
@@ -175,45 +177,61 @@ void draw() {
   homeButton.display();
   if(!volumeSliders.get(0).getMuted()) {
     try {
-      bgm.amp(volumeSliders.get(0).setVolume());
+      if(!volumeSliders.get(1).getMuted()) {
+        try {
+          bgm.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(1).setVolume());
+        } catch(Exception e) {
+          println(e + "\nCan't set BGM volume.");
+        }
+      } else {
+        try {
+          bgm.amp(0.0);
+        } catch(Exception e) {
+          println(e + "\nCan't set BGM volume.");
+        }
+      }
+      if(!volumeSliders.get(2).getMuted()) {
+        try {
+          hitSound.amp(volumeSliders.get(0).setVolume()*2.*volumeSliders.get(2).setVolume());
+        } catch(Exception e) {
+          println(e + "\nCan't set player sound volume.");
+        }
+      } else {
+        try {
+          hitSound.amp(0.0);
+        } catch(Exception e) {
+          println(e + "\nCan't set player sound volume.");
+        }
+      }
+      if(!volumeSliders.get(3).getMuted()) {
+        try {
+          for(SoundFile f : enemySounds) {
+            f.amp(volumeSliders.get(0).setVolume()*2.*volumeSliders.get(3).setVolume());
+          }
+        } catch(Exception e) {
+          println(e + "\nCan't set enemy sound volume.");
+        }
+      } else {
+        try {
+          for(SoundFile f : enemySounds) {
+            f.amp(0.0);
+          }
+        } catch(Exception e) {
+          println(e + "\nCan't set enemy sound volume.");
+        }
+      }
     } catch(Exception e) {
-      println(e + "\n Can't set BGM volume.");
+      println(e + "\nCan't set volume.");
     }
   } else {
     try {
       bgm.amp(0.0);
-    } catch(Exception e) {
-      println(e + "\n Can't set BGM volume.");
-    }
-  }
-  if(!volumeSliders.get(1).getMuted()) {
-    try {
-      hitSound.amp(2.*volumeSliders.get(1).setVolume());
-    } catch(Exception e) {
-      println(e + "\n Can't set player sound volume.");
-    }
-  } else {
-    try {
       hitSound.amp(0.0);
-    } catch(Exception e) {
-      println(e + "\n Can't set player sound volume.");
-    }
-  }
-  if(!volumeSliders.get(2).getMuted()) {
-    try {
-      for(SoundFile f : enemySounds) {
-        f.amp(2.*volumeSliders.get(2).setVolume());
-      }
-    } catch(Exception e) {
-      println(e + "\n Can't set enemy sound volume.");
-    }
-  } else {
-    try {
       for(SoundFile f : enemySounds) {
         f.amp(0.0);
       }
     } catch(Exception e) {
-      println(e + "\n Can't set enemy sound volume.");
+      println(e + "\nCan't set volume.");
     }
   }
   for(Slider s : volumeSliders) {
@@ -262,30 +280,8 @@ void mousePressed() {
 void mouseReleased() {
   homeButton.click();
   homeButton.clickCheck();
-  if(volumeSliders.get(0).mute()) {
-    try {
-      bgm.amp(0.0);
-    } catch(Exception e) {
-      println(e + "\nCan't mute BGM.");
-    }
-  }
-  if(volumeSliders.get(1).mute()) {
-    try {
-      hitSound.amp(0.0);
-    } catch(Exception e) {
-      println(e + "\nCan't mute player sound.");
-    }
-  }
-  if(!volumeSliders.get(2).mute()) {
-    try {
-      for(SoundFile f : enemySounds) {
-        f.amp(0.0);
-      }
-    } catch(Exception e) {
-      println(e + "\n Can't mute enemy sound.");
-    }
-  }
   for(Slider s : volumeSliders) {
+    s.mute();
     s.clickCheck();
   }
   switch(game) {
@@ -395,7 +391,7 @@ void setBgm(int id) {
     this.bgm.removeFromCache();
     this.bgm = bgms.get(id);
     this.bgm.loop();
-    if(volumeSliders.get(0).getMuted()) this.bgm.amp(0.0);
+    if(volumeSliders.get(1).getMuted()) this.bgm.amp(0.0);
   } catch(Exception e) {
     println(e + "\n Can't change BGM.");
   }
