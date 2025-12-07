@@ -3,7 +3,7 @@
     "coordinates":[0, 0],
     "doors":[1, 2],
     "destructibledoors":[1],
-    "enemies":[3, 4, 10],
+    "enemies":[3, 4, -1],
     "collectibles":[],
     "type":"normal",
     "layout":0
@@ -21,7 +21,7 @@
     "coordinates":[2, 0],
     "doors":[3],
     "destructibledoors":[],
-    "enemies":[30],
+    "enemies":[-3],
     "collectibles":[3],
     "type":"boss",
     "layout":2
@@ -84,7 +84,7 @@
     "coordinates":[3, 2],
     "doors":[0, 3, 4],
     "destructibledoors":[],
-    "enemies":[50],
+    "enemies":[-5],
     "collectibles":[],
     "type":"boss",
     "layout":0

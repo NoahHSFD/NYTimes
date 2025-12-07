@@ -55,7 +55,6 @@ public class IsaacCollectible {
     this.effect = effect;
     switch(effect) {
       case 0:
-        this.collectable = false;
         this.clr = #FFFF00;
         break;
       case 1:
@@ -66,6 +65,12 @@ public class IsaacCollectible {
         break;
       case 3:
         this.clr = #000000;
+        break;
+      case 8:
+        this.clr = #191919;
+        break;
+      case 9:
+        this.clr = #44D3B5;
         break;
       default:
     }
@@ -113,7 +118,19 @@ public class IsaacCollectible {
         player.setProjectileFollowing(true);
         break;
       default:
-        player.fireRateUp();
+        player.setActivatable(this);
+    }
+  }
+  
+  void activate() {
+    switch(effect) {
+      case 8:
+        is.player.stopTime();
+        break;
+      case 9:
+        is.getCurrentMap().getCurrentRoom().damageAllEnemies(40);
+        break;
+      default:
     }
   }
   

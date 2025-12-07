@@ -30,8 +30,9 @@ ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
 ArrayList<PImage> nijikaMenu = new ArrayList<PImage>();
 ArrayList<PImage> backgrounds = new ArrayList<PImage>();
-SoundFile bgm, hitSound;
+SoundFile bgm;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
+ArrayList<SoundFile> playerSounds = new ArrayList<SoundFile>();
 ArrayList<SoundFile> enemySounds = new ArrayList<SoundFile>();
 float borderWidth;
 NYTimes nyt;
@@ -122,13 +123,6 @@ void draw() {
       loadAudioFiles();
       bgm = bgms.get(4);
       bgm.loop();
-      //if(volumeSliders.get(1).getMuted()) bgm.amp(0.0);
-      //if(volumeSliders.get(2).getMuted()) hitSound.amp(0.0);
-      //if(volumeSliders.get(3).getMuted()) {
-      //  for(SoundFile f : enemySounds) {
-      //    f.amp(0.0);
-      //  }
-      //}
       Sound.status();
     } catch(Exception e) {
       println(e + "\n Error loading audio or image files.");
@@ -192,13 +186,17 @@ void draw() {
       }
       if(!volumeSliders.get(2).getMuted()) {
         try {
-          hitSound.amp(volumeSliders.get(0).setVolume()*2.*volumeSliders.get(2).setVolume());
+          for(SoundFile f : playerSounds) {
+            f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(2).setVolume());
+          }
         } catch(Exception e) {
           println(e + "\nCan't set player sound volume.");
         }
       } else {
         try {
-          hitSound.amp(0.0);
+          for(SoundFile f : playerSounds) {
+            f.amp(0.0);
+          }
         } catch(Exception e) {
           println(e + "\nCan't set player sound volume.");
         }
@@ -226,7 +224,9 @@ void draw() {
   } else {
     try {
       bgm.amp(0.0);
-      hitSound.amp(0.0);
+      for(SoundFile f : playerSounds) {
+        f.amp(0.0);
+      }
       for(SoundFile f : enemySounds) {
         f.amp(0.0);
       }
@@ -422,7 +422,7 @@ void loadAudioFiles() {
   bgms.get(4).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
   bgms.get(5).removeFromCache();
-  hitSound = new SoundFile(this, "/Audio/player_hit.mp3");
+  playerSounds.add(new SoundFile(this, "/Audio/bocchi_hit.mp3"));
   enemySounds.add(new SoundFile(this, "/Audio/player_hit.mp3"));
 }
 

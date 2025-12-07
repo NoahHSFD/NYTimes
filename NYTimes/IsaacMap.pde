@@ -99,28 +99,28 @@ public class IsaacMap {
       for(int i : e) {
         enemyList.add(new IsaacEnemy(i, random(height*.11, width-height*.1), random(height*.11, height*.9)));
         switch(i) {
-          case 20:
-            enemyList.add(new IsaacEnemy(21, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+          case -2:
+            enemyList.add(new IsaacEnemy(-21, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
             break;
-          case 30:
-            enemyList.add(new IsaacEnemy(31, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
-            enemyList.add(new IsaacEnemy(32, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
-            enemyList.add(new IsaacEnemy(33, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
-            enemyList.add(new IsaacEnemy(34, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
-            enemyList.add(new IsaacEnemy(35, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
-            enemyList.add(new IsaacEnemy(36, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+          case -3:
+            enemyList.add(new IsaacEnemy(-31, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+            enemyList.add(new IsaacEnemy(-32, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+            enemyList.add(new IsaacEnemy(-33, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+            enemyList.add(new IsaacEnemy(-34, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+            enemyList.add(new IsaacEnemy(-35, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
+            enemyList.add(new IsaacEnemy(-36, random(height*.11, width-height*.1), random(height*.11, width-height*.1)));
             break;
-          case 50:
-            enemyList.add(new IsaacEnemy(51, 0, 0));
-            enemyList.add(new IsaacEnemy(52, 0, 0));
-            enemyList.add(new IsaacEnemy(530, 0, 0));
-            enemyList.add(new IsaacEnemy(531, 0, 0));
-            enemyList.add(new IsaacEnemy(532, 0, 0));
-            enemyList.add(new IsaacEnemy(533, 0, 0));
-            enemyList.add(new IsaacEnemy(540, 0, 0));
-            enemyList.add(new IsaacEnemy(541, 0, 0));
-            enemyList.add(new IsaacEnemy(542, 0, 0));
-            enemyList.add(new IsaacEnemy(543, 0, 0));
+          case -5:
+            enemyList.add(new IsaacEnemy(-51, 0, 0));
+            enemyList.add(new IsaacEnemy(-52, 0, 0));
+            enemyList.add(new IsaacEnemy(-530, 0, 0));
+            enemyList.add(new IsaacEnemy(-531, 0, 0));
+            enemyList.add(new IsaacEnemy(-532, 0, 0));
+            enemyList.add(new IsaacEnemy(-533, 0, 0));
+            enemyList.add(new IsaacEnemy(-540, 0, 0));
+            enemyList.add(new IsaacEnemy(-541, 0, 0));
+            enemyList.add(new IsaacEnemy(-542, 0, 0));
+            enemyList.add(new IsaacEnemy(-543, 0, 0));
             break;
           default:
         }
@@ -193,6 +193,9 @@ public class IsaacMap {
       }
       for(IsaacEnemy e : enemyList) {
         e.display();
+      }
+      for(IsaacEnemy e : enemyList) {
+        e.displayHpBar();
       }
       for(IsaacBomb bo : bombList) {
         bo.display();
@@ -295,6 +298,16 @@ public class IsaacMap {
         if(c.update()) {
           collectibleList.remove(c);
           break;
+        }
+      }
+    }
+    
+    void damageAllEnemies(int damage) {
+      for(int i = 0; i < enemyList.size(); i++) {
+        enemyList.get(i).damage(damage);
+        if(i >= 0 && enemyList.get(i).update() && !enemyList.get(i).leavesCorpse) {
+          enemyList.remove(i);
+          i--;
         }
       }
     }

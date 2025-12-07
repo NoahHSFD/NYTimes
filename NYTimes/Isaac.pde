@@ -132,23 +132,23 @@ public class Isaac {
     }
     for(IsaacEnemy e : getCurrentMap().getCurrentRoom().enemyList) {
       switch(e.type) {
-        case 10:
+        case -1:
           boName = "MONSTRO";
           boIcon = ryouIconBack;
           break;
-        case 20:
+        case -2:
           boName = "GEMINI";
           boIcon = nijikaIconRight;
           break;
-        case 30:
+        case -3:
           boName = "GUMS";
           boIcon = gums;
           break;
-        case 40:
+        case -4:
           boName = "JHON";
           boIcon = jhon;
           break;
-        case 50:
+        case -5:
           boName = "PRONOUNS";
           boIcon = loadingScreen;
           break;

@@ -53,6 +53,7 @@ public class IsaacEnemy {
   int screamGap;                                                               //projectile gap in scream attack
   int fleshPos, eyePos;                                                        //position of Mom flesh/eye
   int itemDrop;                                                                //type of collectible the enemy drops upon death
+  float dropRate;                                                              //chance of item to be dropped
   float bossAttackRate;                                                        //controls rate at which boss launches new attack after an old one is finished
   float bossAttackTimer;                                                       //timer for when a new boss attack starts
   float bossAttackDuration;                                                    //duration of boss attack
@@ -153,6 +154,8 @@ public class IsaacEnemy {
         }
         this.knockbackEfficiency = 1;
         this.explodesOnDeath = true;
+        this.itemDrop = 9;
+        this.dropRate = .3;
         break;
       case 6:
         this.following = true;
@@ -171,8 +174,10 @@ public class IsaacEnemy {
         this.r = w*.5;
         this.randomMovement = true;
         this.knockbackEfficiency = 1;
+        this.itemDrop = 8;
+        this.dropRate = .5;
         break;
-      case 10:                                                                                  //monstro
+      case -1:                                                                                  //monstro
         this.w = width*.075;
         this.r = w*.5;
         this.baseSpeed = 2;
@@ -185,15 +190,17 @@ public class IsaacEnemy {
         this.following = true;
         this.maxHp = 5000;
         this.itemDrop = 4;
+        this.dropRate = 1.;
         break;
-      case 20:                                                                                  //gemini - contusion
+      case -2:                                                                                  //gemini - contusion
         this.w *= 1.25;
         this.r = w*.5;
         this.following = true;
         this.maxHp = 2500;
         this.itemDrop = 3;
+        this.dropRate = 1.;
         break;
-      case 21:                                                                                  //gemini - suture
+      case -21:                                                                                  //gemini - suture
         this.w *= .5;
         this.r = w*.5;
         this.baseSpeed = 1;
@@ -202,8 +209,9 @@ public class IsaacEnemy {
         this.following = true;
         this.maxHp = 2500;
         this.itemDrop = 1;
+        this.dropRate = 1.;
         break;
-      case 30:                                                                                  //gums - mouth
+      case -3:                                                                                  //gums - mouth
         this.baseSpeed = 0;
         this.w = width/4.;
         this.r = w*.5;
@@ -218,45 +226,46 @@ public class IsaacEnemy {
         this.bossAttackAmount = 5;
         this.bossAttackRate = .2;
         this.ignoresBorder = true;
-        this.itemDrop = 0;
+        this.itemDrop = 5;
+        this.dropRate = 1.;
         break;
-      case 31:                                                                                  //gums - teeth (31-39)
-        this.baseSpeed = 0;                                                                     //healthy tooth
+      case -31:                                                                                  //gums - teeth (31-39)
+        this.baseSpeed = 0;                                                                      //healthy tooth
         this.maxHp = 1000;
         this.leavesCorpse = true;
         break;
-      case 32:                                                                                  //brittle tooth
+      case -32:                                                                                  //brittle tooth
         this.baseSpeed = 0;
         this.shootsWhenHit = true;
         this.leavesCorpse = true;
         break;
-      case 320:                                                                                 //brittle tooth - enamel projectile
+      case -320:                                                                                 //brittle tooth - enamel projectile
         this.baseSpeed = 0;
         break;
-      case 33:                                                                                  //bloody tooth
+      case -33:                                                                                  //bloody tooth
         this.baseSpeed = 0;
         this.explodesOnDeath = true;
         this.leavesCorpse = true;
         break;
-      case 34:                                                                                  //rotting tooth
+      case -34:                                                                                  //rotting tooth
         this.baseSpeed = 0;
         this.puddleWhenHit = true;
         this.puddleTime = 500;
         this.leavesCorpse = true;
         break;
-      case 35:                                                                                  //infested tooth
+      case -35:                                                                                  //infested tooth
         this.baseSpeed = 0;
         this.spawnsOnDeath = true;
         this.deathSpawn = 8;
         this.deathSpawnAmount = 6;
         this.leavesCorpse = true;
         break;
-      case 36:                                                                                  //gold tooth
+      case -36:                                                                                  //gold tooth
         this.baseSpeed = 0;
         this.puddleWhenHit = true;
         this.leavesCorpse = true;
         break;
-      case 40:                                                                                  //jhon
+      case -4:                                                                                  //jhon
         this.maxHp = 500;
         this.w *= 2.;
         this.maxBullets = 5;
@@ -269,8 +278,9 @@ public class IsaacEnemy {
         this.projectileTime = 500;
         this.projectileBounce = true;
         this.itemDrop = 7;
+        this.dropRate = 1.;
         break;
-      case 50:                                                                                   //mom
+      case -5:                                                                                   //mom
         this.baseSpeed = 0;
         this.w = 0;
         this.h = 0;
@@ -286,9 +296,10 @@ public class IsaacEnemy {
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.itemDrop = 6;
+        this.dropRate = 1.;
         break;
-      case 51:                                                                                   //mom - body parts (51-59)
-        this.baseSpeed = 0;                                                                      //leg
+      case -51:                                                                                   //mom - body parts (51-59)
+        this.baseSpeed = 0;                                                                       //leg
         this.w = width*.1;
         this.h = height;
         this.maxHp = 0;
@@ -297,8 +308,9 @@ public class IsaacEnemy {
         this.airborneTimer = airborneTime*.5 - 1;
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
+        this.untargetable = true;
         break;
-      case 52:                                                                                   //hand
+      case -52:                                                                                   //hand
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.3;
@@ -311,10 +323,10 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         break;
-      case 530:                                                                                  //flesh top
-      case 531:                                                                                  //flesh right
-      case 532:                                                                                  //flesh bottom
-      case 533:                                                                                  //flesh left
+      case -530:                                                                                  //flesh top
+      case -531:                                                                                  //flesh right
+      case -532:                                                                                  //flesh bottom
+      case -533:                                                                                  //flesh left
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
@@ -327,10 +339,10 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         break;
-      case 540:                                                                                  //eye top
-      case 541:                                                                                  //eye right
-      case 542:                                                                                  //eye bottom
-      case 543:                                                                                  //eye left
+      case -540:                                                                                  //eye top
+      case -541:                                                                                  //eye right
+      case -542:                                                                                  //eye bottom
+      case -543:                                                                                  //eye left
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
@@ -388,116 +400,143 @@ public class IsaacEnemy {
         case 4:
           image(bocchiIconBack, x-w, spriteY-w, 2.*w, 2.*w);
           break;
-        case 10:
+        case -1:
           image(ryouIconBack, x-w, spriteY-w, 2.*w, 2.*w);
           break;
-        case 20:
+        case -2:
           image(nijikaIconRight, x-w, spriteY-w, 2.*w, 2.*w);
           for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-            if(e.type == 21 && !e.dead) {
+            if(e.type == -21 && !e.dead) {
               stroke(#000000);
               line(x, y, e.x, e.y);
             }
           }
           break;
-        case 21:
+        case -21:
           image(nijikaIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
           break;
-        case 30:
+        case -3:
           image(gums, x, spriteY, w, h);
           break;
-        case 31:
+        case -31:
           if(jumping) {
             image(gumsToothHealthyFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 32:
+        case -32:
           if(jumping) {
             image(gumsToothBrittleFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothBrittle, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 33:
+        case -33:
           if(jumping) {
             image(gumsToothBloodyFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothBloody, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 34:
+        case -34:
           if(jumping) {
             image(gumsToothRottingFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothRotting, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 35:
+        case -35:
           if(jumping) {
             image(gumsToothInfestedFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothInfested, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 36:
+        case -36:
           if(jumping) {
             image(gumsToothHealthyFalling, x-w, spriteY-w, 2.*w, 2.*w);
           } else {
             image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case 40:
+        case -4:
           image(jhon, x-r, spriteY-r, w, w);
           break;
-        case 50:
+        case -5:
           image(loadingScreen, width*.45, borderWidth-width*.05, width*.1, width*.1);
           image(loadingScreen, width*.95-borderWidth, height*.5-width*.05, width*.1, width*.1);
           image(loadingScreen, width*.45, height-borderWidth-width*.05, width*.1, width*.1);
           image(loadingScreen, borderWidth-width*.05, height*.5-width*.05, width*.1, width*.1);
-          fill(#FF0000);
-          rect(width*.3, height*.9, map(hp, 0, maxHp, 0, width*.4), 20);
           break;
-        case 51:
+        case -51:
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
-        case 52:
+        case -52:
           image(loadingScreen, x-r, spriteY-h, w, h);
           break;
-        case 530:
+        case -530:
           image(momFlesh, x-r, spriteY-h, w, h);
           break;
-        case 531:
+        case -531:
           image(momFlesh, x-r, spriteY-h, w, h);
           break;
-        case 532:
+        case -532:
           image(momFlesh, x-r, spriteY-h, w, h);
           break;
-        case 533:
+        case -533:
           image(momFlesh, x-r, spriteY-h, w, h);
           break;
-        case 540:
+        case -540:
           image(momEye, x-r, spriteY-h, w, h);
           break;
-        case 541:
+        case -541:
           image(momEye, x-r, spriteY-h, w, h);
           break;
-        case 542:
+        case -542:
           image(momEye, x-r, spriteY-h, w, h);
           break;
-        case 543:
+        case -543:
           image(momEye, x-r, spriteY-h, w, h);
           break;
         default:
           image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
       }
-      stroke(#000000);
-      fill(#FF0000);
-      if(!corpse && hp > 0) rect(x+r, y-r, map(hp, 0, maxHp, 0, 50), 10);
       popStyle();
     }
     //text(bossAttackDurationTimer + " " + bossAttackDuration +  " " + bossAttacking, x-r, y+r);
+  }
+  
+  void displayHpBar() {
+    pushStyle();
+    if(!corpse && hp > 0) {
+      switch(type) {
+        case -5:
+          stroke(#000000);
+          fill(#FF0000);
+          rect(width*.3, height*.9, width*.4, 20);
+          noStroke();
+          fill(#00FF00);
+          rect(width*.3, height*.9, map(hp, 0, maxHp, 0, width*.4), 20);
+          fill(#000000);
+          textSize(20);
+          textAlign(CENTER, CENTER);
+          text(int(hp) + "/" + int(maxHp), width*.5, height*.9 + 10);
+          break;
+        default:
+            stroke(#000000);
+            fill(#FF0000);
+            rect(x-50, y-w, 100, 20);
+            noStroke();
+            fill(#00FF00);
+            rect(x-50, y-w, map(hp, 0, maxHp, 0, 100), 20);
+            fill(#000000);
+            textSize(20);
+            textAlign(CENTER, CENTER);
+            text(int(hp) + "/" + int(maxHp), x, y-w + 10);
+          }
+      }
+    popStyle();
   }
 
   boolean update() {
@@ -573,7 +612,7 @@ public class IsaacEnemy {
               }
             } else {
               switch(type) {
-                case 51:
+                case -51:
                   if(airborneTimer < airborneTime*.5 - 1) {
                     noShadow = false;
                     airborneTimer++;
@@ -585,6 +624,7 @@ public class IsaacEnemy {
                     }
                   } else {
                     noShadow = true;
+                    untargetable = true;
                   }
                   break;
                 default:
@@ -595,7 +635,7 @@ public class IsaacEnemy {
                       case 3:
                         shoot(5);
                         break;
-                      case 10:
+                      case -1:
                         shoot(8);
                         break;
                       default:
@@ -605,7 +645,7 @@ public class IsaacEnemy {
             }
             if(bossAttacking && bossAttackDurationTimer++ <= bossAttackDuration) {
               switch(type) {
-                case 30:
+                case -3:
                   switch(bossAttackType) {
                     case 0:
                       gumsBreatheIn();
@@ -626,7 +666,7 @@ public class IsaacEnemy {
                     default:
                   }
                   break;
-                case 50:
+                case -5:
                   if(bossAttackDurationTimer == 1 && checkPlayerPosition(is.player) != 0) bossAttackType = checkPlayerPosition(is.player);
                   switch(bossAttackType) {
                     case -1:
@@ -651,7 +691,7 @@ public class IsaacEnemy {
               }
             } else {
               switch(type) {
-                case 30:
+                case -3:
                   projectileAmount = int(random(12, 17));
                   screamGap = int(random(projectileAmount/3, (2*projectileAmount/3)+1));
                   is.getCurrentMap().getCurrentRoom().setOffSet(0, 0);
@@ -666,9 +706,9 @@ public class IsaacEnemy {
               y += dy*speed;
             }
             switch(type) {
-              case 21:
+              case -21:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                  if(e.type == 20) {
+                  if(e.type == -2) {
                     if(!e.dead) {
                       if(Math.sqrt(Math.pow(Math.abs(x - e.x), 2) + Math.pow(Math.abs(y - e.y), 2)) > r*7) {
                         setX(x + Math.signum(e.x - x));
@@ -683,32 +723,32 @@ public class IsaacEnemy {
                   }
                 }
                 break;
-              case 30:
+              case -3:
                 int teeth = 0;
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                  if((e.type == 31 && !e.corpse) ||
-                     (e.type == 32 && !e.corpse) ||
-                     (e.type == 33 && !e.corpse) ||
-                     (e.type == 34 && !e.corpse) ||
-                     (e.type == 35 && !e.corpse) ||
-                     (e.type == 36 && !e.corpse)) {
+                  if((e.type == -31 && !e.corpse) ||
+                     (e.type == -32 && !e.corpse) ||
+                     (e.type == -33 && !e.corpse) ||
+                     (e.type == -34 && !e.corpse) ||
+                     (e.type == -35 && !e.corpse) ||
+                     (e.type == -36 && !e.corpse)) {
                     teeth++;
                   }
                 }
                 if(teeth <= 0) die();                                                                  //gums dies when all teeth are dead
                 break;
-              case 51:
-              case 52:
-              case 530:
-              case 531:
-              case 532:
-              case 533:
-              case 540:
-              case 541:
-              case 542:
-              case 543:
+              case -51:
+              case -52:
+              case -530:
+              case -531:
+              case -532:
+              case -533:
+              case -540:
+              case -541:
+              case -542:
+              case -543:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                  if(e.type == 50 && e.dead) {
+                  if(e.type == -5 && e.dead) {
                     die();                                                                      //when mom dies, all her body parts die
                   }
                 }
@@ -750,14 +790,14 @@ public class IsaacEnemy {
           }
         } else {
           switch(type) {
-            case 31:
-            case 32:
-            case 33:
-            case 34:
-            case 35:
-            case 36:
+            case -31:
+            case -32:
+            case -33:
+            case -34:
+            case -35:
+            case -36:
               for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-                if(e.type == 30 && e.dead) {
+                if(e.type == -3 && e.dead) {
                   leavesCorpse = false;
                   corpse = false;
                   if(itemDrop != -1) spawnCollectible(); 
@@ -876,8 +916,8 @@ public class IsaacEnemy {
   
   void spawnCollectible() {
     switch(type) {
-     case 30:
-     case 50:
+     case -3:
+     case -5:
        is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, width*.5, height*.75));
        break;
      default:
@@ -977,7 +1017,7 @@ public class IsaacEnemy {
           }
         }
       } while (overlap);
-      spawnEnemy(int(random(31, 37)), 1, xPos, yPos);
+      spawnEnemy(-1*int(random(31, 37)), 1, xPos, yPos);
       is.getCurrentMap().getCurrentRoom().enemyList.get(
       is.getCurrentMap().getCurrentRoom().enemyList.size()-1).fall();
       shoot(6, xPos, yPos, airborneTime*.5);
@@ -1001,7 +1041,8 @@ public class IsaacEnemy {
     }
     if(bossAttackDurationTimer == 50) {
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-        if(e.type == 51) {
+        if(e.type == -51) {
+          e.untargetable = false;
           e.setX(is.player.getX());
           e.setY(is.player.getY());
           e.fall();
@@ -1011,14 +1052,14 @@ public class IsaacEnemy {
     }
     float shakeTimer = 0;
     for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-      if(e.type == 51) {
+      if(e.type == -51) {
         shakeTimer = e.airborneTime*.5 + 50;
       }
     }
     if(bossAttackDurationTimer >= shakeTimer && bossAttackDurationTimer <= shakeTimer + 50) {
       is.getCurrentMap().getCurrentRoom().setOffSet(random(-5, 5), random(-5, 5));
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-        if(e.type == 51) {
+        if(e.type == -51) {
           for(int i = 0; i >= 0 && i < is.getCurrentMap().getCurrentRoom().obstacleList.size(); i++) {
             if(e.stompIntersects(is.getCurrentMap().getCurrentRoom().obstacleList.get(i)) &&
                !is.getCurrentMap().getCurrentRoom().obstacleList.get(i).traversible) {
@@ -1033,7 +1074,7 @@ public class IsaacEnemy {
     }
     if(bossAttackDurationTimer == bossAttackDuration - 1) {
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-        if(e.type == 51) {
+        if(e.type == -51) {
           e.jump();
         }
       }
@@ -1042,7 +1083,7 @@ public class IsaacEnemy {
   
   void momGrab() {
     for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-      if(e.type == 52) {
+      if(e.type == -52) {
         if(bossAttackDurationTimer == 1) {
           switch(bossAttackType) {
             case -1:
@@ -1118,22 +1159,22 @@ public class IsaacEnemy {
   
   void momSummon() {
     if(bossAttackDurationTimer == 1) {
-      fleshPos = int(random(530, 534));
+      fleshPos = -1*int(random(530, 534));
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(e.type == fleshPos) {
           e.untargetable = false;
           e.noContactDamage = false;
           switch(fleshPos) {
-            case 530:
+            case -530:
               e.setPosition(width*.5, borderWidth + e.h*.5);
               break;
-            case 531:
+            case -531:
               e.setPosition(width-borderWidth, height*.5 + e.h*.5);
               break;
-            case 532:
+            case -532:
               e.setPosition(width*.5, height - borderWidth + e.h*.5);
               break;
-            case 533:
+            case -533:
               e.setPosition(borderWidth, height*.5 + e.h*.5);
               break;
             default:
@@ -1142,16 +1183,16 @@ public class IsaacEnemy {
       }
     } else if(bossAttackDurationTimer == (bossAttackDuration >= 50 ? 50 : 1)) {
       switch(fleshPos) {
-        case 530:
+        case -530:
           spawnEnemy(8, 1, width*.5, borderWidth);
           break;
-        case 531:
+        case -531:
           spawnEnemy(8, 1, width-borderWidth, height*.5);
           break;
-        case 532:
+        case -532:
           spawnEnemy(8, 1, width*.5, height - borderWidth);
           break;
-        case 533:
+        case -533:
           spawnEnemy(8, 1, borderWidth, height*.5);
           break;
         default:
@@ -1170,22 +1211,22 @@ public class IsaacEnemy {
   
   void momLook() {
     if(bossAttackDurationTimer == 1) {
-      eyePos = int(random(540, 544));
+      eyePos = -1*int(random(540, 544));
       for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
         if(e.type == eyePos) {
           e.untargetable = false;
           e.noContactDamage = false;
           switch(eyePos) {
-            case 540:
+            case -540:
               e.setPosition(width*.5, borderWidth + e.h*.5);
               break;
-            case 541:
+            case -541:
               e.setPosition(width-borderWidth, height*.5 + e.h*.5);
               break;
-            case 542:
+            case -542:
               e.setPosition(width*.5, height - borderWidth + e.h*.5);
               break;
-            case 543:
+            case -543:
               e.setPosition(borderWidth, height*.5 + e.h*.5);
               break;
             default:
@@ -1243,19 +1284,19 @@ public class IsaacEnemy {
 
   void hit(IsaacProjectile p) {
     switch(type) {
-      case 51:
-      case 52:
-      case 53:
-      case 530:
-      case 531:
-      case 532:
-      case 533:
-      case 540:
-      case 541:
-      case 542:
-      case 543:
+      case -51:
+      case -52:
+      case -53:
+      case -530:
+      case -531:
+      case -532:
+      case -533:
+      case -540:
+      case -541:
+      case -542:
+      case -543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-          if(e.type == 50) {
+          if(e.type == -5) {
             e.hit(p);
           }
         }
@@ -1274,19 +1315,19 @@ public class IsaacEnemy {
 
   void hit(IsaacBeam b) {
     switch(type) {
-      case 51:
-      case 52:
-      case 53:
-      case 530:
-      case 531:
-      case 532:
-      case 533:
-      case 540:
-      case 541:
-      case 542:
-      case 543:
+      case -51:
+      case -52:
+      case -53:
+      case -530:
+      case -531:
+      case -532:
+      case -533:
+      case -540:
+      case -541:
+      case -542:
+      case -543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-          if(e.type == 50) {
+          if(e.type == -5) {
             e.hit(b);
           }
         }
@@ -1303,19 +1344,19 @@ public class IsaacEnemy {
   
   void hit(IsaacBomb bo) {
     switch(type) {
-      case 51:
-      case 52:
-      case 53:
-      case 530:
-      case 531:
-      case 532:
-      case 533:
-      case 540:
-      case 541:
-      case 542:
-      case 543:
+      case -51:
+      case -52:
+      case -53:
+      case -530:
+      case -531:
+      case -532:
+      case -533:
+      case -540:
+      case -541:
+      case -542:
+      case -543:
         for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
-          if(e.type == 50) {
+          if(e.type == -5) {
             e.hit(bo);
           }
         }
@@ -1328,6 +1369,38 @@ public class IsaacEnemy {
     }
   }
   
+  void damage(int damage) {
+    if(!untargetable && !dead && !corpse) {
+      switch(type) {
+        case -51:
+        case -52:
+        case -53:
+        case -530:
+        case -531:
+        case -532:
+        case -533:
+        case -540:
+        case -541:
+        case -542:
+        case -543:
+          for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
+            if(e.type == -5) {
+              e.hp -= damage;
+              if(e.hp <= 0) {
+                e.die();
+              }
+            }
+          }
+          break;
+        default:
+          hp -= damage;
+          if(hp <= 0) {
+            die();
+          }
+      }
+    }
+  }
+  
   void die() {
     if(revives && !reviving) {
       hp = maxHp;
@@ -1337,12 +1410,12 @@ public class IsaacEnemy {
       if(spawnsOnDeath) spawnEnemy(deathSpawn, deathSpawnAmount, x, y);
       if(leavesCorpse) {
         switch(type) {
-          case 31:
-          case 32:
-          case 33:
-          case 34:
-          case 35:
-          case 36:
+          case -31:
+          case -32:
+          case -33:
+          case -34:
+          case -35:
+          case -36:
             this.flyable = true;
             break;
           default:
@@ -1350,7 +1423,7 @@ public class IsaacEnemy {
         corpse = true;
       } else {
         dead = true;
-        if(itemDrop != -1) spawnCollectible();
+        if(itemDrop != -1 && random(0., 1.) <= dropRate) spawnCollectible();
       }
     }
   }
@@ -1360,7 +1433,7 @@ public class IsaacEnemy {
       int oldAttackType = bossAttackType;
       bossAttacking = true;
       switch(type) {
-        case 50:
+        case -5:
           bossAttackDuration = int(random(400, 500));
           break;
         default:

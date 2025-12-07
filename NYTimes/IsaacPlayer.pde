@@ -39,12 +39,19 @@ public class IsaacPlayer {
   int projectileStyle;                                                       //0 = shoot projectiles, 1 = charge attacks
   boolean charging, shootingBeam, shooting;                                  //charging/shooting beam, shooting projectiles
   float maxCharge, charge, chargeRate;                                       //max/current charge and charge rate for beams
+  IsaacCollectible activatable;                                              //activatable item
   int id;                                                                    //0 = Bocchi, 1 = Ryou, 2 = Kita, 3 = Nijika
   PImage playerIcon, playerIconLeft, playerIconRight, playerIconBack;        //image files only have the middle part as the head,
                                                                              //the outer ring is to have room for hair etc. that doesn't count for the hitbox
+  SoundFile hitSound;
   
   public IsaacPlayer(int id) {
     this.id = id;
+    try {
+      this.hitSound = playerSounds.get(0);
+    } catch(Exception e) {
+      println(e + "\nCan't set player sound.");
+    }
     switch(id) {
       case 0:
         playerIcon = bocchiIcon;
@@ -110,6 +117,7 @@ public class IsaacPlayer {
     this.maxTimeStopCharge = 240;
     this.timeStopCharge = maxTimeStopCharge;
     this.timeStopChargeRate = 1;
+    this.activatable = new IsaacCollectible(-1);
   }
   
   void init() {
@@ -124,7 +132,7 @@ public class IsaacPlayer {
   
   void display() {
     pushStyle();
-    //text(shootingBeam + " " + beamTimer + " " + beamTime, x - w, y + w);
+    text(activatable.effect, x - w, y + w);
     fill(#000000, 70);
     noStroke();
     circle(x + (flying ? w*.15 : w*.05), y + (flying ? w*.5 : w*.05), shadowW);
@@ -155,8 +163,10 @@ public class IsaacPlayer {
       fill(#FF0000);
       rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
     }
-    fill(rechargingTimeStop ? #FF0000 : #00FF00);
-    rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
+    if(activatable.effect == 8) {
+      fill(rechargingTimeStop ? #FF0000 : #00FF00);
+      rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
+    }
     fill(#FFFFFF, 1);
     noStroke();
     circle(x, y, w*10);
@@ -339,6 +349,10 @@ public class IsaacPlayer {
     }
   }
   
+  void setActivatable(IsaacCollectible activatable) {
+    this.activatable = activatable;
+  }
+  
   void setProjectileFollowing(boolean projectileFollowing) {
     this.projectileFollowing = projectileFollowing;
   }
@@ -461,7 +475,7 @@ public class IsaacPlayer {
         hitSound.stop();
         hitSound.play();
       } catch(Exception e) {
-        println("Can't play player hit sound: " + e);
+        println(e + "\nCan't play player hit sound.");
       }
       lives -= damage;
       invulnerable = true;
@@ -663,7 +677,7 @@ public class IsaacPlayer {
       //}
     //} else {
     if(k == 16 && bombs > 0) placeBomb();
-    if(k == 32) stopTime();
+    if(k == 32) activatable.activate();
     setMovement(k);
     //}
   }
