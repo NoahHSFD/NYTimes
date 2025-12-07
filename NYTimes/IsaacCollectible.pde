@@ -117,8 +117,17 @@ public class IsaacCollectible {
       case 7:
         player.setProjectileFollowing(true);
         break;
-      default:
+      case 8:                                                                              //time stop
         player.setActivatable(this);
+        break;
+      case 9:                                                                              //necronomicon
+        player.setActivatable(this);
+        break;
+      case 10:                                                                             //5 big booms
+        player.addPassive(effect);
+        player.bombs = 5;
+        break;
+      default:
     }
   }
   

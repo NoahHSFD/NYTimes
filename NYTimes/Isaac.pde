@@ -7,11 +7,13 @@ public class Isaac {
   JSONArray isMap;
   JSONObject[] rooms;
   float borderWidth;
+  float curseChance;                                                           //chance for a floor to be cursed
+  int curse;                                                                   //which curse is applied to the floor
   int animationTimer;                                                          //timer for animations on screen
   GameState state;
   
   public Isaac(int id) {
-    borderWidth = height*.1;
+    this.borderWidth = height*.1;
     try {
       isMap = loadJSONArray("/Maps/Map1.json");
       rooms = new JSONObject[isMap.size()];
@@ -21,7 +23,7 @@ public class Isaac {
       map = new IsaacMap(rooms);
       maps.add(map);
     } catch(Exception e) {
-      println(e + "\n Can't find Isaac map 1.");
+      println(e + "\nCan't find Isaac map 1.");
     }
     try {
       isMap = loadJSONArray("/Maps/Map2.json");
@@ -32,7 +34,7 @@ public class Isaac {
       map = new IsaacMap(rooms);
       maps.add(map);
     } catch(Exception e) {
-      println(e + "\n Can't find Isaac map 2.");
+      println(e + "\nCan't find Isaac map 2.");
     }
     try {
       isMap = loadJSONArray("/Maps/Map3.json");
@@ -43,17 +45,21 @@ public class Isaac {
       map = new IsaacMap(rooms);
       maps.add(map);
     } catch(Exception e) {
-      println(e + "\n Can't find Isaac map 3.");
+      println(e + "\nCan't find Isaac map 3.");
     }
-    currentMap = 0;
-    player = new IsaacPlayer(id);
-    state = GameState.PLAYING;
+    this.curseChance = (1./10.);
+    this.curse = -1;
+    this.currentMap = 0;
+    this.player = new IsaacPlayer(id);
+    this.state = GameState.PLAYING;
   }
   
   void init() {
+    if(random(0., 1.) <= curseChance) {
+      //curse = int(random(0, 6));
+      curse = 0;
+    }
     player.init();
-    player.setFireRate(2);
-    player.setSpeed(5);
   }
   
   void display() {
@@ -73,6 +79,7 @@ public class Isaac {
         break;
       default:
     }
+    text(curse, width*.95, height*.95);
   }
   
   void update() {

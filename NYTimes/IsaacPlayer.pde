@@ -12,6 +12,7 @@ public class IsaacPlayer {
   ArrayList<IsaacProjectile> playerProjectiles = new ArrayList<IsaacProjectile>();
   ArrayList<IsaacBeam> playerBeams = new ArrayList<IsaacBeam>();
   ArrayList<IsaacFamiliar> playerFamiliars = new ArrayList<IsaacFamiliar>();
+  ArrayList<Integer> passiveEffects = new ArrayList<Integer>();
   float shootTimer;                                                          //timer to know when to shoot projectiles
   float fireRate;                                                            //controls rate at which projectiles are fired
   float projectileSpeed;                                                     //how fast projectiles fly
@@ -95,7 +96,7 @@ public class IsaacPlayer {
     this.speed = 5;
     this.shadowW = w*1.1;
     this.facingY = 1;
-    this.fireRate = 1;
+    this.fireRate = 2;
     this.projectileSpeed = 7;
     this.projectileTime = 70;
     this.projectileDamage = 50;
@@ -353,6 +354,10 @@ public class IsaacPlayer {
     this.activatable = activatable;
   }
   
+  void addPassive(int effect) {
+    passiveEffects.add(effect);
+  }
+  
   void setProjectileFollowing(boolean projectileFollowing) {
     this.projectileFollowing = projectileFollowing;
   }
@@ -472,6 +477,7 @@ public class IsaacPlayer {
   void hit(int damage) {
     if(!invulnerable) {
       try {
+        hitSound.removeFromCache();
         hitSound.stop();
         hitSound.play();
       } catch(Exception e) {
@@ -679,6 +685,7 @@ public class IsaacPlayer {
     if(k == 16 && bombs > 0) placeBomb();
     if(k == 32) activatable.activate();
     setMovement(k);
+
     //}
   }
   

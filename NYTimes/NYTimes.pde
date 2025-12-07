@@ -13,7 +13,7 @@ Audio au;
 IsaacMenu isM;
 Isaac is;
 ButtonID game;
-ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: master, 1: bgm, 2: player sounds, 3: enemy sounds
+ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: master, 1: bgm, 2: player sounds, 3: enemy sounds, 4: sfx
 PFont font;
 PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
@@ -34,6 +34,7 @@ SoundFile bgm;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
 ArrayList<SoundFile> playerSounds = new ArrayList<SoundFile>();
 ArrayList<SoundFile> enemySounds = new ArrayList<SoundFile>();
+ArrayList<SoundFile> sfx = new ArrayList<SoundFile>();
 float borderWidth;
 NYTimes nyt;
 
@@ -95,6 +96,7 @@ void setup() {
   volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "bgm"));
   volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "player"));
   volumeSliders.add(new Slider(width*.9, 0, width*.025, height*.1, "enemy"));
+  volumeSliders.add(new Slider(width*.875, 0, width*.025, height*.1, "sfx"));
   borderWidth = height*.1;
   men = new Menu();
   wor = new Wordle();
@@ -181,7 +183,7 @@ void draw() {
         try {
           bgm.amp(0.0);
         } catch(Exception e) {
-          println(e + "\nCan't set BGM volume.");
+          println(e + "\nCan't mute BGM volume.");
         }
       }
       if(!volumeSliders.get(2).getMuted()) {
@@ -198,7 +200,7 @@ void draw() {
             f.amp(0.0);
           }
         } catch(Exception e) {
-          println(e + "\nCan't set player sound volume.");
+          println(e + "\nCan't mute player sound volume.");
         }
       }
       if(!volumeSliders.get(3).getMuted()) {
@@ -215,7 +217,24 @@ void draw() {
             f.amp(0.0);
           }
         } catch(Exception e) {
-          println(e + "\nCan't set enemy sound volume.");
+          println(e + "\nCan't mute enemy sound volume.");
+        }
+      }
+      if(!volumeSliders.get(4).getMuted()) {
+        try {
+          for(SoundFile f : sfx) {
+            f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(4).setVolume());
+          }
+        } catch(Exception e) {
+          println(e + "\nCan't set SFX volume.");
+        }
+      } else {
+        try {
+          for(SoundFile f : sfx) {
+            f.amp(0.0);
+          }
+        } catch(Exception e) {
+          println(e + "\nCan't mute SFX volume.");
         }
       }
     } catch(Exception e) {
@@ -230,8 +249,11 @@ void draw() {
       for(SoundFile f : enemySounds) {
         f.amp(0.0);
       }
+      for(SoundFile f : sfx) {
+        f.amp(0.0);
+      }
     } catch(Exception e) {
-      println(e + "\nCan't set volume.");
+      println(e + "\nCan't mute volume.");
     }
   }
   for(Slider s : volumeSliders) {
@@ -411,19 +433,32 @@ boolean isLetter(char ch) {
 
 void loadAudioFiles() {
   bgms.add(new SoundFile(this, "/Audio/Music/Korogaru_Iwa,_Kimi_ni_Asa_ga_Furu.mp3"));
-  bgms.get(0).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Kara_Kara.mp3"));
-  bgms.get(1).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Distortion!!.mp3"));
-  bgms.get(2).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Nani_ga_Warui.mp3"));
-  bgms.get(3).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Seishun_Complex.mp3"));
-  bgms.get(4).removeFromCache();
   bgms.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
-  bgms.get(5).removeFromCache();
   playerSounds.add(new SoundFile(this, "/Audio/bocchi_hit.mp3"));
   enemySounds.add(new SoundFile(this, "/Audio/player_hit.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/boom.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/big_boom_1.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/big_boom_2.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/big_boom_3.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/big_boom_4.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/big_boom_5.mp3"));
+  sfx.add(new SoundFile(this, "/Audio/metal_pipe.mp3"));
+  for(SoundFile f : bgms) {
+    f.removeFromCache();
+  }
+  for(SoundFile f : playerSounds) {
+    f.removeFromCache();
+  }
+  for(SoundFile f : enemySounds) {
+    f.removeFromCache();
+  }
+  for(SoundFile f : sfx) {
+    f.removeFromCache();
+  }
 }
 
 void loadImages() {

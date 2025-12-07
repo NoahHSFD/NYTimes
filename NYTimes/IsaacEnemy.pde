@@ -141,6 +141,8 @@ public class IsaacEnemy {
         this.baseSpeed = 2;
         this.puddleRate = 40;
         this.knockbackEfficiency = .5;
+        this.itemDrop = 10;
+        this.dropRate = 1.;
         break;
       case 5:
         this.baseSpeed = 7;
@@ -524,18 +526,18 @@ public class IsaacEnemy {
           text(int(hp) + "/" + int(maxHp), width*.5, height*.9 + 10);
           break;
         default:
-            stroke(#000000);
-            fill(#FF0000);
-            rect(x-50, y-w, 100, 20);
-            noStroke();
-            fill(#00FF00);
-            rect(x-50, y-w, map(hp, 0, maxHp, 0, 100), 20);
-            fill(#000000);
-            textSize(20);
-            textAlign(CENTER, CENTER);
-            text(int(hp) + "/" + int(maxHp), x, y-w + 10);
-          }
-      }
+          stroke(#000000);
+          fill(#FF0000);
+          rect(x-50, y-w, 100, 20);
+          noStroke();
+          fill(reviving ? #FFFFFF : #00FF00);
+          rect(x-50, y-w, map(hp, 0, maxHp, 0, 100), 20);
+          fill(#000000);
+          textSize(20);
+          textAlign(CENTER, CENTER);
+          text(int(hp) + "/" + int(maxHp), x, y-w + 10);
+       }
+    }
     popStyle();
   }
 
@@ -1547,7 +1549,7 @@ public class IsaacEnemy {
   }
   
   boolean stompIntersects(IsaacObstacle obstacle) {
-    return x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y > obstacle.y;
+    return !obstacle.falling && x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y > obstacle.y;
   }
 
   boolean intersects(IsaacPlayer player) {
@@ -1575,7 +1577,7 @@ public class IsaacEnemy {
   }
 
   boolean intersects(IsaacObstacle obstacle) {
-    return h == 0 ? x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y :
+    return !obstacle.falling && h == 0 ? x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - r < obstacle.y + obstacle.h && y + r > obstacle.y :
             x - r < obstacle.x + obstacle.w && x + r > obstacle.x && y - h < obstacle.y + obstacle.h && y > obstacle.y;
   }
 }

@@ -208,6 +208,9 @@ public class IsaacMap {
           p.display();
         }
       }
+      for(IsaacObstacle o : obstacleList) {
+        if(o.falling) o.display();
+      }
       popStyle();
     }
     
@@ -242,7 +245,7 @@ public class IsaacMap {
       for(int i = 0; i < enemyList.size(); i++) {
         enemyList.get(i).setTimeStopped(timeStopped);
         for(IsaacObstacle o : obstacleList) {
-          if(!(enemyList.get(i).flying && o.traversible)) {
+          if(!(o.falling || (enemyList.get(i).flying && o.traversible))) {
             if(enemyList.get(i).intersects(o) && !(enemyList.get(i).jumping) && !(enemyList.get(i).ignoresObstacles)) {
               enemyList.get(i).collision(o);
             }
@@ -553,6 +556,10 @@ public class IsaacMap {
             break;
           default:
         }
+        if(is.getCurrentMap().getCurrentRoom().type == 0) {
+          is.getCurrentMap().getCurrentRoom().obstacleList.add(new IsaacObstacle(width*.4, height*.4, width*.2, height*.2, 2));
+        }
+        if(is.player.passiveEffects.contains(10)) is.player.bombs = 5;
         if(is.getCurrentMap().getCurrentRoom().type == 1 &&
            !is.getCurrentMap().getCurrentRoom().enemyList.isEmpty()) {
           for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
