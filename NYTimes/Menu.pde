@@ -9,8 +9,8 @@ public class Menu {
     list.add(new Button(width*.5-width/6, width/3, ButtonID.CROSSWORD));
     list.add(new Button(width*.5-width/6, width/3, ButtonID.CONNECTIONS));
     list.add(new Button(width*.5-width/6, width/3, ButtonID.SCREENSHOT));
-    list.add(new Button(width*.5-width/6, width/3, ButtonID.AUDIO));
-    list.add(new Button(width*.5-width/6, width/3, ButtonID.AUDIOPAUSE));
+    //list.add(new Button(width*.5-width/6, width/3, ButtonID.AUDIO));
+    //list.add(new Button(width*.5-width/6, width/3, ButtonID.AUDIOPAUSE));
     list.add(new Button(width*.5-width/6, width/3, ButtonID.ISAACMENU));
     list.add(new Button(width*.5-width/6, width/3, ButtonID.EXIT));
     i = 1;

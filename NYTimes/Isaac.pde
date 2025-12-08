@@ -11,9 +11,17 @@ public class Isaac {
   int curse;                                                                   //which curse is applied to the floor
   int animationTimer;                                                          //timer for animations on screen
   GameState state;
+  IsaacPause isP;
+  ArrayList<Slider> isaacVolumeSliders = new ArrayList<Slider>();
   
   public Isaac(int id) {
     this.borderWidth = height*.1;
+    isP = new IsaacPause();
+    isaacVolumeSliders.add(new Slider(width*.2, height*.4, width*.1, height*.3, "ismaster"));
+    isaacVolumeSliders.add(new Slider(width*.325, height*.4, width*.1, height*.3, "isbgm"));
+    isaacVolumeSliders.add(new Slider(width*.45, height*.4, width*.1, height*.3, "isplayer"));
+    isaacVolumeSliders.add(new Slider(width*.575, height*.4, width*.1, height*.3, "isenemy"));
+    isaacVolumeSliders.add(new Slider(width*.7, height*.4, width*.1, height*.3, "issfx"));
     try {
       isMap = loadJSONArray("/Maps/Map1.json");
       rooms = new JSONObject[isMap.size()];
@@ -47,7 +55,7 @@ public class Isaac {
     } catch(Exception e) {
       println(e + "\nCan't find Isaac map 3.");
     }
-    this.curseChance = (1./10.);
+    this.curseChance = (1./2.);
     this.curse = -1;
     this.currentMap = 0;
     this.player = new IsaacPlayer(id);
@@ -56,7 +64,10 @@ public class Isaac {
   
   void init() {
     if(random(0., 1.) <= curseChance) {
-      //curse = int(random(0, 6));
+      curse = int(random(0, 6));
+      //0: anvil falls when entering a new room
+      //1:
+      
       curse = 0;
     }
     player.init();
@@ -66,6 +77,12 @@ public class Isaac {
     //background(#554646);
     maps.get(currentMap).display();
     player.display();
+    for(IsaacObstacle o : maps.get(currentMap).getCurrentRoom().obstacleList) {
+      if(o.falling) o.display();
+    }
+    for(IsaacEnemy e : maps.get(currentMap).getCurrentRoom().enemyList) {
+      if(e.jumping) e.display();
+    }
     maps.get(currentMap).minimap.display();
     switch(state) {
       case ANIMATION:
@@ -76,6 +93,9 @@ public class Isaac {
         break;
       case CREDITS:
         state = rollCredits();
+        break;
+      case PAUSED:
+        state = pause();
         break;
       default:
     }
@@ -89,13 +109,118 @@ public class Isaac {
         maps.get(currentMap).update();
         player.update();
         break;
+      case PAUSED:
+        isP.update();
+        break;
       default:
+    }
+    if(!isaacVolumeSliders.get(0).getMuted()) {
+      try {
+        if(!isaacVolumeSliders.get(1).getMuted()) {
+          try {
+            bgm.amp(isaacVolumeSliders.get(0).setVolume()*isaacVolumeSliders.get(1).setVolume());
+          } catch(Exception e) {
+            println(e + "\nCan't set BGM volume.");
+          }
+        } else {
+          try {
+            bgm.amp(0.0);
+          } catch(Exception e) {
+            println(e + "\nCan't mute BGM volume.");
+          }
+        }
+        if(!isaacVolumeSliders.get(2).getMuted()) {
+          try {
+            for(SoundFile f : playerSounds) {
+              f.amp(isaacVolumeSliders.get(0).setVolume()*isaacVolumeSliders.get(2).setVolume());
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't set player sound volume.");
+          }
+        } else {
+          try {
+            for(SoundFile f : playerSounds) {
+              f.amp(0.0);
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't mute player sound volume.");
+          }
+        }
+        if(!isaacVolumeSliders.get(3).getMuted()) {
+          try {
+            for(SoundFile f : enemySounds) {
+              f.amp(isaacVolumeSliders.get(0).setVolume()*2.*isaacVolumeSliders.get(3).setVolume());
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't set enemy sound volume.");
+          }
+        } else {
+          try {
+            for(SoundFile f : enemySounds) {
+              f.amp(0.0);
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't mute enemy sound volume.");
+          }
+        }
+        if(!isaacVolumeSliders.get(4).getMuted()) {
+          try {
+            for(SoundFile f : sfx) {
+              f.amp(isaacVolumeSliders.get(0).setVolume()*isaacVolumeSliders.get(4).setVolume());
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't set SFX volume.");
+          }
+        } else {
+          try {
+            for(SoundFile f : sfx) {
+              f.amp(0.0);
+            }
+          } catch(Exception e) {
+            println(e + "\nCan't mute SFX volume.");
+          }
+        }
+      } catch(Exception e) {
+        println(e + "\nCan't set volume.");
+      }
+    } else {
+      try {
+        bgm.amp(0.0);
+        for(SoundFile f : playerSounds) {
+          f.amp(0.0);
+        }
+        for(SoundFile f : enemySounds) {
+          f.amp(0.0);
+        }
+        for(SoundFile f : sfx) {
+          f.amp(0.0);
+        }
+      } catch(Exception e) {
+        println(e + "\nCan't mute volume.");
+      }
+    }
+    for(Slider s : isaacVolumeSliders) {
+      s.update();
+      s.display();
     }
   }
   
   void pressKey(int k) {
     //if(keyCode == ENTER) state = GameState.ANIMATION;
-    if(state == GameState.PLAYING) player.pressKey(k);
+    //if(state == GameState.PLAYING) player.pressKey(k);
+    switch(state) {
+      case PLAYING:
+        player.pressKey(k);
+        if(k == -1) {
+          player.resetMovement();
+          state = GameState.PAUSED;
+        }
+        break;
+      case PAUSED:
+        isP.pressKey(k);
+        break;
+      default:
+    }
   }
   
   void releaseKey(int k) {
@@ -108,6 +233,11 @@ public class Isaac {
   
   void setCurrentMap(int currentMap) {
     this.currentMap = currentMap;
+  }
+  
+  GameState pause() {
+    isP.display();
+    return GameState.PAUSED;
   }
   
   GameState playAnimation(int len) {
@@ -195,5 +325,13 @@ public class Isaac {
   
   GameState rollCredits() {
     return GameState.CREDITS;
+  }
+  
+  void clickChecks() {
+    isP.clickChecks();
+  }
+  
+  void clicks() {
+    isP.clicks();
   }
 }

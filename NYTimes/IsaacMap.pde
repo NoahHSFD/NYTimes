@@ -556,7 +556,7 @@ public class IsaacMap {
             break;
           default:
         }
-        if(is.getCurrentMap().getCurrentRoom().type == 0) {
+        if(is.curse == 0 && is.getCurrentMap().getCurrentRoom().type == 0) {
           is.getCurrentMap().getCurrentRoom().obstacleList.add(new IsaacObstacle(width*.4, height*.4, width*.2, height*.2, 2));
         }
         if(is.player.passiveEffects.contains(10)) is.player.bombs = 5;

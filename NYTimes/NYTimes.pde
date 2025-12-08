@@ -53,14 +53,14 @@ enum ButtonID {
   SCREENSHOTRESET,
   AUDIO,
   AUDIORESET,
-  AUDIOPAUSE,
   EXIT,
   ISAACMENU,
   ISAAC,
   ISAACBOCCHI,
   ISAACRYOU,
   ISAACKITA,
-  ISAACNIJIKA
+  ISAACNIJIKA,
+  ISAACPAUSE
 }
 
 enum ConnectionsTier {
@@ -94,9 +94,9 @@ void setup() {
   homeButton = new Button(0, 0, width*.05, height*.025, ButtonID.MENU);
   volumeSliders.add(new Slider(width*.975, 0, width*.025, height*.1, "master"));
   volumeSliders.add(new Slider(width*.95, 0, width*.025, height*.1, "bgm"));
-  volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "player"));
-  volumeSliders.add(new Slider(width*.9, 0, width*.025, height*.1, "enemy"));
-  volumeSliders.add(new Slider(width*.875, 0, width*.025, height*.1, "sfx"));
+  //volumeSliders.add(new Slider(width*.925, 0, width*.025, height*.1, "player"));
+  //volumeSliders.add(new Slider(width*.9, 0, width*.025, height*.1, "enemy"));
+  //volumeSliders.add(new Slider(width*.875, 0, width*.025, height*.1, "sfx"));
   borderWidth = height*.1;
   men = new Menu();
   wor = new Wordle();
@@ -171,104 +171,108 @@ void draw() {
   }
   homeButton.update();
   homeButton.display();
-  if(!volumeSliders.get(0).getMuted()) {
-    try {
-      if(!volumeSliders.get(1).getMuted()) {
-        try {
-          bgm.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(1).setVolume());
-        } catch(Exception e) {
-          println(e + "\nCan't set BGM volume.");
+  if(game != ButtonID.ISAAC) {
+    if(!volumeSliders.get(0).getMuted()) {
+      try {
+        if(!volumeSliders.get(1).getMuted()) {
+          try {
+            bgm.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(1).setVolume());
+          } catch(Exception e) {
+            println(e + "\nCan't set BGM volume.");
+          }
+        } else {
+          try {
+            bgm.amp(0.0);
+          } catch(Exception e) {
+            println(e + "\nCan't mute BGM volume.");
+          }
         }
-      } else {
-        try {
-          bgm.amp(0.0);
-        } catch(Exception e) {
-          println(e + "\nCan't mute BGM volume.");
-        }
+        //if(!volumeSliders.get(2).getMuted()) {
+        //  try {
+        //    for(SoundFile f : playerSounds) {
+        //      f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(2).setVolume());
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't set player sound volume.");
+        //  }
+        //} else {
+        //  try {
+        //    for(SoundFile f : playerSounds) {
+        //      f.amp(0.0);
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't mute player sound volume.");
+        //  }
+        //}
+        //if(!volumeSliders.get(3).getMuted()) {
+        //  try {
+        //    for(SoundFile f : enemySounds) {
+        //      f.amp(volumeSliders.get(0).setVolume()*2.*volumeSliders.get(3).setVolume());
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't set enemy sound volume.");
+        //  }
+        //} else {
+        //  try {
+        //    for(SoundFile f : enemySounds) {
+        //      f.amp(0.0);
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't mute enemy sound volume.");
+        //  }
+        //}
+        //if(!volumeSliders.get(4).getMuted()) {
+        //  try {
+        //    for(SoundFile f : sfx) {
+        //      f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(4).setVolume());
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't set SFX volume.");
+        //  }
+        //} else {
+        //  try {
+        //    for(SoundFile f : sfx) {
+        //      f.amp(0.0);
+        //    }
+        //  } catch(Exception e) {
+        //    println(e + "\nCan't mute SFX volume.");
+        //  }
+        //}
+      } catch(Exception e) {
+        println(e + "\nCan't set volume.");
       }
-      if(!volumeSliders.get(2).getMuted()) {
-        try {
-          for(SoundFile f : playerSounds) {
-            f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(2).setVolume());
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't set player sound volume.");
-        }
-      } else {
-        try {
-          for(SoundFile f : playerSounds) {
-            f.amp(0.0);
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't mute player sound volume.");
-        }
+    } else {
+      try {
+        bgm.amp(0.0);
+        //for(SoundFile f : playerSounds) {
+        //  f.amp(0.0);
+        //}
+        //for(SoundFile f : enemySounds) {
+        //  f.amp(0.0);
+        //}
+        //for(SoundFile f : sfx) {
+        //  f.amp(0.0);
+        //}
+      } catch(Exception e) {
+        println(e + "\nCan't mute volume.");
       }
-      if(!volumeSliders.get(3).getMuted()) {
-        try {
-          for(SoundFile f : enemySounds) {
-            f.amp(volumeSliders.get(0).setVolume()*2.*volumeSliders.get(3).setVolume());
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't set enemy sound volume.");
-        }
-      } else {
-        try {
-          for(SoundFile f : enemySounds) {
-            f.amp(0.0);
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't mute enemy sound volume.");
-        }
-      }
-      if(!volumeSliders.get(4).getMuted()) {
-        try {
-          for(SoundFile f : sfx) {
-            f.amp(volumeSliders.get(0).setVolume()*volumeSliders.get(4).setVolume());
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't set SFX volume.");
-        }
-      } else {
-        try {
-          for(SoundFile f : sfx) {
-            f.amp(0.0);
-          }
-        } catch(Exception e) {
-          println(e + "\nCan't mute SFX volume.");
-        }
-      }
-    } catch(Exception e) {
-      println(e + "\nCan't set volume.");
     }
-  } else {
-    try {
-      bgm.amp(0.0);
-      for(SoundFile f : playerSounds) {
-        f.amp(0.0);
-      }
-      for(SoundFile f : enemySounds) {
-        f.amp(0.0);
-      }
-      for(SoundFile f : sfx) {
-        f.amp(0.0);
-      }
-    } catch(Exception e) {
-      println(e + "\nCan't mute volume.");
+    for(Slider s : volumeSliders) {
+      s.update();
+      s.display();
     }
   }
-  for(Slider s : volumeSliders) {
-    s.update();
-    s.display();
-  }
-  text(round(frameRate), width*.9, height*.1);
+  text(round(frameRate), width*.1, height*.1);
   line(width*.5, 0, width*.5, height);
   line(0, height*.5, width, height*.5);
 }
 
 void mousePressed() {
   homeButton.clickCheck();
-  for(Slider s : volumeSliders) {
-    s.clickCheck();
+  if(game != ButtonID.ISAAC) {
+    for(Slider s : volumeSliders) {
+      s.clickCheck();
+    }
   }
   switch(game) {
     case MENU:
@@ -295,6 +299,9 @@ void mousePressed() {
     case ISAACMENU:
       isM.clickChecks();
       break;
+    case ISAAC:
+      is.clickChecks();
+      break;
     default:
   }
 }
@@ -302,9 +309,11 @@ void mousePressed() {
 void mouseReleased() {
   homeButton.click();
   homeButton.clickCheck();
-  for(Slider s : volumeSliders) {
-    s.mute();
-    s.clickCheck();
+  if(game != ButtonID.ISAAC) {
+    for(Slider s : volumeSliders) {
+      s.mute();
+      s.clickCheck();
+    }
   }
   switch(game) {
     case MENU:
@@ -340,6 +349,10 @@ void mouseReleased() {
       isM.clicks();
       isM.clickChecks();
       break;
+    case ISAAC:
+      is.clicks();
+      is.clickChecks();
+      break;
     default:
   }
 }
@@ -347,9 +360,13 @@ void mouseReleased() {
 void keyPressed() {
   if(key == ESC) {
     key = 0;
-    if(game == ButtonID.ISAAC) is.player.resetMovement();
-    game = ButtonID.MENU;
-    if(bgm != bgms.get(4)) setBgm(4);
+    switch(game) {
+      case ISAAC:
+        is.pressKey(-1);
+        break;
+      default:
+        game = ButtonID.MENU;
+    }
   }
   switch(game) {
     case WORDLE:

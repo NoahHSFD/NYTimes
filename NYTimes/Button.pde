@@ -127,16 +127,6 @@ public class Button {
         case AUDIORESET:
           au.init();
           break;
-        case AUDIOPAUSE:
-          if(bgm.isPlaying()) {
-            bgm.removeFromCache();
-            bgm.pause();
-          } else {
-            bgm.removeFromCache();
-            bgm.loop();
-            Sound.status();
-          }
-          break;
         case EXIT:
           exit();
           break;
