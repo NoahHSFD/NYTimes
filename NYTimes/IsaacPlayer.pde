@@ -106,6 +106,7 @@ public class IsaacPlayer {
     this.lives = maxLives;
     this.bombs = 99;
     this.keys = 9;
+    this.coins = 10;
     this.invulnerable = false;
     this.defaultInvulnerabilityTime = 120;
     this.invulnerabilityTime = defaultInvulnerabilityTime;
@@ -118,7 +119,7 @@ public class IsaacPlayer {
     this.maxTimeStopCharge = 240;
     this.timeStopCharge = maxTimeStopCharge;
     this.timeStopChargeRate = 1;
-    this.activatable = new IsaacCollectible(-1);
+    this.activatable = new IsaacCollectible(-100);
   }
   
   void init() {
@@ -164,7 +165,7 @@ public class IsaacPlayer {
       fill(#FF0000);
       rect(x+r, y-r, map(charge, 0, maxCharge, 0, 50), 10);
     }
-    if(activatable.effect == 8) {
+    if(activatable.effect == -2) {
       fill(rechargingTimeStop ? #FF0000 : #00FF00);
       rect(x+r, y+r, map(timeStopCharge, 0, maxTimeStopCharge, 0, 50), 10);
     }

@@ -13,7 +13,7 @@ Audio au;
 IsaacMenu isM;
 Isaac is;
 ButtonID game;
-ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: master, 1: bgm, 2: player sounds, 3: enemy sounds, 4: sfx
+ArrayList<Slider> volumeSliders = new ArrayList<Slider>();                                            //0: master, 1: bgm
 PFont font;
 PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        ryouIcon, ryouIconLeft, ryouIconRight, ryouIconBack,
@@ -522,13 +522,13 @@ void loadImages() {
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu3.png"));
   ryouMenu.add(loadImage("/Images/Sprites/3Ryou_Menu2.png"));
   kitaMenu.add(loadImage("/Images/Sprites/Kita_Icon.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu2.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu3.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu4.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu5.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu6.png"));
-  kitaMenu.add(loadImage("/Images/Sprites/2Kita_Menu7.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu2.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu3.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu4.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu5.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu6.png"));
+  kitaMenu.add(loadImage("/Images/Sprites/3Kita_Menu7.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Icon.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu.png"));
   nijikaMenu.add(loadImage("/Images/Sprites/Nijika_Menu.png"));

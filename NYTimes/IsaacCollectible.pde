@@ -6,21 +6,8 @@ public class IsaacCollectible {
   color clr = #2AF72C;
   int effect;
   boolean collectable;                                                                    //whether the player can pick up the item
-  
-  public IsaacCollectible(float x, float y) {
-    this.x = x;
-    this.y = y;
-    this.effect = 3;
-    this.clr = #000000;
-  }
-  
-  public IsaacCollectible() {
-    this.x = width*.5;
-    this.y = height*.5;
-    this.w = width*.0125;
-    this.r = w*.5;
-    this.effect = 3;
-  }
+  boolean priced;                                                                         //whether the item is for sale and has a price
+  int price;
   
   public IsaacCollectible(int effect) {
     this.x = width*.5;
@@ -54,6 +41,12 @@ public class IsaacCollectible {
     this.collectable = true;
     this.effect = effect;
     switch(effect) {
+      case -2:
+        this.clr = #191919;
+        break;
+      case -1:
+        this.clr = #44D3B5;
+        break;
       case 0:
         this.clr = #FFFF00;
         break;
@@ -66,12 +59,6 @@ public class IsaacCollectible {
       case 3:
         this.clr = #000000;
         break;
-      case 8:
-        this.clr = #191919;
-        break;
-      case 9:
-        this.clr = #44D3B5;
-        break;
       default:
     }
   }
@@ -80,10 +67,16 @@ public class IsaacCollectible {
     pushStyle();
     fill(clr);
     circle(x, y, w);
+    if(priced) {
+      fill(#FFFFFF);
+      textAlign(CENTER, CENTER);
+      text(price, x, y + w*2);
+    }
     popStyle();
   }
   
   boolean update() {
+    collectable = priced ? price <= is.player.coins : true;
     if(collectable && intersects(is.player)) {
       pickUp(is.player);
       return true;
@@ -92,7 +85,14 @@ public class IsaacCollectible {
   }
   
   void pickUp(IsaacPlayer player) {
+    if(priced) is.player.coins -= price;
     switch(effect) {
+      case -2:                                                                              //time stop
+        player.setActivatable(this);
+        break;
+      case -1:                                                                              //necronomicon
+        player.setActivatable(this);
+        break;
       case 0:
         player.addCoin();
         break;
@@ -117,13 +117,7 @@ public class IsaacCollectible {
       case 7:
         player.setProjectileFollowing(true);
         break;
-      case 8:                                                                              //time stop
-        player.setActivatable(this);
-        break;
-      case 9:                                                                              //necronomicon
-        player.setActivatable(this);
-        break;
-      case 10:                                                                             //5 big booms
+      case 10:                                                                               //5 big booms
         player.addPassive(effect);
         player.bombs = 5;
         break;
@@ -131,12 +125,17 @@ public class IsaacCollectible {
     }
   }
   
+  void setPrice(int price) {
+    this.priced = true;
+    this.price = price;
+  }
+  
   void activate() {
     switch(effect) {
-      case 8:
+      case -2:
         is.player.stopTime();
         break;
-      case 9:
+      case -1:
         is.getCurrentMap().getCurrentRoom().damageAllEnemies(40);
         break;
       default:

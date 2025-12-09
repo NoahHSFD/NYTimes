@@ -32,7 +32,7 @@ public class IsaacChest {
   void open(IsaacPlayer player) {
     player.removeKey();
     clr = #FF0000;
-    is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(x+w*.5, y+h*.5));
+    is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(0, x+w*.5, y+h*.5));
     open = true;
   }
   

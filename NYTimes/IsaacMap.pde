@@ -27,9 +27,9 @@ public class IsaacMap {
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDoors(rooms[i].getIntList("doors").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setDestructibleDoors(rooms[i].getIntList("destructibledoors").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
-      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setType(rooms[i].getString("type"));
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setLayout(rooms[i].getInt("layout"));
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
     }
     minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
     currentRoomX = rooms[0].getIntList("coordinates").get(0);
@@ -130,6 +130,14 @@ public class IsaacMap {
     void setCollectibles(int[] c) {
       for(int i : c) {
         collectibleList.add(new IsaacCollectible(i));
+      }
+      if(type == 2) {
+        for(IsaacCollectible co : collectibleList) {
+          switch(co.effect) {
+            default:
+              co.setPrice(10);
+          }
+        }
       }
     }
     

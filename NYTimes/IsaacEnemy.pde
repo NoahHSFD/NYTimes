@@ -99,7 +99,7 @@ public class IsaacEnemy {
     this.puddleDamage = 1;
     this.projectileAmount = 1;
     this.revivalTime = 200;
-    this.itemDrop = -1;
+    this.itemDrop = -100;
     this.maxHp = 200;
     this.type = type;
     switch(type) {
@@ -156,7 +156,7 @@ public class IsaacEnemy {
         }
         this.knockbackEfficiency = 1;
         this.explodesOnDeath = true;
-        this.itemDrop = 9;
+        this.itemDrop = -1;
         this.dropRate = .3;
         break;
       case 6:
@@ -176,7 +176,7 @@ public class IsaacEnemy {
         this.r = w*.5;
         this.randomMovement = true;
         this.knockbackEfficiency = 1;
-        this.itemDrop = 8;
+        this.itemDrop = -2;
         this.dropRate = .5;
         break;
       case -1:                                                                                  //monstro
@@ -1425,7 +1425,7 @@ public class IsaacEnemy {
         corpse = true;
       } else {
         dead = true;
-        if(itemDrop != -1 && random(0., 1.) <= dropRate) spawnCollectible();
+        if(itemDrop != -100 && random(0., 1.) <= dropRate) spawnCollectible();
       }
     }
   }

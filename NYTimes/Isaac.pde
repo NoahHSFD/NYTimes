@@ -12,7 +12,7 @@ public class Isaac {
   int animationTimer;                                                          //timer for animations on screen
   GameState state;
   IsaacPause isP;
-  ArrayList<Slider> isaacVolumeSliders = new ArrayList<Slider>();
+  ArrayList<Slider> isaacVolumeSliders = new ArrayList<Slider>();              //0: master, 1: bgm, 2: player sounds, 3: enemy sounds, 4: sfx
   
   public Isaac(int id) {
     this.borderWidth = height*.1;
@@ -207,7 +207,6 @@ public class Isaac {
   
   void pressKey(int k) {
     //if(keyCode == ENTER) state = GameState.ANIMATION;
-    //if(state == GameState.PLAYING) player.pressKey(k);
     switch(state) {
       case PLAYING:
         player.pressKey(k);
@@ -328,10 +327,20 @@ public class Isaac {
   }
   
   void clickChecks() {
-    isP.clickChecks();
+    switch(state) {
+      case PAUSED:
+        isP.clickChecks();
+        break;
+      default:
+    }
   }
   
   void clicks() {
-    isP.clicks();
+    switch(state) {
+      case PAUSED:
+        isP.clicks();
+        break;
+      default:
+    }
   }
 }
