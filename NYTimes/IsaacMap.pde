@@ -69,6 +69,7 @@ public class IsaacMap {
     ArrayList<IsaacObstacle> obstacleList = new ArrayList<IsaacObstacle>();
     ArrayList<IsaacChest> chestList = new ArrayList<IsaacChest>();
     PImage backgroundSprite;
+    SoundFile quizSong;                                                                    //music to play in the quiz room
     int type;                                                                              //0: normal room, 1: boss room, 2: store
     boolean timeStopped;                                                                   //whether enemies and projectiles in the room are timestopped
     
@@ -150,6 +151,13 @@ public class IsaacMap {
         backgroundSprite = backgrounds.get(1);
       } else if(type.equals("store")){
         this.type = 2;
+      } else if(type.equals("quiz")){
+        this.type = 3;
+        try {
+          quizSong = quizMusic.get(0);
+        } catch(Exception e) {
+          println(e + "\nCouldn't set quiz music.");
+        }
       } else {
         this.type = 0;
       }
@@ -223,6 +231,18 @@ public class IsaacMap {
     }
     
     void update() {
+      //switch(type) {
+      //  case 3:
+      //    is.isaacVolumeSliders.get(1).muted = true;
+      //    try {
+      //      quizSong.amp(is.isaacVolumeSliders.get(0).setVolume()*is.isaacVolumeSliders.get(1).setVolume());
+      //    } catch(Exception e) {
+      //      println(e + "\nCouldn't set quiz music volume.");
+      //    }
+      //    break;
+      //  default:
+      //}
+            
       for(IsaacDoor d : doors) {
         if(type == 1) {
           for(IsaacEnemy e : enemyList) {
@@ -535,6 +555,8 @@ public class IsaacMap {
       }
       
       void switchRoom() {
+        int prevX = currentRoomX;
+        int prevY = currentRoomY;
         for(IsaacEnemy e : enemyList) {
           if(e.dead) {
             e.enemyProjectiles.clear();
@@ -572,6 +594,37 @@ public class IsaacMap {
            !is.getCurrentMap().getCurrentRoom().enemyList.isEmpty()) {
           for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
             if(!e.dead) is.state = is.playAnimation(500);
+          }
+        }
+        if(is.getCurrentMap().getCurrentRoom().type == 3) {
+          try {
+            if(!is.isaacVolumeSliders.get(1).muted) {
+              is.isaacVolumeSliders.get(1).wasMuted = false;
+              is.isaacVolumeSliders.get(1).muted = true;
+            } else {
+              is.isaacVolumeSliders.get(1).wasMuted = true;
+            }
+          } catch(Exception e) {
+            println(e + "\nCouldn't mute BGM when entering quiz room.");
+          }
+          try {
+            is.getCurrentMap().getCurrentRoom().quizSong.stop();
+            is.getCurrentMap().getCurrentRoom().quizSong.removeFromCache();
+            is.getCurrentMap().getCurrentRoom().quizSong.loop();
+          } catch(Exception e) {
+            println(e + "\nCouldn't play quiz room music.");
+          }
+        } else if(is.getCurrentMap().rooms[prevX][prevY].type == 3) {
+          try {
+            is.getCurrentMap().rooms[prevX][prevY].quizSong.stop();
+            is.getCurrentMap().rooms[prevX][prevY].quizSong.removeFromCache();
+          } catch(Exception e) {
+            println(e + "\nCouldn't stop quiz room music.");
+          }
+          try {
+            if(!is.isaacVolumeSliders.get(1).wasMuted) is.isaacVolumeSliders.get(1).muted = false;
+          } catch(Exception e) {
+            println(e + "\nCouldn't unmute BGM when exiting quiz room.");
           }
         }
       }

@@ -6,7 +6,8 @@ public class Slider {
   int status = 0;                                //0 = not hovered, 1 = hovered, 2 = clicked
   float slider;
   String type;
-  boolean muted = false;
+  boolean muted;
+  boolean wasMuted;                              //to remember whether a slider was muted before entering a quiz room
   
   public Slider(float x, float y, float w, float h, String type) {
     this.x = x;

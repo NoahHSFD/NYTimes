@@ -35,6 +35,7 @@ ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
 ArrayList<SoundFile> playerSounds = new ArrayList<SoundFile>();
 ArrayList<SoundFile> enemySounds = new ArrayList<SoundFile>();
 ArrayList<SoundFile> sfx = new ArrayList<SoundFile>();
+ArrayList<SoundFile> quizMusic = new ArrayList<SoundFile>();
 float borderWidth;
 NYTimes nyt;
 
@@ -464,6 +465,7 @@ void loadAudioFiles() {
   sfx.add(new SoundFile(this, "/Audio/big_boom_4.mp3"));
   sfx.add(new SoundFile(this, "/Audio/big_boom_5.mp3"));
   sfx.add(new SoundFile(this, "/Audio/metal_pipe.mp3"));
+  quizMusic.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
   for(SoundFile f : bgms) {
     f.removeFromCache();
   }
@@ -474,6 +476,9 @@ void loadAudioFiles() {
     f.removeFromCache();
   }
   for(SoundFile f : sfx) {
+    f.removeFromCache();
+  }
+  for(SoundFile f : quizMusic) {
     f.removeFromCache();
   }
 }

@@ -72,6 +72,15 @@
     "layout":0
   },
   {
+    "coordinates":[1, 3],
+    "doors":[3],
+    "destructibledoors":[],
+    "enemies":[],
+    "collectibles":[],
+    "type":"quiz",
+    "layout":1
+  },
+  {
     "coordinates":[2, 2],
     "doors":[1, 3],
     "destructibledoors":[],
@@ -91,7 +100,7 @@
   },
   {
     "coordinates":[0, 3],
-    "doors":[0],
+    "doors":[0, 1],
     "destructibledoors":[],
     "enemies":[],
     "collectibles":[0],

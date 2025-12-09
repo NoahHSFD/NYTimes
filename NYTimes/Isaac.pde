@@ -180,6 +180,13 @@ public class Isaac {
             println(e + "\nCan't mute SFX volume.");
           }
         }
+        try {
+          for(SoundFile f : quizMusic) {
+            f.amp(isaacVolumeSliders.get(0).setVolume()*isaacVolumeSliders.get(1).setVolume());
+          }
+        } catch(Exception e) {
+          println(e + "\nCan't set quiz music volume.");
+        }
       } catch(Exception e) {
         println(e + "\nCan't set volume.");
       }
