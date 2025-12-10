@@ -152,6 +152,14 @@ public class Button {
           break;
         case MENU:
           if(bgm != bgms.get(4)) setBgm(4);
+          if(game == ButtonID.ISAAC && is.getCurrentMap().getCurrentRoom().type == 3) {
+            try {
+              is.getCurrentMap().getCurrentRoom().quizSong.stop();
+              is.getCurrentMap().getCurrentRoom().quizSong.removeFromCache();
+            } catch(Exception e) {
+              println(e + "\nCouldn't stop quiz room music after exiting to menu.");
+            }
+          }
         default:
           game = this.id;
       }

@@ -153,11 +153,7 @@ public class IsaacMap {
         this.type = 2;
       } else if(type.equals("quiz")){
         this.type = 3;
-        try {
-          quizSong = quizMusic.get(0);
-        } catch(Exception e) {
-          println(e + "\nCouldn't set quiz music.");
-        }
+        setQuizRoom(0);
       } else {
         this.type = 0;
       }
@@ -188,6 +184,42 @@ public class IsaacMap {
     void setOffSet(float offSetX, float offSetY) {
       this.offSetX = offSetX;
       this.offSetY = offSetY;
+    }
+    
+    void setQuizRoom(int quizRoomType) {
+      IsaacCollectible co;
+      try {
+        quizSong = quizMusic.get(0);
+      } catch(Exception e) {
+        println(e + "\nCouldn't set quiz music.");
+      }
+      switch(quizRoomType) {
+        case 0:
+          co = new IsaacCollectible(2, width*.4, height*.5);
+          co.dummy = true;
+          collectibleList.add(co);
+          co = new IsaacCollectible(2, width*.75, height*.5);
+          collectibleList.add(co);
+          co = new IsaacCollectible(0, width*.5, height*.5);
+          collectibleList.add(co);
+          co = new IsaacCollectible(1, width*.5, height*.25);
+          collectibleList.add(co);
+          co = new IsaacCollectible(3, width*.5, height*.75);
+          collectibleList.add(co);
+          co = new IsaacCollectible(3, width*.5, height*.9);
+          collectibleList.add(co);
+          co = new IsaacCollectible(3, width*.5, height*.2);
+          collectibleList.add(co);
+          co = new IsaacCollectible(3, width*.2, height*.2);
+          collectibleList.add(co);
+          co = new IsaacCollectible(3, width*.85, height*.2);
+          collectibleList.add(co);
+          break;
+        default:
+      }
+      for(IsaacCollectible c : collectibleList) {
+        c.quizItem = true;
+      }
     }
     
     void display() {
@@ -227,22 +259,14 @@ public class IsaacMap {
       for(IsaacObstacle o : obstacleList) {
         if(o.falling) o.display();
       }
+      
+      for(IsaacCollectible c : collectibleList) {
+        c.showDetails();
+      }
       popStyle();
     }
     
-    void update() {
-      //switch(type) {
-      //  case 3:
-      //    is.isaacVolumeSliders.get(1).muted = true;
-      //    try {
-      //      quizSong.amp(is.isaacVolumeSliders.get(0).setVolume()*is.isaacVolumeSliders.get(1).setVolume());
-      //    } catch(Exception e) {
-      //      println(e + "\nCouldn't set quiz music volume.");
-      //    }
-      //    break;
-      //  default:
-      //}
-            
+    void update() {   
       for(IsaacDoor d : doors) {
         if(type == 1) {
           for(IsaacEnemy e : enemyList) {
@@ -325,10 +349,25 @@ public class IsaacMap {
           }
         }
       }
-      for(IsaacCollectible c : collectibleList) {
-        if(c.update()) {
-          collectibleList.remove(c);
-          break;
+      //for(IsaacCollectible c : collectibleList) {
+      //  if(c.update()) {
+      //    collectibleList.remove(c);
+      //    break;
+      //  }
+      //}
+      for(int i = 0; i < collectibleList.size(); i++) {
+        if(collectibleList.get(i).update()) {
+          if(!collectibleList.get(i).quizItem) {
+            collectibleList.remove(i);
+            i--;
+          } else {
+            for(int j = 0; j < collectibleList.size(); j++) {
+              if(collectibleList.get(j).quizItem) {
+                collectibleList.remove(j);
+                j--;
+              }
+            }
+          }
         }
       }
     }
