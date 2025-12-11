@@ -58,6 +58,10 @@ public class Button {
           image(nijikaMenu.get(1), x, y, w, h);
         }
         break;
+      case ISAACMENU:
+        fill(#FFFFFF);
+        text("???", x + w*.5, y + h*.5);
+        break;
       default:
         fill(#FFFFFF);
         text(id.toString(), x + w*.5, y + h*.5);

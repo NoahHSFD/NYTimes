@@ -29,6 +29,7 @@ public class IsaacMap {
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setEnemies(rooms[i].getIntList("enemies").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setType(rooms[i].getString("type"));
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setLayout(rooms[i].getInt("layout"));
+      this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setLockedDoors(rooms[i].getIntList("lockeddoors").toArray());
       this.rooms[rooms[i].getIntList("coordinates").get(0)][rooms[i].getIntList("coordinates").get(1)].setCollectibles(rooms[i].getIntList("collectibles").toArray());
     }
     minimap = new IsaacMinimap(rooms, mapWidth, mapHeight);
@@ -92,6 +93,14 @@ public class IsaacMap {
       for(int i : des) {
         for(IsaacDoor door : doors) {
           if(door.position == i) door.setDestructible();
+        }
+      }
+    }
+    
+    void setLockedDoors(int[] loc) {
+      for(int i : loc) {
+        for(IsaacDoor door : doors) {
+          if(door.position == i) door.setLocked();
         }
       }
     }
@@ -385,8 +394,7 @@ public class IsaacMap {
     class IsaacDoor {
     
       float x, y;
-      float w = height*.21;
-      float h = height*.21;
+      float w, h;
       color clr = #FFFF00;
       int position;                                                             //0 = top, 1 = right, 2 = bottom, 3 = left,4 = middle
       boolean open;
@@ -395,6 +403,7 @@ public class IsaacMap {
       boolean unlocking;                                                        //whether it is currently being unlocked
       float unlockTimer;                                                        //timer to check when door is unlocked after being opened with a key
                                                                                 //so that player doesnt instantly enter a door when unlocking it
+      PImage doorSprite;
       
       public IsaacDoor(float x, float y) {
         this.x = x;
@@ -405,38 +414,42 @@ public class IsaacMap {
         this.position = position;
         switch(position) {
           case 0:                                                              //top
-            this.x = width*.5;
-            this.y = 0;
-            this.w = height*.1;
-            this.h = height*.21;
+            this.w = borderWidth;
+            this.h = borderWidth*.5 + 1;
+            this.x = width*.5 - this.w*.5;
+            this.y = borderWidth*.5;
             this.open = true;
+            this.doorSprite = doorSprites.get(0);
             break;
           case 1:                                                              //right
-            this.x = width;
-            this.y = height*.5;
-            this.w = height*.21;
-            this.h = height*.1;
+            this.w = borderWidth*.5 + 1;
+            this.h = borderWidth;
+            this.x = width - borderWidth - 1;
+            this.y = height*.5 - this.h*.5;
             this.open = true;
+            this.doorSprite = doorSprites.get(1);
             break; 
           case 2:                                                              //bottom
-            this.x = width*.5;
-            this.y = height;
-            this.w = height*.1;
-            this.h = height*.21;
+            this.w = borderWidth;
+            this.h = borderWidth*.5 + 1;
+            this.x = width*.5 - this.w*.5;
+            this.y = height - borderWidth - 1;
             this.open = true;
+            this.doorSprite = doorSprites.get(2);
             break;
           case 3:                                                              //left
-            this.x = 0;
-            this.y = height*.5;
-            this.w = height*.21;
-            this.h = height*.1;
+            this.w = borderWidth*.5 + 1;
+            this.h = borderWidth;
+            this.x = borderWidth*.5;
+            this.y = height*.5 - this.h*.5;
             this.open = true;
+            this.doorSprite = doorSprites.get(3);
             break;
           case 4:                                                              //middle
-            this.x = width*.5;
-            this.y = height*.5;
-            this.w = height*.1;
-            this.h = height*.1;
+            this.w = borderWidth;
+            this.h = borderWidth;
+            this.x = width*.5 - this.w*.5;
+            this.y = height*.5 - this.h*.5;
             break;
           default:
         }
@@ -449,8 +462,11 @@ public class IsaacMap {
         } else {
           fill(#FF0000);
         }
-        rectMode(CENTER);
-        rect(x, y, w, h);
+        if(doorSprite != null) {
+          if(!(destructible && !open)) image(doorSprite, x, y, w, h);
+        } else {
+          rect(x, y, w, h);
+        }
         fill(#000000);
         text(type + " " + enemyList.isEmpty() + " " + open, x + w, y);
         popStyle();
@@ -471,50 +487,39 @@ public class IsaacMap {
         }
       }
       
-      boolean intersects(IsaacPlayer player) {                                //different calculation because of rectMode(CENTER) in display()
-        return x - w*.5 < player.x + player.r && x + w*.5 > player.x - player.r && y - h*.5 < player.y + player.r && y + h*.5 > player.y - player.r;
+      boolean intersects(IsaacPlayer player) {
+        switch(position) {
+          case 0:
+          case 2:
+            return x + w*.25 < player.x + player.r && x + w*.75 > player.x - player.r && y < player.y + player.r && y + h > player.y - player.r;
+          case 1:
+          case 3:
+            return x < player.x + player.r && x + w > player.x - player.r && y + h*.25 < player.y + player.r && y + h*.75 > player.y - player.r;
+          default:
+        }
+        return x + w*.25 < player.x + player.r && x + w*.75 > player.x - player.r && y + h*.25 < player.y + player.r && y + h*.75 > player.y - player.r;
       }
       
       boolean intersects(IsaacBomb bomb) {
-        return bomb.exploding && (bomb.explosionTime == 1) &&  (x-w*.5 < bomb.x + bomb.explosionR && x + w*.5 > bomb.x - bomb.explosionR &&
-               y - h*.5 < bomb.y + bomb.explosionR && y + h*.5 > bomb.y - bomb.explosionR);
+        return bomb.exploding && (bomb.explosionTime == 1) &&  (x < bomb.x + bomb.explosionR && x + w > bomb.x - bomb.explosionR &&
+               y < bomb.y + bomb.explosionR && y + h > bomb.y - bomb.explosionR);
       }
       
-      void lock() {
+      void setLocked() {
         open = false;
         locked = true;
         switch(position) {
           case 0:
-            for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
-              if(d.position == 2) {
-                d.open = false;
-                d.locked = true;
-              }
-            }
+            doorSprite = doorSprites.get(12);
             break;
           case 1:
-            for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
-              if(d.position == 3) {
-                d.open = false;
-                d.locked = true;
-              }
-            }
+            doorSprite = doorSprites.get(13);
             break;
           case 2:
-            for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
-              if(d.position == 0) {
-                d.open = false;
-                d.locked = true;
-              }
-            }
+            doorSprite = doorSprites.get(14);
             break;
           case 3:
-            for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
-              if(d.position == 1) {
-                d.open = false;
-                d.locked = true;
-              }
-            }
+            doorSprite = doorSprites.get(15);
             break;
           default:
         }
@@ -525,21 +530,25 @@ public class IsaacMap {
         unlocking = true;
         switch(position) {
           case 0:
+            doorSprite = doorSprites.get(16);
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
               if(d.position == 2) d.open();
             }
             break;
           case 1:
+            doorSprite = doorSprites.get(17);
             for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
               if(d.position == 3) d.open();
             }
             break;
           case 2:
+            doorSprite = doorSprites.get(18);
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
               if(d.position == 0) d.open();
             }
             break;
           case 3:
+            doorSprite = doorSprites.get(19);
             for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
               if(d.position == 1) d.open();
             }
@@ -549,27 +558,27 @@ public class IsaacMap {
       }
       
       void destroy() {
-        open();
+        open = true;
         locked = false;
         switch(position) {
           case 0:
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
-              if(d.position == 2) d.open();
+              if(d.position == 2) d.open = true;
             }
             break;
           case 1:
             for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
-              if(d.position == 3) d.open();
+              if(d.position == 3) d.open = true;
             }
             break;
           case 2:
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
-              if(d.position == 0) d.open();
+              if(d.position == 0) d.open = true;
             }
             break;
           case 3:
             for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
-              if(d.position == 1) d.open();
+              if(d.position == 1) d.open = true;
             }
             break;
           default:
@@ -579,6 +588,21 @@ public class IsaacMap {
       void setDestructible() {
         destructible = true;
         open = false;
+        switch(position) {
+          case 0:                                                              //top
+            this.doorSprite = doorSprites.get(8);
+            break;
+          case 1:                                                              //right
+            this.doorSprite = doorSprites.get(9);
+            break; 
+          case 2:                                                              //bottom
+            this.doorSprite = doorSprites.get(10);
+            break;
+          case 3:                                                              //left
+            this.doorSprite = doorSprites.get(11);
+            break;
+          default:
+        }
       }
       
       int getPosition() {
@@ -587,10 +611,40 @@ public class IsaacMap {
       
       void open() {
         open = true;
+        switch(position) {
+          case 0:                                                              //top
+            this.doorSprite = doorSprites.get(0);
+            break;
+          case 1:                                                              //right
+            this.doorSprite = doorSprites.get(1);
+            break; 
+          case 2:                                                              //bottom
+            this.doorSprite = doorSprites.get(2);
+            break;
+          case 3:                                                              //left
+            this.doorSprite = doorSprites.get(3);
+            break;
+          default:
+        }
       }
       
       void close() {
         open = false;
+        switch(position) {
+          case 0:                                                              //top
+            this.doorSprite = doorSprites.get(4);
+            break;
+          case 1:                                                              //right
+            this.doorSprite = doorSprites.get(5);
+            break; 
+          case 2:                                                              //bottom
+            this.doorSprite = doorSprites.get(6);
+            break;
+          case 3:                                                              //left
+            this.doorSprite = doorSprites.get(7);
+            break;
+          default:
+        }
       }
       
       void switchRoom() {
@@ -605,21 +659,23 @@ public class IsaacMap {
         switch(position) {
           case 0:
             currentRoomY--;
-            is.player.setY(height - (h + is.player.getR()));
+            is.player.setY(height - borderWidth - is.player.w);
             break;
           case 1:
             currentRoomX++;
-            is.player.setX(w + is.player.getR());
+            is.player.setX(borderWidth + is.player.w);
             break;
           case 2:
             currentRoomY++;
-            is.player.setY(h + is.player.getR());
+            is.player.setY(borderWidth + is.player.w);
             break;
           case 3:
             currentRoomX--;
-            is.player.setX(width - (w + is.player.getR()));
+            is.player.setX(width - borderWidth - is.player.w);
             break;
           case 4:
+            prevX = -1;
+            prevY = -1;
             is.setCurrentMap((is.currentMap+1)%is.maps.size());
             is.getCurrentMap().init();
             break;
@@ -653,7 +709,7 @@ public class IsaacMap {
           } catch(Exception e) {
             println(e + "\nCouldn't play quiz room music.");
           }
-        } else if(is.getCurrentMap().rooms[prevX][prevY].type == 3) {
+        } else if(prevX != -1 && prevY != -1 && is.getCurrentMap().rooms[prevX][prevY].type == 3) {
           try {
             is.getCurrentMap().rooms[prevX][prevY].quizSong.stop();
             is.getCurrentMap().rooms[prevX][prevY].quizSong.removeFromCache();

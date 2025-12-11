@@ -179,6 +179,7 @@ public class IsaacEnemy {
         this.itemDrop = -2;
         this.dropRate = .5;
         break;
+                                                                                                //negative: bosses, positive: others
       case -1:                                                                                  //monstro
         this.w = width*.075;
         this.r = w*.5;
@@ -751,7 +752,7 @@ public class IsaacEnemy {
               case -543:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                   if(e.type == -5 && e.dead) {
-                    die();                                                                      //when mom dies, all her body parts die
+                    die();                                                                             //when mom dies, all her body parts die
                   }
                 }
                 break;
@@ -802,7 +803,7 @@ public class IsaacEnemy {
                 if(e.type == -3 && e.dead) {
                   leavesCorpse = false;
                   corpse = false;
-                  if(itemDrop != -1) spawnCollectible(); 
+                  if(itemDrop != -100) spawnCollectible(); 
                   dead = true;
                 }
               }
@@ -917,13 +918,15 @@ public class IsaacEnemy {
   }
   
   void spawnCollectible() {
-    switch(type) {
-     case -3:
-     case -5:
-       is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, width*.5, height*.75));
-       break;
-     default:
-       is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, x, h == 0 ? y : y + h*.5));
+    if(itemDrop != -100) {
+      switch(type) {
+       case -3:
+       case -5:
+         is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, width*.5, height*.75));
+         break;
+       default:
+         is.getCurrentMap().getCurrentRoom().collectibleList.add(new IsaacCollectible(itemDrop, x, h == 0 ? y : y + h*.5));
+      }
     }
   }
   

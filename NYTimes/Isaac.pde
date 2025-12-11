@@ -13,6 +13,7 @@ public class Isaac {
   GameState state;
   IsaacPause isP;
   ArrayList<Slider> isaacVolumeSliders = new ArrayList<Slider>();              //0: master, 1: bgm, 2: player sounds, 3: enemy sounds, 4: sfx
+  PImage curseOverlay;
   
   public Isaac(int id) {
     this.borderWidth = height*.1;
@@ -22,6 +23,7 @@ public class Isaac {
     isaacVolumeSliders.add(new Slider(width*.45, height*.4, width*.1, height*.3, "isplayer"));
     isaacVolumeSliders.add(new Slider(width*.575, height*.4, width*.1, height*.3, "isenemy"));
     isaacVolumeSliders.add(new Slider(width*.7, height*.4, width*.1, height*.3, "issfx"));
+    this.curseOverlay = overlays.get(0);
     try {
       isMap = loadJSONArray("/Maps/Map1.json");
       rooms = new JSONObject[isMap.size()];
@@ -66,9 +68,7 @@ public class Isaac {
     if(random(0., 1.) <= curseChance) {
       curse = int(random(0, 6));
       //0: anvil falls when entering a new room
-      //1:
-      
-      curse = 0;
+      //1: overlay
     }
     player.init();
   }
@@ -84,6 +84,7 @@ public class Isaac {
       if(e.jumping) e.display();
     }
     maps.get(currentMap).minimap.display();
+    if(curse == 1) image(curseOverlay, 0, 0, width, height);
     switch(state) {
       case ANIMATION:
         state = playAnimation(600);

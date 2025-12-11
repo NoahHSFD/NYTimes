@@ -73,6 +73,7 @@ public class IsaacCollectible {
       textAlign(CENTER, CENTER);
       text(price, x, y + w*2);
     }
+    text(effect, x, y-20);
     popStyle();
   }
   
@@ -107,6 +108,7 @@ public class IsaacCollectible {
         case -1:                                                                              //necronomicon
           player.setActivatable(this);
           break;
+                                                                                              //negative: active item, positive: others
         case 0:
           player.addCoin();
           break;
