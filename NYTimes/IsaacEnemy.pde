@@ -69,6 +69,7 @@ public class IsaacEnemy {
   SoundFile attackSound0;
   int phase;                                                                   //boss phases
   int type;
+  PImage enemySprite;
 
   public IsaacEnemy(int type, float x, float y) {
     this.x = x;
@@ -86,6 +87,7 @@ public class IsaacEnemy {
         this.facingY = -1;
       }
     }
+    this.enemySprite = enemySprites.get(0);
     this.baseSpeed = 3;
     this.dx = facingX;
     this.dy = facingY;
@@ -181,7 +183,7 @@ public class IsaacEnemy {
         break;
                                                                                                 //negative: bosses, positive: others
       case -1:                                                                                  //monstro
-        this.w = width*.075;
+        this.w = width*.15;
         this.r = w*.5;
         this.baseSpeed = 2;
         this.fireRate = .5;
@@ -194,17 +196,19 @@ public class IsaacEnemy {
         this.maxHp = 5000;
         this.itemDrop = 4;
         this.dropRate = 1.;
+        this.enemySprite = enemySprites.get(0);
         break;
       case -2:                                                                                  //gemini - contusion
-        this.w *= 1.25;
+        this.w = width*.15;
         this.r = w*.5;
         this.following = true;
         this.maxHp = 2500;
         this.itemDrop = 3;
         this.dropRate = 1.;
+        this.enemySprite = enemySprites.get(1);
         break;
       case -21:                                                                                  //gemini - suture
-        this.w *= .5;
+        this.w = width*.1;
         this.r = w*.5;
         this.baseSpeed = 1;
         this.fireRate = .5;
@@ -213,6 +217,7 @@ public class IsaacEnemy {
         this.maxHp = 2500;
         this.itemDrop = 1;
         this.dropRate = 1.;
+        this.enemySprite = enemySprites.get(2);
         break;
       case -3:                                                                                  //gums - mouth
         this.baseSpeed = 0;
@@ -404,19 +409,19 @@ public class IsaacEnemy {
           image(bocchiIconBack, x-w, spriteY-w, 2.*w, 2.*w);
           break;
         case -1:
-          image(ryouIconBack, x-w, spriteY-w, 2.*w, 2.*w);
+          image(enemySprite, x-r, spriteY-r, w, w);
           break;
         case -2:
-          image(nijikaIconRight, x-w, spriteY-w, 2.*w, 2.*w);
           for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
             if(e.type == -21 && !e.dead) {
               stroke(#000000);
               line(x, y, e.x, e.y);
             }
           }
+          image(enemySprite, x-r, spriteY-r, w, w);
           break;
         case -21:
-          image(nijikaIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
+          image(enemySprite, x-r, spriteY-r, w, w);
           break;
         case -3:
           image(gums, x, spriteY, w, h);

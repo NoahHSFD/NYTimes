@@ -278,11 +278,11 @@ public class Isaac {
       switch(e.type) {
         case -1:
           boName = "MONSTRO";
-          boIcon = ryouIconBack;
+          boIcon = enemySprites.get(0);
           break;
         case -2:
           boName = "GEMINI";
-          boIcon = nijikaIconRight;
+          boIcon = enemySprites.get(1);
           break;
         case -3:
           boName = "GUMS";
@@ -316,6 +316,15 @@ public class Isaac {
     text(boName, (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.9-height*.2) :
                                                                           (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
     popStyle();
+    if(boName.equals("GUMS") && animationTimer == len*.5) {
+      try {
+        enemySounds.get(1).stop();
+        enemySounds.get(1).removeFromCache();
+        enemySounds.get(1).play();
+      } catch(Exception e) {
+        println(e + "\nCouldn't play Gums intro sound.");
+      }
+    }
     if(animationTimer++ <= len) return GameState.ANIMATION;
     animationTimer = 0;
     return GameState.PLAYING;

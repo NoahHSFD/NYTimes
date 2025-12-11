@@ -32,6 +32,7 @@ ArrayList<PImage> nijikaMenu = new ArrayList<PImage>();
 ArrayList<PImage> backgrounds = new ArrayList<PImage>();
 ArrayList<PImage> overlays = new ArrayList<PImage>();
 ArrayList<PImage> doorSprites = new ArrayList<PImage>();
+ArrayList<PImage> enemySprites = new ArrayList<PImage>();
 SoundFile bgm;
 ArrayList<SoundFile> bgms = new ArrayList<SoundFile>();
 ArrayList<SoundFile> playerSounds = new ArrayList<SoundFile>();
@@ -460,6 +461,7 @@ void loadAudioFiles() {
   bgms.add(new SoundFile(this, "/Audio/Music/Seiza_ni_Naretara.mp3"));
   playerSounds.add(new SoundFile(this, "/Audio/bocchi_hit.mp3"));
   enemySounds.add(new SoundFile(this, "/Audio/player_hit.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/mr_beast_scream.mp3"));
   sfx.add(new SoundFile(this, "/Audio/boom.mp3"));
   sfx.add(new SoundFile(this, "/Audio/big_boom_1.mp3"));
   sfx.add(new SoundFile(this, "/Audio/big_boom_2.mp3"));
@@ -578,6 +580,9 @@ void loadImages() {
   doorSprites.add(loadImage("/Images/Sprites/Door_Unlocking1.png"));
   doorSprites.add(loadImage("/Images/Sprites/Door_Unlocking2.png"));
   doorSprites.add(loadImage("/Images/Sprites/Door_Unlocking3.png"));
+  enemySprites.add(loadImage("/Images/Sprites/monstro.png"));
+  enemySprites.add(loadImage("/Images/Sprites/contusion.png"));
+  enemySprites.add(loadImage("/Images/Sprites/suture.png"));
   jhon = loadImage("/Images/Sprites/jhon.png");
   gums = loadImage("/Images/Sprites/gums.png");
   gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
