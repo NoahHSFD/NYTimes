@@ -14,6 +14,12 @@ public class Isaac {
   IsaacPause isP;
   ArrayList<Slider> isaacVolumeSliders = new ArrayList<Slider>();              //0: master, 1: bgm, 2: player sounds, 3: enemy sounds, 4: sfx
   PImage curseOverlay;
+  PImage plIcon = bocchiMenu.get(0);                                           //for bossroom entrance
+  PImage boIcon = enemySprites.get(3);                                         //
+  String plName = "BOBBY";                                                     //
+  String boName = "GUMS";                                                      //
+  int boType = -3;                                                             //
+  int monstroRnd;                                                              //random number to choose monstro name
   
   public Isaac(int id) {
     this.borderWidth = height*.1;
@@ -57,7 +63,7 @@ public class Isaac {
     } catch(Exception e) {
       println(e + "\nCan't find Isaac map 3.");
     }
-    this.curseChance = (1./2.);
+    this.curseChance = (1./10.);
     this.curse = -1;
     this.currentMap = 0;
     this.player = new IsaacPlayer(id);
@@ -251,52 +257,56 @@ public class Isaac {
     player.charging = false;
     player.charge = 0;
     pushStyle();
-    PImage plIcon = bocchiMenu.get(0);
-    PImage boIcon = gums;
-    String plName = "BOBBY";
-    String boName = "GUMS";
-    switch(player.id) {
-      case 0:
-        plName = "BOBBY";
-        plIcon = bocchiMenu.get(0);
-        break;
-      case 1:
-        plName = "RYOU";
-        plIcon = ryouMenu.get(0);
-        break;
-      case 2:
-        plName = "KITA";
-        plIcon = kitaMenu.get(0);
-        break;
-      case 3:
-        plName = "NIJIKA";
-        plIcon = nijikaMenu.get(0);
-        break;
-      default:
-    }
-    for(IsaacEnemy e : getCurrentMap().getCurrentRoom().enemyList) {
-      switch(e.type) {
-        case -1:
-          boName = "MONSTRO";
-          boIcon = enemySprites.get(0);
+    if(animationTimer == 1) {
+      switch(player.id) {
+        case 0:
+          plName = "BOBBY";
+          plIcon = bocchiMenu.get(0);
           break;
-        case -2:
-          boName = "GEMINI";
-          boIcon = enemySprites.get(1);
+        case 1:
+          plName = "RYOU";
+          plIcon = ryouMenu.get(0);
           break;
-        case -3:
-          boName = "GUMS";
-          boIcon = gums;
+        case 2:
+          plName = "KITA";
+          plIcon = kitaMenu.get(0);
           break;
-        case -4:
-          boName = "JHON";
-          boIcon = jhon;
-          break;
-        case -5:
-          boName = "PRONOUNS";
-          boIcon = loadingScreen;
+        case 3:
+          plName = "NIJIKA";
+          plIcon = nijikaMenu.get(0);
           break;
         default:
+      }
+      for(IsaacEnemy e : getCurrentMap().getCurrentRoom().enemyList) {
+        switch(e.type) {
+          case -1:
+            monstroRnd = int(random(0, 33));
+            boName = getMonstroName();
+            boIcon = enemySprites.get(0);
+            boType = 0;
+            break;
+          //case -2:
+          //  boName = "SALT'nSUGAR";
+          //  boIcon = enemySprites.get(1);
+          //  boType = 1;
+          //  break;
+          case -3:
+            boName = "MR BEAST";
+            boIcon = enemySprites.get(3);
+            boType = 2;
+            break;
+          case -4:
+            boName = "JHON";
+            boIcon = enemySprites.get(4);
+            boType = 3;
+            break;
+          case -5:
+            boName = "PRONOUNS";
+            boIcon = loadingScreen;
+            boType = 4;
+            break;
+          default:
+        }
       }
     }
     background(#000000);
@@ -307,22 +317,40 @@ public class Isaac {
     ellipse(((animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
                                           width*.9-height*.4) + height*.2, height*.75, height*.45, height*.15);
     image(boIcon, (animationTimer <= len*.3) ? map(animationTimer, 0, len*.3, width+height*3, width*.9-height*.4) :
-                                                      width*.9-height*.4, height*.6, height*.4, height*.2);
-    textSize(height*.1);
+                                                      width*.9-height*.4, height*.4, height*.4, height*.4);
+    //textSize(height*.1);
     fill(#FFFFFF);
-    text(plName, (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.1+height*.2) : width*.1+height*.2, height*.25);
+    textAlign(CENTER, CENTER);
+    textSize((height*.6)/plName.length());
+    text(plName, (animationTimer <= len*.4) ? map(animationTimer, len*.2, len*.4, height*-2, width*.2) : width*.2, height*.25);
+    textSize(height*.1);
     text("VS", width*.5, (animationTimer >= len*.4) && (animationTimer <= len*.5) ? map(animationTimer, len*.4, len*.5, height*-1, height*.25) :
                                                                                     (animationTimer < len*.4) ? height*-1 : height*.25);
-    text(boName, (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.9-height*.2) :
-                                                                          (animationTimer < len*.4) ? width+height*2 : width*.9-height*.2, height*.25);
+    textSize((height*.6)/boName.length());
+    text(boName, (animationTimer >= len*.4) && (animationTimer <= len*.6) ? map(animationTimer, len*.4, len*.6, width+height*2, width*.8) :
+                                                                          (animationTimer < len*.4) ? width+height*2 : width*.8, height*.25);
     popStyle();
-    if(boName.equals("GUMS") && animationTimer == len*.5) {
-      try {
-        enemySounds.get(1).stop();
-        enemySounds.get(1).removeFromCache();
-        enemySounds.get(1).play();
-      } catch(Exception e) {
-        println(e + "\nCouldn't play Gums intro sound.");
+    if(animationTimer == len*.5) {
+      switch(boType) {
+        case 0:
+          try {
+            enemySounds.get(monstroRnd+2).stop();
+            enemySounds.get(monstroRnd+2).removeFromCache();
+            enemySounds.get(monstroRnd+2).play();
+          } catch(Exception e) {
+            println(e + "\nCouldn't play Monstro intro sound.");
+          }
+          break;
+        case 2:
+          try {
+            enemySounds.get(1).stop();
+            enemySounds.get(1).removeFromCache();
+            enemySounds.get(1).play();
+          } catch(Exception e) {
+            println(e + "\nCouldn't play Gums intro sound.");
+          }
+          break;
+        default:
       }
     }
     if(animationTimer++ <= len) return GameState.ANIMATION;
@@ -359,5 +387,78 @@ public class Isaac {
         break;
       default:
     }
+  }
+  
+  String getMonstroName() {
+    switch(monstroRnd) {
+      case 0:
+        return "MONSTHROLDT";
+      case 1:
+        return "MONSTHROLDT HOOVER";
+      case 2:
+        return "HEY, MONSTOLT";
+      case 3:
+        return "YOU COMING, MONSTHROLD";
+      case 4:
+        return "MONSTOLTO";
+      case 5:
+        return "MONSTOTO";
+      case 6:
+        return "HEY, MONSTROLT";
+      case 7:
+        return "AND MONSTHROLT FUBAR";
+      case 8:
+        return "MONSTOLD";
+      case 9:
+        return "MONSTOLTDO";
+      case 10:
+        return "MONSTELL";
+      case 11:
+        return "RIGHT, MEARTOTO";
+      case 12:
+        return "MONUSUTORUTO";
+      case 13:
+        return "MONSTHELT";
+      case 14:
+        return "MUNSTOLTO";
+      case 15:
+        return "MONSDLOT?!";
+      case 16:
+        return "MONSOTHOLTO";
+      case 17:
+        return "MINSTOL";
+      case 18:
+        return "MEARLTO-SAN";
+      case 19:
+        return "MOURNTOAST";
+      case 20:
+        return "MOJITO";
+      case 21:
+        return "MONSTLOTTO?!";
+      case 22:
+        return "MONSTANOL";
+      case 23:
+        return "MONATHOLTHOTH";
+      case 24:
+        return "MONUSUTORORUDO";
+      case 25:
+        return "MONTHNORLD";
+      case 26:
+        return "MORNINGSNORT";
+      case 27:
+        return "MONUSUTORORUTO";
+      case 28:
+        return "MONTHOLOMEW";
+      case 29:
+        return "MONNELDOT";
+      case 30:
+        return "MOERTHGNOLGDT";
+      case 31:
+        return "NARUTO";
+      case 32:
+        return "MONEDICT CUMBERSTROLT";
+      default:
+    }
+    return "MONSTRO";
   }
 }

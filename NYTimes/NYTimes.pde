@@ -20,11 +20,11 @@ PImage bocchiIcon, bocchiIconLeft, bocchiIconRight, bocchiIconBack,
        kitaIcon, kitaIconLeft, kitaIconRight, kitaIconBack,
        nijikaIcon, nijikaIconLeft, nijikaIconRight, nijikaIconBack,
        loadingScreen,
-       jhon, gums, mom,
+       jhon, mom,
        gumsToothHealthy, gumsToothBrittle, gumsToothBloody, gumsToothRotting, gumsToothInfested,
        gumsToothHealthyFalling, gumsToothBrittleFalling,gumsToothBloodyFalling,
        gumsToothRottingFalling, gumsToothInfestedFalling,
-       momEye, momFlesh;
+       momDoorTop, momDoorRight, momDoorBottom, momDoorLeft, momEye, momFlesh;
 ArrayList<PImage> bocchiMenu = new ArrayList<PImage>();
 ArrayList<PImage> ryouMenu = new ArrayList<PImage>();
 ArrayList<PImage> kitaMenu = new ArrayList<PImage>();
@@ -462,6 +462,39 @@ void loadAudioFiles() {
   playerSounds.add(new SoundFile(this, "/Audio/bocchi_hit.mp3"));
   enemySounds.add(new SoundFile(this, "/Audio/player_hit.mp3"));
   enemySounds.add(new SoundFile(this, "/Audio/mr_beast_scream.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert0.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert1.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert2.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert3.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert4.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert5.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert6.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert7.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert8.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert9.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert10.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert11.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert12.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert13.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert14.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert15.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert16.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert17.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert18.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert19.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert20.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert21.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert22.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert23.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert24.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert25.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert26.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert27.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert28.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert29.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert30.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert31.mp3"));
+  enemySounds.add(new SoundFile(this, "/Audio/Enemies/bert32.mp3"));
   sfx.add(new SoundFile(this, "/Audio/boom.mp3"));
   sfx.add(new SoundFile(this, "/Audio/big_boom_1.mp3"));
   sfx.add(new SoundFile(this, "/Audio/big_boom_2.mp3"));
@@ -583,8 +616,26 @@ void loadImages() {
   enemySprites.add(loadImage("/Images/Sprites/monstro.png"));
   enemySprites.add(loadImage("/Images/Sprites/contusion.png"));
   enemySprites.add(loadImage("/Images/Sprites/suture.png"));
-  jhon = loadImage("/Images/Sprites/jhon.png");
-  gums = loadImage("/Images/Sprites/gums.png");
+  enemySprites.add(loadImage("/Images/Sprites/gums.png"));
+  enemySprites.add(loadImage("/Images/Sprites/jhon.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_eye0.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_eye1.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_eye2.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_eye3.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_leg.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_hand0.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_hand1.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_hand2.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_hand3.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_flesh0.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_flesh1.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_flesh2.png"));
+  enemySprites.add(loadImage("/Images/Sprites/mom_flesh3.png"));
+  enemySprites.add(loadImage("/Images/Sprites/gaper.png"));                              //18
+  enemySprites.add(loadImage("/Images/Sprites/gaper_open_eyes.png"));
+  enemySprites.add(loadImage("/Images/Sprites/gaper_no_head.png"));
+  //jhon = loadImage("/Images/Sprites/jhon.png");
+  //gums = loadImage("/Images/Sprites/gums.png");
   gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
   gumsToothHealthyFalling = loadImage("/Images/Sprites/gums_tooth_healthy_falling.png");
   gumsToothBrittle = loadImage("/Images/Sprites/gums_tooth_brittle.png");
@@ -595,6 +646,10 @@ void loadImages() {
   gumsToothRottingFalling = loadImage("/Images/Sprites/gums_tooth_rotting_falling.png");
   gumsToothInfested = loadImage("/Images/Sprites/gums_tooth_infested.png");
   gumsToothInfestedFalling = loadImage("/Images/Sprites/gums_tooth_infested_falling.png");
-  momEye = loadImage("/Images/Sprites/Bocchi_Menu.png");
+  momDoorTop = loadImage("/Images/Sprites/mom_door0.png");
+  momDoorRight = loadImage("/Images/Sprites/mom_door1.png");
+  momDoorBottom = loadImage("/Images/Sprites/mom_door2.png");
+  momDoorLeft = loadImage("/Images/Sprites/mom_door3.png");
+  //momEye = loadImage("/Images/Sprites/Bocchi_Menu.png");
   momFlesh = loadImage("/Images/Sprites/Nijika_Icon.png");
 }

@@ -4,7 +4,7 @@
     "doors":[1, 2],
     "destructibledoors":[1],
     "lockeddoors":[],
-    "enemies":[-5],
+    "enemies":[0, 0, 0],
     "collectibles":[],
     "type":"normal",
     "layout":0

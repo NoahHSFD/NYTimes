@@ -468,7 +468,9 @@ public class IsaacMap {
           rect(x, y, w, h);
         }
         fill(#000000);
-        text(type + " " + enemyList.isEmpty() + " " + open, x + w, y);
+        for(int i = 0; i < enemyList.size(); i++) {
+          text(enemyList.get(i).type + " " + enemyList.get(i).dead + " " + enemyList.get(i).x + " " + enemyList.get(i).y, x + w, y + i*w);
+        }
         popStyle();
       }
       
@@ -532,25 +534,37 @@ public class IsaacMap {
           case 0:
             doorSprite = doorSprites.get(16);
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY-1].doors) {
-              if(d.position == 2) d.open();
+              if(d.position == 2)  {
+                d.locked = false;
+                d.open();
+              }
             }
             break;
           case 1:
             doorSprite = doorSprites.get(17);
             for(IsaacDoor d : rooms[currentRoomX+1][currentRoomY].doors) {
-              if(d.position == 3) d.open();
+              if(d.position == 3)  {
+                d.locked = false;
+                d.open();
+              }
             }
             break;
           case 2:
             doorSprite = doorSprites.get(18);
             for(IsaacDoor d : rooms[currentRoomX][currentRoomY+1].doors) {
-              if(d.position == 0) d.open();
+              if(d.position == 0)  {
+                d.locked = false;
+                d.open();
+              }
             }
             break;
           case 3:
             doorSprite = doorSprites.get(19);
             for(IsaacDoor d : rooms[currentRoomX-1][currentRoomY].doors) {
-              if(d.position == 1) d.open();
+              if(d.position == 1)  {
+                d.locked = false;
+                d.open();
+              }
             }
             break;
           default:

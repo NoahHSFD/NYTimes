@@ -106,20 +106,30 @@ public class IsaacEnemy {
     this.type = type;
     switch(type) {
       case 0:
-        this.clr = #F200FF;
-        this.fireRate = 1;
+        //this.clr = #F200FF;
+        //this.fireRate = 1;
         this.knockbackEfficiency = 1;
-        this.projectileAmount = 7;
-        this.projectileBounce = true;
-        this.maxBullets = 10;
-        this.bullets = maxBullets;
-        this.reloadTime = 250;
+        //this.projectileAmount = 7;
+        //this.projectileBounce = true;
+        //this.maxBullets = 10;
+        //this.bullets = maxBullets;
+        //this.reloadTime = 250;
+        this.following = true;
+        this.baseSpeed = 1;
+        this.enemySprite = enemySprites.get(18);
+        this.spawnsOnDeath = true;
+        this.deathSpawn = 1;
+        this.deathSpawnAmount = 1;
         break;
       case 1:
-        this.clr = #E7F00C;
-        this.flying = true;
-        this.fireRate = 1;
-        this.knockbackEfficiency = 1;
+        //this.clr = #E7F00C;
+        //this.flying = true;
+        //this.fireRate = 1;
+        this.w = width*.025;
+        this.knockbackEfficiency = 1.2;
+        this.randomMovement = true;
+        this.baseSpeed = 1;
+        this.enemySprite = enemySprites.get(20);
         break;
       case 2:
         this.clr = #2836C6;
@@ -236,6 +246,7 @@ public class IsaacEnemy {
         this.ignoresBorder = true;
         this.itemDrop = 5;
         this.dropRate = 1.;
+        this.enemySprite = enemySprites.get(3);
         break;
       case -31:                                                                                  //gums - teeth (31-39)
         this.baseSpeed = 0;                                                                      //healthy tooth
@@ -273,7 +284,7 @@ public class IsaacEnemy {
         this.puddleWhenHit = true;
         this.leavesCorpse = true;
         break;
-      case -4:                                                                                  //jhon
+      case -4:                                                                                   //jhon
         this.maxHp = 500;
         this.w *= 2.;
         this.maxBullets = 5;
@@ -287,6 +298,7 @@ public class IsaacEnemy {
         this.projectileBounce = true;
         this.itemDrop = 7;
         this.dropRate = 1.;
+        this.enemySprite = enemySprites.get(4);
         break;
       case -5:                                                                                   //mom
         this.baseSpeed = 0;
@@ -308,21 +320,22 @@ public class IsaacEnemy {
         break;
       case -51:                                                                                   //mom - body parts (51-59)
         this.baseSpeed = 0;                                                                       //leg
-        this.w = width*.1;
+        this.w = width*.2;
         this.h = height;
         this.maxHp = 0;
-        this.airborneTime = 150;
+        this.airborneTime = 100;
         this.jumping = true;
         this.airborneTimer = airborneTime*.5 - 1;
         this.ignoresObstacles = true;
         this.ignoresBorder = true;
         this.untargetable = true;
+        this.enemySprite = enemySprites.get(9);
         break;
       case -52:                                                                                   //hand
         this.baseSpeed = 0;
         this.maxHp = 0;
-        this.w = width*.3;
-        this.h = width*.1;
+        this.w = width*.2;
+        //this.h = width*.1;
         this.x = width + w;
         this.y = height + h;
         this.ignoresObstacles = true;
@@ -332,9 +345,63 @@ public class IsaacEnemy {
         this.noContactDamage = true;
         break;
       case -530:                                                                                  //flesh top
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        //this.h = width*.1;
+        this.x = width + w;
+        this.y = height + w;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.enemySprite = enemySprites.get(14);
+        break;
       case -531:                                                                                  //flesh right
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.075;
+        //this.h = width*.1;
+        this.x = width + w;
+        this.y = height + w;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.enemySprite = enemySprites.get(15);
+        break;
       case -532:                                                                                  //flesh bottom
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        //this.h = width*.1;
+        this.x = width + w;
+        this.y = height + w;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.enemySprite = enemySprites.get(16);
+        break;
       case -533:                                                                                  //flesh left
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        //this.h = width*.1;
+        this.x = width + w;
+        this.y = height + w;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        this.enemySprite = enemySprites.get(17);
+        break;
+      case -540:                                                                                  //eye top
+        this.enemySprite = enemySprites.get(5);
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
@@ -347,10 +414,36 @@ public class IsaacEnemy {
         this.untargetable = true;
         this.noContactDamage = true;
         break;
-      case -540:                                                                                  //eye top
       case -541:                                                                                  //eye right
+        this.enemySprite = enemySprites.get(6);
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        this.h = width*.1;
+        this.x = width + w;
+        this.y = height + h;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        break;
       case -542:                                                                                  //eye bottom
+        this.enemySprite = enemySprites.get(7);
+        this.baseSpeed = 0;
+        this.maxHp = 0;
+        this.w = width*.1;
+        this.h = width*.1;
+        this.x = width + w;
+        this.y = height + h;
+        this.ignoresObstacles = true;
+        this.ignoresBorder = true;
+        this.noShadow = true;
+        this.untargetable = true;
+        this.noContactDamage = true;
+        break;
       case -543:                                                                                  //eye left
+        this.enemySprite = enemySprites.get(8);
         this.baseSpeed = 0;
         this.maxHp = 0;
         this.w = width*.1;
@@ -384,31 +477,13 @@ public class IsaacEnemy {
   void display() {
     pushStyle();
     if(!dead || leavesCorpse) {
-    //fill(clr);
-    //circle(x, y, w);
-    //fill(#FFFFFF);
-    //circle(x + facingX*r*.5, y + facingY*r*.5, r);
       fill(#000000, 70);
       noStroke();
       if(!noShadow) circle(x + shadowOffsetX, y + shadowOffsetY, ((airborneTime > 0) ? (((airborneTime/2.)-airborneTimer)/(airborneTime/2.))*shadowW : shadowW));
       spriteY = jumping ? y + ((Math.abs(airborneTimer-airborneTime/2.)-airborneTime/2.)/(airborneTime/2.))*height : y;
       switch(type) {
         case 0:
-          image(bocchiIcon, x-w, spriteY-w, 2.*w, 2.*w);
-          break;
-        case 1:
-          image(ryouIcon, x-w, spriteY-w, 2.*w, 2.*w);
-          break;
-        case 2:
-          image(kitaIcon, x-w, spriteY-w, 2.*w, 2.*w);
-          break;
-        case 3:
-          image(nijikaIcon, x-w, spriteY-w, 2.*w, 2.*w);
-          break;
-        case 4:
-          image(bocchiIconBack, x-w, spriteY-w, 2.*w, 2.*w);
-          break;
-        case -1:
+          circle(x, y, r*5);
           image(enemySprite, x-r, spriteY-r, w, w);
           break;
         case -2:
@@ -420,11 +495,8 @@ public class IsaacEnemy {
           }
           image(enemySprite, x-r, spriteY-r, w, w);
           break;
-        case -21:
-          image(enemySprite, x-r, spriteY-r, w, w);
-          break;
         case -3:
-          image(gums, x, spriteY, w, h);
+          image(enemySprite, x, spriteY, w, h);
           break;
         case -31:
           if(jumping) {
@@ -468,47 +540,17 @@ public class IsaacEnemy {
             image(gumsToothHealthy, x-w, spriteY-w, 2.*w, 2.*w);
           }
           break;
-        case -4:
-          image(jhon, x-r, spriteY-r, w, w);
-          break;
         case -5:
-          image(loadingScreen, width*.45, borderWidth-width*.05, width*.1, width*.1);
-          image(loadingScreen, width*.95-borderWidth, height*.5-width*.05, width*.1, width*.1);
-          image(loadingScreen, width*.45, height-borderWidth-width*.05, width*.1, width*.1);
-          image(loadingScreen, borderWidth-width*.05, height*.5-width*.05, width*.1, width*.1);
+          image(momDoorTop, width*.45, borderWidth-width*.05, width*.1, width*.05);
+          image(momDoorRight, width-borderWidth, height*.5-width*.05, width*.05, width*.1);
+          image(momDoorBottom, width*.45, height-borderWidth, width*.1, width*.05);
+          image(momDoorLeft, borderWidth-width*.05, height*.5-width*.05, width*.05, width*.1);
           break;
         case -51:
-          image(loadingScreen, x-r, spriteY-h, w, h);
-          break;
-        case -52:
-          image(loadingScreen, x-r, spriteY-h, w, h);
-          break;
-        case -530:
-          image(momFlesh, x-r, spriteY-h, w, h);
-          break;
-        case -531:
-          image(momFlesh, x-r, spriteY-h, w, h);
-          break;
-        case -532:
-          image(momFlesh, x-r, spriteY-h, w, h);
-          break;
-        case -533:
-          image(momFlesh, x-r, spriteY-h, w, h);
-          break;
-        case -540:
-          image(momEye, x-r, spriteY-h, w, h);
-          break;
-        case -541:
-          image(momEye, x-r, spriteY-h, w, h);
-          break;
-        case -542:
-          image(momEye, x-r, spriteY-h, w, h);
-          break;
-        case -543:
-          image(momEye, x-r, spriteY-h, w, h);
+          image(enemySprite, x-w, spriteY-h, 2*w, h);
           break;
         default:
-          image(bocchiIconLeft, x-w, spriteY-w, 2.*w, 2.*w);
+          image(enemySprite, x-r, h == 0 ? spriteY-r : spriteY-h, w, h == 0 ? w : h);
       }
       popStyle();
     }
@@ -517,7 +559,7 @@ public class IsaacEnemy {
   
   void displayHpBar() {
     pushStyle();
-    if(!corpse && hp > 0) {
+    if(!corpse && hp > 0 && (type < 0 || is.player.passiveEffects.contains(4))) {
       switch(type) {
         case -5:
           stroke(#000000);
@@ -684,7 +726,7 @@ public class IsaacEnemy {
                       momGrab();
                       break;
                     case 0:
-                      bossAttackDuration = 200;
+                      bossAttackDuration = 300;
                       momStomp();
                       break;
                     case 1:
@@ -714,6 +756,13 @@ public class IsaacEnemy {
               y += dy*speed;
             }
             switch(type) {
+              case 0:
+                if(phase == 0 && is.player.r + r*10 >= sqrt(pow((is.player.x - x), 2) + pow((is.player.y - y), 2))) {
+                  phase = 1;
+                  enemySprite = enemySprites.get(19);
+                  speed = baseSpeed*2;
+                }
+                break;
               case -21:
                 for(IsaacEnemy e : is.getCurrentMap().getCurrentRoom().enemyList) {
                   if(e.type == -2) {
@@ -1097,24 +1146,22 @@ public class IsaacEnemy {
         if(bossAttackDurationTimer == 1) {
           switch(bossAttackType) {
             case -1:
-              e.w = width*.1;
-              e.h = width*.3;
+              //e.w = width*.2;
+              //e.h = width*.2;
               e.setPosition(width*.5, borderWidth);
+              e.enemySprite = enemySprites.get(10);
               break;
             case -2:
-              e.w = width*.3;
-              e.h = width*.1;
               e.setPosition(width-borderWidth + e.w*.5, height*.5 + e.h*.5);
+              e.enemySprite = enemySprites.get(11);
               break;
             case -3:
-              e.w = width*.1;
-              e.h = width*.3;
               e.setPosition(width*.5, height-borderWidth + e.h);
+              e.enemySprite = enemySprites.get(12);
               break;
             case -4:
-              e.w = width*.3;
-              e.h = width*.1;
               e.setPosition(borderWidth - e.w*.5, height*.5 + e.h*.5);
+              e.enemySprite = enemySprites.get(13);
               break;
             default:
           }
@@ -1124,13 +1171,13 @@ public class IsaacEnemy {
           e.untargetable = false;
           e.noContactDamage = false;
           if(e.x < borderWidth + e.w*.5) {
-            e.x = e.x + 5;
+            e.x = e.x + 30;
           } else if(e.x > width-borderWidth - e.w*.5) {
-            e.x = e.x - 5;
+            e.x = e.x - 30;
           } else if(e.y < borderWidth + e.h) {
-            e.y = e.y + 5;
+            e.y = e.y + 30;
           } else if(e.y > height-borderWidth){
-            e.y = e.y - 5;
+            e.y = e.y - 30;
           }
         } else {
           if(e.x <= borderWidth + e.w*.5 + 1) {

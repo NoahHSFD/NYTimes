@@ -122,7 +122,7 @@ public class IsaacCollectible {
           player.fireRateUp();
           break;
         case 4:
-          player.projectileSizeUp();
+          player.addPassive(effect);                                                            //see enemy HP bars
           break;
         case 5:
           player.addFamiliar();
