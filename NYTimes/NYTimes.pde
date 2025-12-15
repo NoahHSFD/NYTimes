@@ -631,11 +631,14 @@ void loadImages() {
   enemySprites.add(loadImage("/Images/Sprites/mom_flesh1.png"));
   enemySprites.add(loadImage("/Images/Sprites/mom_flesh2.png"));
   enemySprites.add(loadImage("/Images/Sprites/mom_flesh3.png"));
-  enemySprites.add(loadImage("/Images/Sprites/gaper.png"));                              //18
+  enemySprites.add(loadImage("/Images/Sprites/gaper.png"));
   enemySprites.add(loadImage("/Images/Sprites/gaper_open_eyes.png"));
-  enemySprites.add(loadImage("/Images/Sprites/gaper_no_head.png"));
-  //jhon = loadImage("/Images/Sprites/jhon.png");
-  //gums = loadImage("/Images/Sprites/gums.png");
+  enemySprites.add(loadImage("/Images/Sprites/gaper_no_head.png"));                      //20
+  enemySprites.add(loadImage("/Images/Sprites/the_attack_fly.png"));
+  enemySprites.add(loadImage("/Images/Sprites/maggot.png"));
+  enemySprites.add(loadImage("/Images/Sprites/globin.png"));
+  enemySprites.add(loadImage("/Images/Sprites/globin_goo.png"));
+  enemySprites.add(loadImage("/Images/Sprites/86.png"));
   gumsToothHealthy = loadImage("/Images/Sprites/gums_tooth_healthy.png");
   gumsToothHealthyFalling = loadImage("/Images/Sprites/gums_tooth_healthy_falling.png");
   gumsToothBrittle = loadImage("/Images/Sprites/gums_tooth_brittle.png");

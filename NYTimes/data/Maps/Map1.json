@@ -45,7 +45,7 @@
     "destructibledoors":[],
     "lockeddoors":[0],
     "enemies":[0, 0, 1, 2, 4, 6],
-    "collectibles":[1],
+    "collectibles":[],
     "type":"normal",
     "layout":0
   },
@@ -65,7 +65,7 @@
     "destructibledoors":[],
     "lockeddoors":[],
     "enemies":[0, 0, 1, 0, 4, 4],
-    "collectibles":[1],
+    "collectibles":[],
     "type":"normal",
     "layout":0
   },
@@ -104,7 +104,7 @@
     "doors":[0, 3, 4],
     "destructibledoors":[],
     "lockeddoors":[],
-    "enemies":[-1, -2],
+    "enemies":[-2],
     "collectibles":[],
     "type":"boss",
     "layout":0

@@ -102,7 +102,7 @@ public class IsaacCollectible {
     if(priced) is.player.coins -= price;
     if(!dummy) {
       switch(effect) {
-        case -2:                                                                              //time stop
+        case -2:                                                                              //za warudo (time stop)
           player.setActivatable(this);
           break;
         case -1:                                                                              //necronomicon
@@ -112,8 +112,8 @@ public class IsaacCollectible {
         case 0:
           player.addCoin();
           break;
-        case 1:
-          player.speedUp();
+        case 1:                                                                               //GER (enemies no longer revive)
+          player.addPassive(effect);
           break;
         case 2:
           player.changeStyle();
@@ -122,7 +122,7 @@ public class IsaacCollectible {
           player.fireRateUp();
           break;
         case 4:
-          player.addPassive(effect);                                                            //see enemy HP bars
+          player.addPassive(effect);                                                          //sehen wir ja dann (see enemy HP bars)
           break;
         case 5:
           player.addFamiliar();
@@ -133,7 +133,7 @@ public class IsaacCollectible {
         case 7:
           player.setProjectileFollowing(true);
           break;
-        case 10:                                                                               //5 big booms
+        case 10:                                                                              //5 big booms
           player.addPassive(effect);
           player.bombs = 5;
           break;

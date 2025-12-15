@@ -73,6 +73,7 @@ public class IsaacMap {
     SoundFile quizSong;                                                                    //music to play in the quiz room
     int type;                                                                              //0: normal room, 1: boss room, 2: store
     boolean timeStopped;                                                                   //whether enemies and projectiles in the room are timestopped
+    float totalMaxHp;                                                                      //total hp of all initial enemies in the room combined (for boss rooms)
     
     public IsaacRoom(int x, int y) {
       this.x = x;
@@ -134,6 +135,9 @@ public class IsaacMap {
             break;
           default:
         }
+      }
+      for(IsaacEnemy en : enemyList) {
+        totalMaxHp += en.maxHp;
       }
     }
     
@@ -278,16 +282,18 @@ public class IsaacMap {
     void update() {   
       for(IsaacDoor d : doors) {
         if(type == 1) {
-          for(IsaacEnemy e : enemyList) {
-            if(!e.dead) {
-              d.close();
-              break;
+          if(!(d.destructible || d.locked)) {
+            for(IsaacEnemy e : enemyList) {
+              if(!e.dead) {
+                d.close();
+                break;
+              }
+              if(!d.destructible && !d.locked) d.open();
+              //todo:
+              //for some reason sometimes doors dont open after all enemies are defeated
             }
-            if(!d.destructible && !d.locked) d.open();
-            //todo:
-            //for some reason sometimes doors dont open after all enemies are defeated
+            if(enemyList.isEmpty() && !d.destructible && !d.locked) d.open();
           }
-          if(enemyList.isEmpty() && !d.destructible && !d.locked) d.open();
         }
         d.update();
       }

@@ -285,11 +285,11 @@ public class Isaac {
             boIcon = enemySprites.get(0);
             boType = 0;
             break;
-          //case -2:
-          //  boName = "SALT'nSUGAR";
-          //  boIcon = enemySprites.get(1);
-          //  boType = 1;
-          //  break;
+          case -2:
+            boName = "SALT'nSUGAR";
+            boIcon = enemySprites.get(1);
+            boType = 1;
+            break;
           case -3:
             boName = "MR BEAST";
             boIcon = enemySprites.get(3);
